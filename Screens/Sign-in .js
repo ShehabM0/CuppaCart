@@ -1,102 +1,114 @@
-import {View, Text, Image, TextInput,
-    TouchableWithoutFeedback,Keyboard,ImageBackground ,Dimensions,ScrollView} from 'react-native';
-    import React, { useState, useEffect, useContext } from "react";
-    import CommonButton from '../Components/CommonButton';
-    import { Fumi} from 'react-native-textinput-effects';
-    import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-    import { AntDesign } from '@expo/vector-icons';
-    // import Loader from '../common/Loader';
-    const d = Dimensions.get("window")
-    export default function Login({navigation}) {
-      return (
-        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <ImageBackground
-            resizeMode="cover"
-            style={{   position: 'relative',
-            width: d.width,
-            height:d.height+32}}
-            source={require("../assets/coffee5.jpg")}
-          >
-    <TouchableWithoutFeedback
-            onPress={() => {
-              Keyboard.dismiss();
-            }}
-          >
-        <View style={{flex: 1}}>
-          
-          <Text
-            style={{
-              marginTop: 50,
-              alignSelf: 'center',
-              fontSize: 24,
-              fontWeight: '600',
-              color: '#fff',
-            }}>
-            Login
-          </Text>
-        <Fumi
-        label={'Email'}
-        iconClass={FontAwesomeIcon}
-        iconName={'envelope-o'}
-        keyboardType={"email-address"}
-        iconColor={'#000000'}
-        iconSize={20}
-        iconWidth={40}
-        inputPadding={20}
-        style={{backgroundColor:"#D1D1D1" ,textColor:"#000000" , width:"98%",marginTop:15,marginLeft:5,borderRadius:10}}
-      />
-     <View>
-     <Fumi
-        label={'Password'}
-        iconClass={FontAwesomeIcon}
-        iconName={'eye'}
-        iconColor={'#000000'}
-        iconSize={20}
-        iconWidth={40}
-        inputPadding={20}
-        style={{backgroundColor:"#D1D1D1" ,color:"#000000" , width:"98%",marginTop:15,marginLeft:5  , borderRadius:10}}
-      />
-      <AntDesign name="eyeo" size={24} color="black"   onPress={() => {
-              
-             
-              }} style={{marginLeft:"91%" ,marginTop:-45,paddingBottom:20}} />
-     </View>
-       
-          {/* <CustomTextInput
-            type={'passwpord'}
-            placeholder={'Enter Password'}
-            i icon={require('../assets/lock.png')}
-            value={password}
-            onChangeText={
-              setPassword
-            }
-          />  */}
-          <CommonButton
-            title={'Login'}
-            textColor={'#fff'}
-            onPress={() => {
+import React,{useState} from 'react';
+import {View, Text, SafeAreaView, Keyboard, Alert} from 'react-native';
+import COLORS from '../';
+import Button from '../Components/Button';
+import Input from '../Components/Input';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loader from '../Components/Loader';
+import auth from "../firebase/config";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { addUser, getUserById, getUserUId } from "../firebase/user";
+import { login, getUserToken,logout } from "../firebase/auth";
+
+const LoginScreen = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errors, setErrors] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
+
+  const validate = async () => {
+    Keyboard.dismiss();
+    if (!email) {
+      handleError('Please enter email', 'email');
+      return;
+    }
+    if (!password) {
+      handleError('Please enter password', 'password');
+      return;
+    }
+      login(email, password)
+        .then(() => {
+          getUserUId().then((id) => {
+            getUserById(id).then((user) => {
+              if (user[0].Role === "Admin") {
+                navigation.navigate("Admin");
+              } else {
                 navigation.navigate("TabsNav");
-              }}
+              }
+            });
+          });
+          setLoading(true);
+        })
+        .catch((e) => {
+          alert("invalid email or password");
+          console.log(e.message);
+        });
+    
+  };
+  
+  const handleOnchange = (text, input) => {
+    setInputs(prevState => ({...prevState, [input]: text}));
+  };
+
+  const handleError = (error, input) => {
+    setErrors(prevState => ({...prevState, [input]: error}));
+  };
+  return (
+    <SafeAreaView style={{backgroundColor: COLORS.white, flex: 1}}>
+      <Loader visible={loading} />
+      <View style={{paddingTop: 50, paddingHorizontal: 20}}>
+        <Text style={{color: COLORS.black, fontSize: 40, fontWeight: 'bold'}}>
+          Log In
+        </Text>
+        <Text style={{color: COLORS.grey, fontSize: 18, marginVertical: 10}}>
+          Enter Your Details to Login
+        </Text>
+        <View style={{marginVertical: 20}}>
+          <Input
+            onChangeText={setEmail}
+            value={email}
+            onFocus={() => handleError(null, email)}
+            iconName="email-outline"
+            label="Email"
+            placeholder="Enter your email address"
+            error={errors.email}
           />
+          <Input
+            onChangeText={setPassword}
+            value={password}
+            onFocus={() => handleError(null, password)}
+            iconName="lock-outline"
+            label="Password"
+            placeholder="Enter your password"
+            error={errors.password}
+            password
+          />
+          <Button title="Log In" onPress={validate} />
           <Text
+            onPress={() => navigation.navigate('SignUp')}
             style={{
-              fontSize: 18,
-              fontWeight: '800',
-              alignSelf: 'center',
-              marginTop: 20,
-              color:"white"
-            }}
-            onPress={() => {
-              navigation.navigate('SignUp');
+              color: COLORS.black,
+              fontWeight: 'bold',
+              textAlign: 'center',
+              fontSize: 16,
             }}>
-            Create New Account?
+            Don't have account? Register
           </Text>
-          
+          <Text
+            onPress={() => navigation.navigate('ForgetPassword')}
+            style={{
+              color: COLORS.black,
+              fontWeight: 'bold',
+              textAlign: 'center',
+              fontSize: 16,
+              padding:13
+            }}>
+            Forgot password?
+          </Text>
         </View>
-        </TouchableWithoutFeedback>
-        </ImageBackground>
-        </ScrollView>
-      );
-    };
-    
-    
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export default LoginScreen;
