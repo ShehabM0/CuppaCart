@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/core';
 import React,{useState,useEffect} from 'react';
 const backImage = require("../assets/adaptive-icon.png");
 import { Ionicons } from '@expo/vector-icons';
+import { logout } from '../firebase/auth';
 
 import {
   Avatar,
@@ -28,6 +29,19 @@ from "../firebase/user"
 // import {getUsers}from"../firebase/user";
 
 const ProfileScreen = ({navigation}) => {
+
+
+
+  const ss=()=>{
+  
+    logout(auth).then(()=>{
+      console.log("sign out done");
+        navigation.navigate('SignIn')
+    })
+  }
+
+
+
 
 
   const [email, setEmail] = useState("");
@@ -135,7 +149,7 @@ console.log(fullname);
         <TouchableRipple onPress={() => { }}>
           <View style={styles.menuItem}>
             <Icon name="heart-outline" color="#964B00" size={25} />
-            <Text style={styles.menuItemText}>Your Favorites</Text>
+            <Text style={styles.menuItemText}>Favourites</Text>
           </View>
         </TouchableRipple>
         <TouchableRipple onPress={() => { }}>
@@ -162,6 +176,14 @@ console.log(fullname);
           </View>
         </TouchableRipple>
       </View>
+
+      <TouchableOpacity
+        onPress={ss}
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>Sign out</Text>
+      </TouchableOpacity>
+
 
 
     </SafeAreaView>
@@ -195,13 +217,14 @@ const styles = StyleSheet.create({
     borderTopColor: '#dddddd',
     borderTopWidth: 1,
     flexDirection: 'row',
-    height: 100,
+    height: 80,
   },
   infoBox: {
-    width: '35%',
+    width: '33%',
     alignItems: 'center',
     justifyContent: 'center',
     color:'#fff',
+    padding:10
   },
   menuWrapper: {
     marginTop: 10,
@@ -209,7 +232,7 @@ const styles = StyleSheet.create({
   menuItem: {
     flexDirection: 'row',
     paddingVertical: 15,
-    paddingHorizontal: 30,
+    paddingHorizontal: 15,
   },
   menuItemText: {
     color: '#fff',
@@ -217,6 +240,20 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 16,
     lineHeight: 26,
+  },
+  button: {
+    backgroundColor: '#964B00',
+    width: '60%',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 40,
+    marginLeft: '20%',
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: '700',
+    fontSize: 16,
   },
 });
 
