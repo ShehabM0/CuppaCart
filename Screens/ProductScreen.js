@@ -6,6 +6,23 @@ import COLORS from '../Conts/Color'
 export default function ProductScreen() {
 
   const [arrow, setArrow] = useState(true);
+  const [price, setPrice] = useState(21.99);
+  const [coin, setCoin] = useState(40);
+
+  function setSmall() {
+    setPrice(19.99);
+    setCoin(30);
+  }
+
+  function setMedium() {
+    setPrice(21.99);
+    setCoin(40);
+  }
+
+  function setLarge() {
+    setPrice(23.99);
+    setCoin(50);
+  }
 
   return (
       <ScrollView>
@@ -30,14 +47,14 @@ export default function ProductScreen() {
               <Image 
                 style={styles.downArrow} 
                 source={require('../assets/dollar_sign.png')}
-              /> 14.99
+              /> {price}
             </Text>
 
             <Text style={styles.titlepriceTxt}>
               <Image 
                 style={styles.downArrow} 
                 source={require('../assets/coin.png')}
-              /> 30
+              /> {coin}
             </Text>
             
           </View>
@@ -72,13 +89,13 @@ export default function ProductScreen() {
         </View>
 
         <View style={styles.sizesCont}>
-          <TouchableOpacity style={styles.size}>
+          <TouchableOpacity style={styles.size} onPress={setSmall}>
             <Text style={styles.sizeTxt}>Small</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.size}>
+          <TouchableOpacity style={styles.size} onPress={setMedium}>
             <Text style={styles.sizeTxt}>Medium</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.size}>
+          <TouchableOpacity style={styles.size} onPress={setLarge}>
             <Text style={styles.sizeTxt}>Large</Text>
           </TouchableOpacity>
         </View>
