@@ -5,6 +5,7 @@ const COLORS = {
     grey: '#BABBC3',
     light: '#F3F4FB',
     darkBlue: '#7978B5',
+    bisque: '#ffe4c4',
     red: 'red',
     darkOrange:"#361500",
     darkModOrange:"#865439",
