@@ -23,8 +23,9 @@ const Input = ({
               ? COLORS.red
               : isFocused
               ? COLORS.darkBlue
-              : COLORS.light,
+              : COLORS.darkModOrange,
             alignItems: 'center',
+            borderWidth:1
           },
         ]}>
         <Icon
