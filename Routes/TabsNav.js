@@ -2,7 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import { CartStack, ProductStack } from "./StackNav";
+import { ProductStack, CartStack } from './ProductCartStack';
 import ProfileScreen from "../Screens/ProfileScreen";
 import { FontAwesome } from "@expo/vector-icons";
 import SettingsScreen from "../Screens/SettingsScreen";
