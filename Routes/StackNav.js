@@ -2,6 +2,11 @@
 import React from 'react'
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import StartupScreen from '../Screens/StartupScreen';
+import Signin from '../Screens/Sign-in ';
+import Signup from '../Screens/Sign-up';
+import ForgetPasswordScreen from '../Screens/ForgetPasswordScreen';
+import AdminScreen from '../Screens/AdminScreen';
+import TabsNav from './TabsNav';
 import HomeScreen from '../Screens/HomeScreen';
 import ProductScreen from '../Screens/ProductScreen';
 import CheckoutScreen from '../Screens/CheckoutScreen';
@@ -9,11 +14,10 @@ import CartScreen from '../Screens/CartScreen';
 import PaymentScreen from '../Screens/PaymentScreen';
 import CheckoutCart from '../Screens/CheckoutCart';
 import PaymentCart from '../Screens/PaymentCart';
-import TabsNav from './TabsNav';
-import Signin from '../Screens/Sign-in ';
-import Signup from '../Screens/Sign-up';
-import ForgetPasswordScreen from '../Screens/ForgetPasswordScreen';
-import AdminScreen from '../Screens/AdminScreen';
+
+
+
+
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
