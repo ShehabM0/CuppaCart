@@ -33,7 +33,7 @@ const Home = ({ navigation }) => {
         />
 
         <TextAnimator
-          content="️The best grain, the finest roast & the powerful flavor"
+          content="The best grain, the finest roast & the powerful flavor"
           textStyle={styles.textFootStyle}
           style={styles.textFootStyle}
           duration={800}
