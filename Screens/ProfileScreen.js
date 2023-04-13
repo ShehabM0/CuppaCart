@@ -1,8 +1,8 @@
-import { useNavigation } from '@react-navigation/core';
-import React,{useState,useEffect} from 'react';
+import { useNavigation } from "@react-navigation/core";
+import React, { useState, useEffect } from "react";
 const backImage = require("../assets/adaptive-icon.png");
-import { Ionicons } from '@expo/vector-icons';
-import { logout } from '../firebase/auth';
+import { Ionicons } from "@expo/vector-icons";
+import { logout } from "../firebase/auth";
 
 import {
   Avatar,
@@ -10,9 +10,16 @@ import {
   Caption,
   Text,
   TouchableRipple,
-} from 'react-native-paper';
-import { StyleSheet, currentUser, SafeAreaView, TouchableOpacity, View,ScrollView } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+} from "react-native-paper";
+import {
+  StyleSheet,
+  currentUser,
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import auth from "../firebase/config";
 import {
   getUserUId,
@@ -23,26 +30,17 @@ import {
   getUserByName,
   getUsers,
   subscribeUser,
-} 
-from "../firebase/user"
+} from "../firebase/user";
 // import 'firebase/firestore';
 // import {getUsers}from"../firebase/user";
 
-const ProfileScreen = ({navigation}) => {
-
-
-
-  const ss=()=>{
-  
-    logout(auth).then(()=>{
+const ProfileScreen = ({ navigation }) => {
+  const ss = () => {
+    logout(auth).then(() => {
       console.log("sign out done");
-        navigation.navigate('SignIn')
-    })
-  }
-
-
-
-
+      navigation.navigate("SignIn");
+    });
+  };
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,143 +51,143 @@ const ProfileScreen = ({navigation}) => {
   const [role, setRole] = useState("");
   const [balance, setBalance] = useState();
 
-  
-  
-
   useEffect(() => {
     getUserUId().then((id) => {
-       //console.log(id);
+      //console.log(id);
       getUserById(id).then((user) => {
-       // console.log(user);
+        // console.log(user);
         setEmail(user[0].email);
         setPassword(user[0].password);
         setname(user[0].fullname);
         setPhone(user[0].phone);
         setimage(user[0].image);
         setRole(user[0].Role);
-        setBalance(user[0].balance)
+        setBalance(user[0].balance);
       });
     });
   }, []);
 
-console.log(fullname);
-
-
-
-
   return (
     <ScrollView
-    style={{
-      padding: 22,
-      backgroundColor:"#2E333E"
-    }}
-  > 
-    <SafeAreaView style={styles.container}>
+      style={{
+        padding: 22,
+        backgroundColor: "#2E333E",
+      }}
+    >
+      <SafeAreaView style={styles.container}>
+        <View style={styles.userInfoSection}>
+          <View style={{ flexDirection: "row", marginTop: 36 }}>
+            <Avatar.Image source={{ uri: image }} size={60} />
 
-
-
-      <View style={styles.userInfoSection}>
-        <View style={{ flexDirection: 'row', marginTop: 36 }}>
-          <Avatar.Image
-            source={{uri: image}} size={60}/>
-
-          <View style={{ marginLeft: 5}}>
-            <Title style={[styles.title, {
-              marginTop: 20,
-              marginBottom: 5,
-              color:'white',fontSize:25
-            }]}>{fullname}</Title>
-
-
-
+            <View style={{ marginLeft: 5 }}>
+              <Title
+                style={[
+                  styles.title,
+                  {
+                    marginTop: 20,
+                    marginBottom: 5,
+                    color: "white",
+                    fontSize: 25,
+                  },
+                ]}
+              >
+                {fullname}
+              </Title>
+            </View>
           </View>
         </View>
-      </View>
 
-      <View style={styles.userInfoSection}>
-        <View style={styles.row}>
-          <Icon name="map-marker-radius" color="#777777" size={20} />
-          <Text style={{ color: "#fff", marginLeft: 20 }}>Cairo,Egypt</Text>
-        </View>
-        <View style={styles.row}>
-          <Icon name="phone" color="#777777" size={20} />
-          <Text style={{ color: "#fff", marginLeft: 20 }}>{phone}</Text>
-        </View>
-        <View style={styles.row}>
-          <Icon name="email" color="#777777" size={20} />
-          <Text style={{ color: "#fff", marginLeft: 20 }}>{email}</Text>
-        </View>
-      </View>
-
-      <View style={styles.infoBoxWrapper}>
-        <View style={[styles.infoBox, {
-          borderRightColor: '#dddddd',
-          borderRightWidth: 1
-        }]}>
-          <Title style={{ color:'white' }} >-</Title>
-          <Caption style={{ color:'white',fontSize:15 }} >Bonus</Caption>
-        </View>
-        <View  style={[styles.infoBox, {
-          borderRightColor: '#dddddd',
-          borderRightWidth: 1
-        }]}>
-          <Title style={{ color:'white' }} >-</Title>
-          <Caption style={{ color:'white',fontSize:15 }} >Orders</Caption>
-          
-        </View>
-
-        <View style={styles.infoBox}>
-          <Title style={{ color:'white' }} >{balance}</Title>
-          <Caption style={{ color:'white',fontSize:15 }} >Balance</Caption>
-        </View>
-        
-      </View>
-
-      <View style={styles.menuWrapper}>
-        <TouchableRipple onPress={() => { }}>
-          <View style={styles.menuItem}>
-            <Icon name="heart-outline" color="#964B00" size={25} />
-            <Text style={styles.menuItemText}>Favourites</Text>
+        <View style={styles.userInfoSection}>
+          <View style={styles.row}>
+            <Icon name="map-marker-radius" color="#777777" size={20} />
+            <Text style={{ color: "#fff", marginLeft: 20 }}>Cairo,Egypt</Text>
           </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={() => { }}>
-          <View style={styles.menuItem}>
-            <Icon name="credit-card" color="#964B00" size={25} />
-            <Text style={styles.menuItemText}>Payment</Text>
+          <View style={styles.row}>
+            <Icon name="phone" color="#777777" size={20} />
+            <Text style={{ color: "#fff", marginLeft: 20 }}>{phone}</Text>
           </View>
-        </TouchableRipple>
-
-
-
-        <TouchableRipple onPress={() => { }}>
-          <View style={styles.menuItem}>
-            <Icon name="account-check-outline" color="#964B00" size={25} />
-            <Text style={styles.menuItemText}>Support</Text>
+          <View style={styles.row}>
+            <Icon name="email" color="#777777" size={20} />
+            <Text style={{ color: "#fff", marginLeft: 20 }}>{email}</Text>
           </View>
-        </TouchableRipple>
+        </View>
 
-        <TouchableRipple onPress={() => {
-          navigation.navigate("SettingsTab")}}>
-          <View style={styles.menuItem}>
-          <Ionicons name="settings-outline" size={25} color="#964B00" />
-            <Text style={styles.menuItemText}>Settings</Text>
+        <View style={styles.infoBoxWrapper}>
+          <View
+            style={[
+              styles.infoBox,
+              {
+                borderRightColor: "#dddddd",
+                borderRightWidth: 1,
+              },
+            ]}
+          >
+            <Title style={{ color: "white" }}>-</Title>
+            <Caption style={{ color: "white", fontSize: 15 }}>Bonus</Caption>
           </View>
-        </TouchableRipple>
-      </View>
+          <View
+            style={[
+              styles.infoBox,
+              {
+                borderRightColor: "#dddddd",
+                borderRightWidth: 1,
+              },
+            ]}
+          >
+            <Title style={{ color: "white" }}>-</Title>
+            <Caption style={{ color: "white", fontSize: 15 }}>Orders</Caption>
+          </View>
 
-      <TouchableOpacity
-        onPress={ss}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Sign out</Text>
-      </TouchableOpacity>
+          <View style={styles.infoBox}>
+            <Title style={{ color: "white" }}>{balance}</Title>
+            <Caption style={{ color: "white", fontSize: 15 }}>Balance</Caption>
+          </View>
+        </View>
 
+        <View style={styles.menuWrapper}>
+          <TouchableRipple
+            onPress={() => {
+              navigation.navigate("Fav");
+            }}
+          >
+            <View style={styles.menuItem}>
+              <Icon name="heart-outline" color="#964B00" size={25} />
+              <Text style={styles.menuItemText}>Favourites</Text>
+            </View>
+          </TouchableRipple>
+          <TouchableRipple onPress={() => {}}>
+            <View style={styles.menuItem}>
+              <Icon name="credit-card" color="#964B00" size={25} />
+              <Text style={styles.menuItemText}>Payment</Text>
+            </View>
+          </TouchableRipple>
 
+          <TouchableRipple onPress={() => {}}>
+            <View style={styles.menuItem}>
+              <Icon name="account-check-outline" color="#964B00" size={25} />
+              <Text style={styles.menuItemText}>Support</Text>
+            </View>
+          </TouchableRipple>
 
-    </SafeAreaView>
+          <TouchableRipple
+            onPress={() => {
+              navigation.navigate("SettingsTab");
+            }}
+          >
+            <View style={styles.menuItem}>
+              <Ionicons name="settings-outline" size={25} color="#964B00" />
+              <Text style={styles.menuItemText}>Settings</Text>
+            </View>
+          </TouchableRipple>
+        </View>
+
+        <TouchableOpacity onPress={ss} style={styles.button}>
+          <Text style={styles.buttonText}>Sign out</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
     </ScrollView>
   );
-}
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -200,61 +198,61 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   caption: {
     fontSize: 14,
     lineHeight: 14,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 10,
   },
   infoBoxWrapper: {
-    borderBottomColor: '#dddddd',
+    borderBottomColor: "#dddddd",
     borderBottomWidth: 1,
-    borderTopColor: '#dddddd',
+    borderTopColor: "#dddddd",
     borderTopWidth: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     height: 80,
   },
   infoBox: {
-    width: '33%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color:'#fff',
-    padding:10
+    width: "33%",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "#fff",
+    padding: 10,
   },
   menuWrapper: {
     marginTop: 10,
   },
   menuItem: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingVertical: 15,
     paddingHorizontal: 15,
   },
   menuItemText: {
-    color: '#fff',
+    color: "#fff",
     marginLeft: 20,
-    fontWeight: '600',
+    fontWeight: "600",
     fontSize: 16,
     lineHeight: 26,
   },
   button: {
-    backgroundColor: '#964B00',
-    width: '60%',
+    backgroundColor: "#964B00",
+    width: "60%",
     padding: 15,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 40,
-    marginLeft: '20%',
+    marginLeft: "20%",
   },
   buttonText: {
-    color: 'white',
-    fontWeight: '700',
+    color: "white",
+    fontWeight: "700",
     fontSize: 16,
   },
 });
 
-export default ProfileScreen
+export default ProfileScreen;
