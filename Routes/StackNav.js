@@ -15,6 +15,8 @@ import CartScreen from '../Screens/CartScreen';
 import PaymentScreen from '../Screens/PaymentScreen';
 import CheckoutCart from '../Screens/CheckoutCart';
 import PaymentCart from '../Screens/PaymentCart';
+import DeleteProductScreen from '../Screens/DeleteProductScreen';
+import EditProductScreen from '../Screens/EditProductScreen';
 
 
 
@@ -30,6 +32,8 @@ const MainStack = () => {
      <Stack.Screen name='ForgetPassword' component={ForgetPasswordScreen}/>
      <Stack.Screen name='Admin' component={AdminScreen}/>
      <Stack.Screen name='AddProduct' component={AddProductScrenn}/>
+     <Stack.Screen name='DeleteProduct' component={DeleteProductScreen}/>
+     <Stack.Screen name='EditProduct' component={EditProductScreen}/>
      <Stack.Screen name='TabsNav' component={TabsNav}/>
    </Stack.Navigator>
   )
