@@ -335,6 +335,9 @@ const ProfileScreen = ({ navigation }) => {
           </TouchableRipple>
 
           <TouchableRipple
+          onPress={() => {
+            navigation.navigate("AddAdmin");
+          }}
             
           >
             <View style={styles.menuItem}>
