@@ -6,6 +6,7 @@ import Signin from '../Screens/Sign-in ';
 import Signup from '../Screens/Sign-up';
 import ForgetPasswordScreen from '../Screens/ForgetPasswordScreen';
 import AdminScreen from '../Screens/AdminScreen';
+import AddProductScrenn from '../Screens/AddProductScreen';
 import TabsNav from './TabsNav';
 import HomeScreen from '../Screens/HomeScreen';
 import ProductScreen from '../Screens/ProductScreen';
@@ -28,6 +29,7 @@ const MainStack = () => {
      <Stack.Screen name='SignUp' component={Signup}/>
      <Stack.Screen name='ForgetPassword' component={ForgetPasswordScreen}/>
      <Stack.Screen name='Admin' component={AdminScreen}/>
+     <Stack.Screen name='AddProduct' component={AddProductScrenn}/>
      <Stack.Screen name='TabsNav' component={TabsNav}/>
    </Stack.Navigator>
   )
