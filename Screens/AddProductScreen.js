@@ -22,6 +22,7 @@ import {
   subscribeProduct,
 } from "../firebase/products";
 import Button from "../Components/Button";
+import Input from "../Components/Input";
 const AddProductsScreen = ({ navigation }) => {
   const [productName, setProductName] = useState("");
   const [image, setImage] = useState(null);
@@ -42,85 +43,101 @@ const AddProductsScreen = ({ navigation }) => {
     alert("Product Added with Product Name : " + productName);
   };
   return (
-    <View style={styles.container} behavior={"padding"}>
-      <View
-        style={{ width: "80%", alignItems: "center", justifyContent: "center" }}
-      >
-        <Text
+    <ScrollView style={{ padding: 20 }}>
+      <View style={styles.container} behavior={"padding"}>
+        <View
           style={{
-            color: "black",
-            fontSize: 28,
-            fontWeight: "500",
+            width: "80%",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          Add Product
-        </Text>
-      </View>
-
-      <View
-        style={{
-          width: "10%",
-          fontSize: 18,
-          color: "#B9B9B9",
-          borderRadius: 10,
-        }}
-      >
-        <TouchableOpacity>
-          <Entypo
-            name="chevron-thin-left"
+          <Text
             style={{
-              fontSize: 18,
               color: "black",
-              padding: 12,
-              borderRadius: 10,
-              backgroundColor: "#F0F0F3",
+              fontSize: 28,
+              fontWeight: "500",
             }}
-            onPress={() => {
-              navigation.navigate("Admin");
-            }}
+          >
+            Add Product
+          </Text>
+        </View>
+
+        <View
+          style={{
+            width: "10%",
+            fontSize: 18,
+            color: "#B9B9B9",
+            borderRadius: 10,
+          }}
+        >
+          <TouchableOpacity>
+            <Entypo
+              name="chevron-thin-left"
+              style={{
+                fontSize: 18,
+                color: "black",
+                padding: 12,
+                borderRadius: 10,
+                backgroundColor: "#F0F0F3",
+              }}
+              onPress={() => navigation.goBack()}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.inputContainer}>
+          <Input
+            onChangeText={(text) => setProductName(text)}
+            value={productName}
+            iconName="rename-box"
+            label="ProductName"
+            placeholder="Enter Product Name"
+            style={styles.input}
           />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="productName"
-          value={productName}
-          onChangeText={(text) => setProductName(text)}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Image"
-          value={image}
-          onChangeText={setImage}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="price"
-          value={price}
-          onChangeText={(text) => setPrice(text)}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="details"
-          value={details}
-          onChangeText={(text) => setDetails(text)}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="type"
-          value={type}
-          onChangeText={(text) => setType(text)}
-          style={styles.input}
-        />
-        <TextInput
-          placeholder="Rate"
-          value={Rate}
-          onChangeText={(text) => setRate(text)}
-          style={styles.input}
-        />
-      </View>
-      <View style={styles.buttonContainer}>
-        {/* <TouchableOpacity
+          <Input
+            placeholder="Image"
+            value={image}
+            onChangeText={setImage}
+            iconName="image"
+            label="Image"
+            style={styles.input}
+          />
+          <Input
+            placeholder="price"
+            value={price}
+            onChangeText={(text) => setPrice(text)}
+            iconName="bitcoin"
+            label="price"
+            style={styles.input}
+          />
+
+          <Input
+            placeholder="details"
+            value={details}
+            onChangeText={(text) => setDetails(text)}
+            iconName="details"
+            label="details"
+            style={styles.input}
+          />
+          <Input
+            placeholder="type"
+            value={type}
+            onChangeText={(text) => setType(text)}
+            iconName="information"
+            label="type"
+            style={styles.input}
+          />
+          <Input
+            placeholder="Rate"
+            value={Rate}
+            onChangeText={(text) => setRate(text)}
+            iconName="account-star-outline"
+            label="Rate"
+            style={styles.input}
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          {/* <TouchableOpacity
           onPress={() => {
             handleAddProduct();
           }}
@@ -128,14 +145,15 @@ const AddProductsScreen = ({ navigation }) => {
         >
           <Text style={[styles.buttonOutlineText]}>Add Product</Text>
         </TouchableOpacity> */}
-        <Button
-          title="ADD Product"
-          onPress={() => {
-            handleAddProduct();
-          }}
-        />
+          <Button
+            title="ADD Product"
+            onPress={() => {
+              handleAddProduct();
+            }}
+          />
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -148,16 +166,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   inputContainer: {
-    width: "80%",
+    width: "85%",
   },
   input: {
     backgroundColor: "white",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
-    marginTop: 5,
     color: "black",
     fontSize: 18,
+    width:"93%"
+
   },
   buttonContainer: {
     width: "60%",
