@@ -6,17 +6,19 @@ import { ProductStack, CartStack } from './ProductCartStack';
 import ProfileScreen from "../Screens/ProfileScreen";
 import { FontAwesome } from "@expo/vector-icons";
 import SettingsScreen from "../Screens/SettingsScreen";
+import Fav from "../Screens/FavScreen";
+
 const Tab = createBottomTabNavigator();
 const TabsNav = () => {
   return (
     <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: false,
-        tabBarStyle: { backgroundColor: "#865439" },
-        tabBarInactiveTintColor: "white",
-        tabBarActiveTintColor: "yellow",
-      }}
+    screenOptions={{headerShown:false , tabBarShowLabel:false ,tabBarStyle:{backgroundColor:"#865439", height: 60,
+    position: 'absolute',
+    bottom:20,
+    right: 16,
+    left: 16,
+    borderRadius: 16,
+    shadowRadius:10 },tabBarInactiveTintColor:"white" ,tabBarActiveTintColor:"yellow"}}
     >
       <Tab.Screen
         name="HomeTab"
@@ -51,6 +53,15 @@ const TabsNav = () => {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="settings-outline" size={size} color={color} />
+          ),
+        }}
+      />
+       <Tab.Screen
+        name="Fav"
+        component={Fav}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="heart" size={size} color={color} />
           ),
         }}
       />
