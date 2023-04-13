@@ -69,7 +69,7 @@ export default function ProfileScreen({ navigation }) {
   }, []);
   const [searchTerm, setSearchTerm] = useState("");
   return (
-    <View
+    <ScrollView
       style={{
         padding: 26,
         backgroundColor: "#2E333E",
@@ -203,7 +203,7 @@ export default function ProfileScreen({ navigation }) {
         <View style={{ paddingLeft: 5 }}>
           <FlatList
             data={products.slice(0, 4)}
-            numColumns={2}
+            horizontal
             showsHorizontalScrollIndicator={true}
             renderItem={(itemData) => {
               return (
@@ -219,8 +219,28 @@ export default function ProfileScreen({ navigation }) {
             }}
           />
         </View>
+        <View style={{ paddingLeft: 5 }}>
+          <FlatList
+            data={products.slice(7, 10)}
+            horizontal
+            showsHorizontalScrollIndicator={true}
+            renderItem={(itemData) => {
+              return (
+                <ProductCard
+                  productName={itemData.item.productName}
+                  price={itemData.item.price}
+                  details={itemData.item.details}
+                  image={itemData.item.image}
+                  Rate={itemData.item.Rate}
+                  id={itemData.item.id}
+                />
+              );
+            }}
+          />
+        </View>
+        
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
