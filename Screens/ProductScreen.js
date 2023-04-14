@@ -24,9 +24,10 @@ export default function ProductScreen() {
   }
 
   return (
+    <>
+      <View style={styles.imgbgLayout}/>
       <SafeAreaView style={{paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 2 : 0,}}>
         <ScrollView>
-          <View style={styles.imgbgLayout}/>
           <View style={styles.imgTitlePriceCont}>
             <Image 
               style={styles.img}
@@ -89,7 +90,9 @@ export default function ProductScreen() {
             { 
               !arrow && 
               <View>
-                <Text style={styles.desc}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</Text>
+                <Text style={styles.desc}>
+                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </Text>
               </View>
             }
           </View>
@@ -120,6 +123,7 @@ export default function ProductScreen() {
           </View>
         </ScrollView>
       </SafeAreaView>
+      </>
   );
 }
 
@@ -216,9 +220,10 @@ const styles = StyleSheet.create({
   desc: {
     fontWeight: 'bold',
     padding: 10,
-    color: COLORS.white,
+    color: 'rgba(255, 255, 255, 0.8)',
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     borderRadius: 20,
+    lineHeight: 25
   },
   downArrow: {
     width: 30,
