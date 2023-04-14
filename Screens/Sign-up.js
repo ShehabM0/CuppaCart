@@ -43,6 +43,7 @@ const RegistrationScreen = ({navigation}) => {
   const validate = async () => {
     Keyboard.dismiss();
     let isValid = true;
+    let user_id;
   
     if (!email) {
       handleError('Please enter email', 'email');
@@ -74,7 +75,7 @@ const RegistrationScreen = ({navigation}) => {
       register(email, password)
       .then(() => {
         getUserUId().then((id) => {
-          // console.log(id);
+          user_id = id;
           addUser({
             id: id,
             email,
@@ -88,13 +89,14 @@ const RegistrationScreen = ({navigation}) => {
             favorite:[],
             balance:0,
             selectedStartDate,
+            creditcard: ""
           });
         });
         setLoading(true);
         setTimeout(() => {
           setLoading(false);
-          navigation.navigate('SignIn');
-        }, 3000);
+          navigation.navigate('CreditCard', { user_id: user_id });
+        }, 2000);
       })
       .catch((error)=>{
         alert(error.message);
