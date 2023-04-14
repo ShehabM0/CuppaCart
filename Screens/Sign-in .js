@@ -9,7 +9,13 @@ import auth from "../firebase/config";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { addUser, getUserById, getUserUId } from "../firebase/user";
 import { login, getUserToken, logout } from "../firebase/auth";
+import { SocialIcon } from "react-native-elements";
 
+import Ionicons from "react-native-vector-icons/Ionicons";
+
+const loginwithgoogle = () => {
+  
+};
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -102,6 +108,13 @@ const LoginScreen = ({ navigation }) => {
           />
 
           <Button title="Log In" onPress={validate} />
+          <SocialIcon
+            title="Sign In With Google"
+            button
+            type="google"
+            onPress={loginwithgoogle}
+          
+          />
           <Text
             onPress={() => navigation.navigate("SignUp")}
             style={{
@@ -109,6 +122,7 @@ const LoginScreen = ({ navigation }) => {
               fontWeight: "bold",
               textAlign: "center",
               fontSize: 16,
+              padding:8
             }}
           >
             Don't have account? Register
@@ -120,7 +134,7 @@ const LoginScreen = ({ navigation }) => {
               fontWeight: "bold",
               textAlign: "center",
               fontSize: 16,
-              padding: 13,
+              padding: 2,
             }}
           >
             Forgot password?
