@@ -25,7 +25,8 @@ import { sendEmailVerification } from "firebase/auth";
 import { register, getUserUId } from "../firebase/auth";
 import { addUser } from "../firebase/user";
 const RegistrationScreen = ({navigation}) => {
-  const [fullname, setFullname] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
   const [isFocused, setIsFocused] = React.useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,7 +54,11 @@ const RegistrationScreen = ({navigation}) => {
       isValid = false;
     }
   
-    if (!fullname) {
+    if (!firstname) {
+      handleError('Please enter fullname', 'fullname');
+      isValid = false;
+    }
+    if (!lastname) {
       handleError('Please enter fullname', 'fullname');
       isValid = false;
     }
@@ -80,7 +85,8 @@ const RegistrationScreen = ({navigation}) => {
             id: id,
             email,
             password,
-            fullname,
+            firstname,
+            lastname,
             phone,
             Role: "User",
             image:
@@ -142,13 +148,22 @@ const RegistrationScreen = ({navigation}) => {
           />
 
           <Input
-            value={fullname}
-            onChangeText={setFullname}
-            onFocus={() => handleError(null, fullname)}
+            value={firstname}
+            onChangeText={setFirstname}
+            onFocus={() => handleError(null, firstname)}
             iconName="account-outline"
-            label="Full Name"
-            placeholder="Enter your full name"
-            error={errors.fullname}
+            label="First Name"
+            placeholder="Enter your first name"
+            error={errors.firstname}
+          />
+           <Input
+            value={lastname}
+            onChangeText={setLastname}
+            onFocus={() => handleError(null, lastname)}
+            iconName="account-outline"
+            label="Last Name"
+            placeholder="Enter your last name"
+            error={errors.lastname}
           />
 
           <Input
