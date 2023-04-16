@@ -5,6 +5,8 @@ import StartupScreen from '../Screens/StartupScreen';
 import Signin from '../Screens/Sign-in ';
 import Signup from '../Screens/Sign-up';
 import CreditCard from '../Screens/CreditCard';
+import CreateCreditCard from '../Screens/CreateCreditCard';
+import ChangeCreditCard from '../Screens/ChangeCreditCard';
 import ForgetPasswordScreen from '../Screens/ForgetPasswordScreen';
 import AdminScreen from '../Screens/AdminScreen';
 import AddProductScrenn from '../Screens/AddProductScreen';
@@ -34,6 +36,8 @@ const MainStack = () => {
      <Stack.Screen name='SignIn' component={Signin}/>
      <Stack.Screen name='SignUp' component={Signup}/>
      <Stack.Screen name='CreditCard' component={CreditCard}/>
+     <Stack.Screen name='CreateCreditCard' component={CreateCreditCard}/>
+     <Stack.Screen name='ChangeCreditCard' component={ChangeCreditCard}/>
      <Stack.Screen name='ForgetPassword' component={ForgetPasswordScreen}/>
      <Stack.Screen name='Admin' component={AdminScreen}/>
      <Stack.Screen name='AddProduct' component={AddProductScrenn}/>
@@ -47,26 +51,27 @@ const MainStack = () => {
    </Stack.Navigator>
   )
 }
-const ProductStack = () => {
-    return (
-     <Stack.Navigator screenOptions={{headerShown:false}}>
-      <Stack.Screen name='Home' component={HomeScreen}/>
-       <Stack.Screen name='Product' component={ProductScreen}/>
-       <Stack.Screen name='Checkout' component={CheckoutScreen}/>
-       <Stack.Screen name='Payment' component={PaymentScreen}/>
-     </Stack.Navigator>
-    )
-  }
 
-  const CartStack = () => {
-    return (
-     <Stack.Navigator screenOptions={{headerShown:false}}>
+const ProductStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown:false}}>
+      <Stack.Screen name='Home' component={HomeScreen}/>
+      <Stack.Screen name='Product' component={ProductScreen}/>
+      <Stack.Screen name='Checkout' component={CheckoutScreen}/>
+      <Stack.Screen name='Payment' component={PaymentScreen}/>
+    </Stack.Navigator>
+  )
+}
+
+const CartStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{headerShown:false}}>
       <Stack.Screen name='Cart' component={CartScreen}/>
-       <Stack.Screen name='CheckoutCart' component={CheckoutCart}/>
-       <Stack.Screen name='PaymentCart' component={PaymentCart}/>
-     </Stack.Navigator>
-    )
-  }
+      <Stack.Screen name='CheckoutCart' component={CheckoutCart}/>
+      <Stack.Screen name='PaymentCart' component={PaymentCart}/>
+    </Stack.Navigator>
+  )
+}
 
   
 export  {MainStack,ProductStack,CartStack}
