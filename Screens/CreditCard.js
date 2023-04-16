@@ -1,5 +1,5 @@
-import React,{useState} from 'react';
-import { StyleSheet, View, Text, SafeAreaView, ScrollView, Alert, TouchableOpacity } from 'react-native'; 
+import React,{ useState } from 'react';
+import { StyleSheet, View, Text, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'; 
 
 import Loader from '../Components/Loader';
 import Input from '../Components/Input';
@@ -30,13 +30,15 @@ export default RegistrationScreen = ({ route, navigation }) => {
                 where("number" , "==", number),
                 where("expiry_date" , "==", date),
                 where("cvv" , "==", cvv),);
-            const exist = await getDocs(q);
-            if(exist.docs.length) {
+            const existCreditCard = await getDocs(q);
+
+            if(existCreditCard.docs.length) {
                 let creditcard_id;
-                exist.forEach(doc => creditcard_id = doc.id)
-                const docRef = doc(db, "users", user_id);
-                await updateDoc(docRef, { creditcard: creditcard_id })
-                .then(docRef => {
+                existCreditCard.forEach(doc => creditcard_id = doc.id);
+
+                const userDoc = doc(db, "users", user_id);
+                await updateDoc(userDoc, { creditcard: creditcard_id })
+                .then(() => {
                     setLoading(true);
                     setTimeout(() => setLoading(false), 2000);
 
@@ -106,10 +108,10 @@ export default RegistrationScreen = ({ route, navigation }) => {
         <Loader visible={loading} />
         <ScrollView contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
             <Text style={{color: COLORS.black, fontSize: 40, fontWeight: 'bold'}}>
-            CreditCard
+                CreditCard
             </Text>
             <Text style={{color: COLORS.grey, fontSize: 18, marginVertical: 10}}>
-            Enter Your CreditCard Details
+                Enter Your CreditCard Details
             </Text>
             <View style={{marginVertical: 20}}>
                 <Input
@@ -149,7 +151,7 @@ export default RegistrationScreen = ({ route, navigation }) => {
                             keyboardType="numeric"
                             iconName="credit-card-lock"
                             label="CVV"
-                            placeholder="3-4 digit"
+                            placeholder="3-4 digits"
                             value={cvv}
                             onChangeText={setCvv}
                             onFocus={() => handleError(null, cvv)}
@@ -169,10 +171,12 @@ export default RegistrationScreen = ({ route, navigation }) => {
             </View>
         </ScrollView>
         {
-            success && <SuccessMessage message={"Account has been created with Credit Card"}/>
+            success &&
+            <SuccessMessage message={"Account has been created with Credit Card"}/>
         }
         {
-            skip && <SuccessMessage message={"Account has been created"}/>
+            skip &&
+            <SuccessMessage message={"Account has been created"}/>
         }
         </SafeAreaView>
     );
