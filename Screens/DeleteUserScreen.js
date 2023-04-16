@@ -23,17 +23,18 @@ import {
     getUserByName,
     getUsers,
     subscribeUser,
+    getUserByEmail,
 } from "../firebase/user";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
 const DeleteUserScreen = ({navigation}) => {
-    const [fullname, setFullname] = useState("");
+    const [email, setemail] = useState("");
    
     const handleDeleteUser = async () => {
      
-        const object = await getUserByName(fullname);
+        const object = await getUserByEmail(email);
         deleteUser(object);
-        alert("User Deleted With Name : " + fullname);
+        alert("User Deleted With Name : " + email);
       };
   return (
     <View style={styles.container} behavior={"padding"}>
@@ -67,8 +68,8 @@ const DeleteUserScreen = ({navigation}) => {
     <View style={styles.inputContainer}>
     <Input
            placeholder="User Name"
-           value={fullname}
-           onChangeText={(text) => setFullname(text)}
+           value={email}
+           onChangeText={(text) => setemail(text)}
             iconName="rename-box"
             label="UserName"
             style={styles.input}
