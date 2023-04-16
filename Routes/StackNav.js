@@ -21,6 +21,7 @@ import EditProductScreen from '../Screens/EditProductScreen';
 import EditUserScreen from '../Screens/EditUserScreen';
 import AddAdminScreen from '../Screens/AddAdminScreen';
 import DeleteUserScreen from '../Screens/DeleteUserScreen';
+import AllUsersScreen from '../Screens/AllUsersScreen';
 
 
 
@@ -41,6 +42,7 @@ const MainStack = () => {
      <Stack.Screen name='EditUserScreen' component={EditUserScreen}/>
      <Stack.Screen name='AddAdmin' component={AddAdminScreen}/>
      <Stack.Screen name='DeleteUser' component={DeleteUserScreen}/>
+     <Stack.Screen name='AllUsers' component={AllUsersScreen}/>
      <Stack.Screen name='TabsNav' component={TabsNav}/>
    </Stack.Navigator>
   )
