@@ -23,16 +23,11 @@ export default RegistrationScreen = ({ navigation }) => {
 
     const handleSubmit = async () => {
         if(validateName() && validateNumber() && validateDate() && validateCvv() && validateBalance()) {
-            const q = query(
-                creditCardCollection, 
-                where("name", "==", name.trim().toLowerCase()),
-                where("number" , "==", number),
-                where("expiry_date" , "==", date),
-                where("cvv" , "==", cvv),);
+            const q = query(creditCardCollection, where("number" , "==", number));
             const existCreditCard = await getDocs(q);
 
             if(existCreditCard.docs.length) {
-                alert("Invalid Credit Card Info!");
+                alert("Credit Card Already Exists!");
             } else {
                 creditCardData = {
                     name: name.trim().toLowerCase(),
@@ -58,7 +53,7 @@ export default RegistrationScreen = ({ navigation }) => {
                 .catch(error => alert(error.message));
             }
         } else {
-            alert("Invalid Credit Card Info!");
+            alert("Invalid Credit Card data!");
         }
     }
 
