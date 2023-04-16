@@ -177,7 +177,7 @@ export default RegistrationScreen = ({ navigation }) => {
             </ScrollView>
             {
                 success &&
-                <SuccessMessage message={"Credit Card has been add to database"}/>
+                <SuccessMessage message={"Credit Card has been added to database"}/>
             }
         </SafeAreaView>
     );
