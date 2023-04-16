@@ -284,7 +284,11 @@ const ProfileScreen = ({ navigation }) => {
             ]}
           >
             <Title style={{ color: "white" }}>{Users.length}</Title>
+            <TouchableRipple onPress={() => {
+              navigation.navigate("AllUsers");
+            }} >
             <Caption style={{ color: "white", fontSize: 15 }}>Users</Caption>
+            </TouchableRipple>
           </View>
           <View
             style={[
