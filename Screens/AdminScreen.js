@@ -347,7 +347,7 @@ const ProfileScreen = ({ navigation }) => {
           </TouchableRipple>
           <TouchableRipple
             onPress={() => {
-              navigation.navigate("SettingsTab");
+              navigation.navigate("DeleteUser");
             }}
           >
             <View style={styles.menuItem}>

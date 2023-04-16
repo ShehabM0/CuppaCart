@@ -15,7 +15,7 @@ import { async } from "@firebase/util";
 
 async function getUserByName(name) {
   const usersColumn = collection(db, "users");
-  const que = query(usersColumn, where("userName", "==", name));
+  const que = query(usersColumn, where("fullname", "==", name));
   const userSnapShot = await getDocs(que);
   const userObject = userSnapShot.docs.map((doc) => {
     return { id: doc.id, ...doc.data() };
