@@ -84,6 +84,13 @@ async function getUserUId() {
     return null;
   }
 }
+
+function getCurrUserId() {
+  if (auth.currentUser) 
+    return auth.currentUser.uid;
+  return null;
+}
+
 async function getUserById(id) {
   const usersRef = collection(db, "users");
   const q = query(usersRef, where("id", "==", id));
@@ -102,5 +109,6 @@ export {
   subscribeUser,
   getUserUId,
   getUserById,
+  getCurrUserId,
   getUserByEmail,
 };
