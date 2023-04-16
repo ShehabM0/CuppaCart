@@ -22,6 +22,15 @@ async function getUserByName(name) {
   });
   return userObject[0];
 }
+async function getUserByEmail(email) {
+  const usersColumn = collection(db, "users");
+  const que = query(usersColumn, where("email", "==", email));
+  const userSnapShot = await getDocs(que);
+  const userObject = userSnapShot.docs.map((doc) => {
+    return { id: doc.id, ...doc.data() };
+  });
+  return userObject[0];
+}
 
 async function getUsers() {
   const usersCol = collection(db, "users");
@@ -93,4 +102,5 @@ export {
   subscribeUser,
   getUserUId,
   getUserById,
+  getUserByEmail,
 };
