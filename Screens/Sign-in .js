@@ -1,27 +1,44 @@
 import React, { useState,useEffect   } from "react";
 import { View, Text, SafeAreaView, Keyboard, Alert } from "react-native";
-import COLORS from "../";
+import {COLORS} from "../Conts/Color";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Loader from "../Components/Loader";
-import auth from "../firebase/config";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {auth} from "../firebase/config";
+import { GoogleAuthProvider, signInWithPopup, } from "firebase/auth";
 import { addUser, getUserById, getUserUId } from "../firebase/user";
 import { login, getUserToken, logout } from "../firebase/auth";
 import { SocialIcon } from "react-native-elements";
+const provider = new GoogleAuthProvider();
 
-import Ionicons from "react-native-vector-icons/Ionicons";
-
-const loginwithgoogle = () => {
-  
-};
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = React.useState({});
   const [loading, setLoading] = React.useState(false);
-
+  const googleauth=()=>{
+    signInWithPopup(auth, provider)
+    .then((result) => {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      // The signed-in user info.
+      const user = result.user;
+      // IdP data available using getAdditionalUserInfo(result)
+      // ...
+      console.log(user.email);
+    }).catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
+    });
+   } 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       setLoading(false);
@@ -74,7 +91,7 @@ const LoginScreen = ({ navigation }) => {
     setErrors((prevState) => ({ ...prevState, [input]: error }));
   };
   return (
-    <SafeAreaView style={{ backgroundColor: COLORS.black, flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
       <Loader visible={loading} />
       <View style={{ paddingTop: 50, paddingHorizontal: 20 }}>
         <Text style={{ color: COLORS.black, fontSize: 40, fontWeight: "bold" }}>
@@ -112,7 +129,7 @@ const LoginScreen = ({ navigation }) => {
             title="Sign In With Google"
             button
             type="google"
-            onPress={loginwithgoogle}
+            onPress={()=>googleauth()}
           
           />
           <Text

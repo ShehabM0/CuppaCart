@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'; 
-
 import SuccessMessage from '../Components/SuccessMessage';
 import Loader from '../Components/Loader';
 import Input from '../Components/Input';
-
+import {COLORS} from "../Conts/Color";
 import { getCreditCardByNumber, addCreditCard } from '../firebase/creditcard';
 
-export default RegistrationScreen = ({ navigation }) => {
+const RegistrationScreen = ({ navigation }) => {
 
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
@@ -184,7 +183,7 @@ export default RegistrationScreen = ({ navigation }) => {
         </SafeAreaView>
     );
 }
-
+export default RegistrationScreen
 const styles = StyleSheet.create({
     cont: {
         flexDirection: 'row',

@@ -9,12 +9,12 @@ import {
   Alert,
 } from 'react-native'; 
 
-import COLORS from '../Conts/Color';
+import {COLORS} from '../Conts/Color';
 import Button from '../Components/Button';
 import Input from '../Components/Input';
 import Loader from '../Components/Loader';
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import auth from "../firebase/config";
+import {auth} from "../firebase/config";
 import { sendEmailVerification } from "firebase/auth";
 import { register, getUserUId } from "../firebase/auth";
 import { addUser } from "../firebase/user";

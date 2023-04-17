@@ -1,4 +1,4 @@
-import { app } from "../";
+import { app } from "./config";
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,

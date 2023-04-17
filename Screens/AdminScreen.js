@@ -164,7 +164,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { AntDesign } from '@expo/vector-icons';
-import auth from "../firebase/config";
+import {auth} from "../firebase/config";
 import {
   getUserUId,
   addUser,

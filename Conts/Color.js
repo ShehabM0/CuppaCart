@@ -1,6 +1,6 @@
-export default COLORS = {
-    white: '#fff',
-    black: '#1C0A00',
+export const COLORS = {
+    white: "#fff",
+    black: "#1C0A00",
     blue: '#5D5FEE',
     grey: '#BABBC3',
     light: '#F3F4FB',

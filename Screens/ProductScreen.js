@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Platform, StatusBar, ScrollView, Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View, SafeAreaView } from 'react-native';
-import COLORS from '../Conts/Color'
+import {COLORS} from '../Conts/Color'
 
 export default function ProductScreen() {
 
