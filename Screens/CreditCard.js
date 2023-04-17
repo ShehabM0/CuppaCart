@@ -1,12 +1,12 @@
 import React,{ useState } from 'react';
 import { StyleSheet, View, Text, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'; 
 
+import SuccessMessage from '../Components/SuccessMessage';
 import Loader from '../Components/Loader';
 import Input from '../Components/Input';
-import SuccessMessage from '../Components/SuccessMessage';
 
-import { collection, doc, getDocs, query, where, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { getCreditCard } from '../firebase/creditcard';
+import { updateUser } from '../firebase/user';
 
 export default RegistrationScreen = ({ route, navigation }) => {
     
@@ -19,44 +19,51 @@ export default RegistrationScreen = ({ route, navigation }) => {
     const [success, setSuccess] = useState(false);
     const [skip, setSkip] = useState(false);
 
-    const creditCardCollection = collection(db, "creditcards");
     const { user_id } = route.params;
 
-    const handleSubmit = async () => {
+    const handleSubmit = () => {
         if(validateName() && validateNumber() && validateDate() && validateCvv()) {
-            const q = query(
-                creditCardCollection, 
-                where("name", "==", name.trim().toLowerCase()),
-                where("number" , "==", number),
-                where("expiry_date" , "==", date),
-                where("cvv" , "==", cvv),);
-            const existCreditCard = await getDocs(q);
-
-            if(existCreditCard.docs.length) {
-                let creditcard_id;
-                existCreditCard.forEach(doc => creditcard_id = doc.id);
-
-                const userDoc = doc(db, "users", user_id);
-                await updateDoc(userDoc, { creditcard: creditcard_id })
-                .then(() => {
-                    setLoading(true);
-                    setTimeout(() => setLoading(false), 2000);
-
-                    setTimeout(() => {
-                        setSuccess(true);
-                        setTimeout(() => setSuccess(false), 3500);
-                    }, 2000);
-
-                    setTimeout(() => {
-                        navigation.navigate('SignIn');
-                    }, 5500);
-                })
-                .catch(error => alert(error.message));
-            } else {
-                alert("Invalid Credit Card Info!");
+            creditCardData = {
+                name: name,
+                number: number,
+                date: date,
+                cvv: cvv,
             }
+            getCreditCard(creditCardData)
+            .then(existCreditCard => {
+                if(existCreditCard) {
+                    let creditcard_id;
+                    existCreditCard.forEach(doc => creditcard_id = doc.id);
+        
+                    updateUser(user_id, { creditcard: creditcard_id })
+                    .then(({ status, message }) => {
+                        if(status) {
+                            setLoading(true);
+                            setTimeout(() => setLoading(false), 2000);
+            
+                            setTimeout(() => {
+                                setSuccess(true);
+                                setTimeout(() => setSuccess(false), 3500);
+                            }, 2000);
+            
+                            setTimeout(() => {
+                                navigation.navigate('SignIn');
+                            }, 5500);
+                        } else {
+                            alert(message);
+                        }
+                    })
+                    .catch(error => alert(error.message))
+                } else {
+                    alert("Invalid Credit Card Info!")
+                }
+            })
+            .catch(error => alert(error.message));
+        } else {
+            alert("Invalid Credit Card data!");
         }
     }
+
     function handleSkip() {
         setLoading(true);
         setTimeout(() => setLoading(false), 1000);
