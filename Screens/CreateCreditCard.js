@@ -5,8 +5,7 @@ import SuccessMessage from '../Components/SuccessMessage';
 import Loader from '../Components/Loader';
 import Input from '../Components/Input';
 
-import { collection, getDocs, addDoc, query, where } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { getCreditCardByNumber, addCreditCard } from '../firebase/creditcard';
 
 export default RegistrationScreen = ({ navigation }) => {
 
@@ -19,39 +18,44 @@ export default RegistrationScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
 
-    const creditCardCollection = collection(db, "creditcards");
-
     const handleSubmit = async () => {
         if(validateName() && validateNumber() && validateDate() && validateCvv() && validateBalance()) {
-            const q = query(creditCardCollection, where("number" , "==", number));
-            const existCreditCard = await getDocs(q);
+            
+            getCreditCardByNumber(number)
+            .then(existCreditCard => {
+                if(existCreditCard) {
+                    alert("Credit Card Already Exists!");
+                } else {
+                    creditCardData = {
+                        name: name.trim().toLowerCase(),
+                        number: number,
+                        expiry_date: date,
+                        cvv: cvv,
+                        balance: Number(balance)
+                    }
 
-            if(existCreditCard.docs.length) {
-                alert("Credit Card Already Exists!");
-            } else {
-                creditCardData = {
-                    name: name.trim().toLowerCase(),
-                    number: number,
-                    expiry_date: date,
-                    cvv: cvv,
-                    balance: Number(balance)
+                    addCreditCard(creditCardData)
+                    .then(({ status, message }) => {
+                        if(status) {
+                            setLoading(true);
+                            setTimeout(() => setLoading(false), 2000);
+        
+                            setTimeout(() => {
+                                setSuccess(true);
+                                setTimeout(() => setSuccess(false), 3500);
+                            }, 2000);
+        
+                            setTimeout(() => {
+                                navigation.navigate('TabsNav');
+                            }, 5500);
+                        } else {
+                            alert(message);
+                        }
+                    })
+                    .catch(error => alert(error.message));
                 }
-                await addDoc(creditCardCollection, creditCardData)
-                .then(() => {
-                    setLoading(true);
-                    setTimeout(() => setLoading(false), 2000);
-
-                    setTimeout(() => {
-                        setSuccess(true);
-                        setTimeout(() => setSuccess(false), 3500);
-                    }, 2000);
-
-                    setTimeout(() => {
-                        navigation.navigate('TabsNav');
-                    }, 5500);
-                })
-                .catch(error => alert(error.message));
-            }
+            })
+            .catch(error => error.message)
         } else {
             alert("Invalid Credit Card data!");
         }
@@ -86,8 +90,11 @@ export default RegistrationScreen = ({ navigation }) => {
         }
         return true;
     }
-    function validateBalance() {
-        return (balance > -1 &&  !isNaN(balance));
+    function validateBalance() { 
+        if (balance && balance > -1 && !isNaN(balance))
+            return true;
+        handleError('Credit Card balance must be valid number', 'balance');
+        return false;
     }
 
     const handleError = (error, input) => {

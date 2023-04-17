@@ -5,9 +5,8 @@ import SuccessMessage from '../Components/SuccessMessage';
 import Loader from '../Components/Loader';
 import Input from '../Components/Input';
 
-import { collection, doc, getDocs, getDoc, query, where, updateDoc } from 'firebase/firestore';
-import { getCurrUserId } from "../firebase/user"
-import { db } from '../firebase/config';
+import { getCurrUserId, getUserById, updateUser } from "../firebase/user"
+import { getCreditCard } from '../firebase/creditcard';
 
 export default RegistrationScreen = ({ navigation }) => {
     
@@ -21,56 +20,63 @@ export default RegistrationScreen = ({ navigation }) => {
     const [successMessage, setSuccessMessage] = useState('Credit Card has been added to your account');
     const [hasCreditCard, setHasCreditCard] = useState(false);
 
-    const creditCardCollection = collection(db, "creditcards");
     const user_id = getCurrUserId();
 
     useEffect(() => {
         const creditCardConfirmation = async () => {
-            const userDoc = doc(db, "users", user_id);
-            const user = await getDoc(userDoc);
-            const userCreditCard = user.data().creditcard;
-            if(userCreditCard) {
-                setHasCreditCard(true);
-                setSuccessMessage('Credit Card has been changed');
-            }
+            getUserById(user_id)
+            .then((user) => {
+                const userCreditCard = user[0].creditcard;
+                if(userCreditCard) {
+                    setHasCreditCard(true);
+                    setSuccessMessage('Credit Card has been changed');
+                }
+            })
+            .catch(error => alert(error.message))
         }
         creditCardConfirmation();
     }, []);
 
     const handleSubmit = async () => {
         if(validateName() && validateNumber() && validateDate() && validateCvv()) {
-            const q = query(
-                creditCardCollection, 
-                where("name", "==", name.trim().toLowerCase()),
-                where("number" , "==", number),
-                where("expiry_date" , "==", date),
-                where("cvv" , "==", cvv),);
-            const existCreditCard = await getDocs(q);
-
-            if(existCreditCard.docs.length) {
-                let creditcard_id;
-                existCreditCard.forEach(doc => creditcard_id = doc.id)
-
-                const userDoc = doc(db, "users", user_id);
-
-                await updateDoc(userDoc, { creditcard: creditcard_id })
-                .then(() => {
-                    setLoading(true);
-                    setTimeout(() => setLoading(false), 2000);
-
-                    setTimeout(() => {
-                        setSuccess(true);
-                        setTimeout(() => setSuccess(false), 3500);
-                    }, 2000);
-
-                    setTimeout(() => {
-                        navigation.navigate('TabsNav');
-                    }, 5500);
-                })
-                .catch(error => alert(error.message));
-            } else {
-                alert("Invalid Credit Card Info!");
+            creditCardData = {
+                name: name,
+                number: number,
+                date: date,
+                cvv: cvv,
             }
+            getCreditCard(creditCardData)
+            .then(existCreditCard => {
+                if(existCreditCard) {
+                    let creditcard_id;
+                    existCreditCard.forEach(doc => creditcard_id = doc.id);
+        
+                    updateUser(user_id, { creditcard: creditcard_id })
+                    .then(({ status, message }) => {
+                        if(status) {
+                            setLoading(true);
+                            setTimeout(() => setLoading(false), 2000);
+            
+                            setTimeout(() => {
+                                setSuccess(true);
+                                setTimeout(() => setSuccess(false), 3500);
+                            }, 2000);
+            
+                            setTimeout(() => {
+                                navigation.navigate('TabsNav');
+                            }, 5500);
+                        } else {
+                            alert(message);
+                        }
+                    })
+                    .catch(error => alert(error.message))
+                } else {
+                    alert("Invalid Credit Card Info!")
+                }
+            })
+            .catch(error => alert(error.message));
+        } else {
+            alert("Invalid Credit Card data!");
         }
     }
 
