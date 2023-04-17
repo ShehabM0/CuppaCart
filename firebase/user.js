@@ -10,6 +10,7 @@ import {
   onSnapshot,
   orderBy,
   where,
+  updateDoc,
 } from "firebase/firestore";
 import { async } from "@firebase/util";
 
@@ -54,6 +55,24 @@ async function editUser(object) {
   } catch (error) {
     console.log(error.massage);
   }
+}
+
+async function updateUser(userId, userData) {
+  let result;
+  await updateDoc(doc(db, "users", userId), userData)
+  .then(() => {
+    result = {
+      status: true,
+      message: "User updated"
+    }
+  })
+  .catch((error) => {
+    result = {
+      status: false,
+      message: error.message
+    }
+  })
+  return result;
 }
 
 async function deleteUser(object) {
@@ -105,6 +124,7 @@ export {
   getUsers,
   addUser,
   editUser,
+  updateUser,
   deleteUser,
   subscribeUser,
   getUserUId,
