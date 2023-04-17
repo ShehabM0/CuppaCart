@@ -20,7 +20,7 @@ import {
   ScrollView,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import auth from "../firebase/config";
+import {auth} from "../firebase/config";
 import {
   getUserUId,
   addUser,

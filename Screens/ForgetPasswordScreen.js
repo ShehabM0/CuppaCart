@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { View, Text, SafeAreaView, Keyboard, Alert } from "react-native";
-import COLORS from "../Conts/Color";
+import {COLORS} from "../Conts/Color";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
 import Loader from "../Components/Loader";

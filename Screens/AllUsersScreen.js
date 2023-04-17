@@ -23,7 +23,7 @@ import {
   getUsers,
   subscribeUser,
 } from "../firebase/user";
-import COLORS from "../Conts/Color";
+import {COLORS} from "../Conts/Color";
 import UsersCard from "../Components/UsersCard";
 
 const AllUsersScreen = () => {
@@ -42,7 +42,8 @@ const AllUsersScreen = () => {
 
     
   return (
-    <SafeAreaView style={{ backgroundColor: "white", flex: 1 }}>
+    <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
+    
       <View style={{ paddingTop: 50, paddingHorizontal: 20 ,width:"100%" }}>
         <Text style={{ color: COLORS.black, fontSize: 40, fontWeight: "bold" }}>
          All Users
@@ -51,9 +52,7 @@ const AllUsersScreen = () => {
         <View >
           <FlatList
             data={Users}
-           horizontal={false}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
+          
             renderItem={(itemData) => {
               return (
                 <UsersCard
@@ -76,7 +75,8 @@ const AllUsersScreen = () => {
           
         </View>
       </View>
-    </SafeAreaView>
+    
+    </ScrollView>
   )
 }
 

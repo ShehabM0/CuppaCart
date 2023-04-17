@@ -21,7 +21,7 @@ import {
 import DatePicker from "react-native-modern-datepicker";
 import { getFormatedDate } from "react-native-modern-datepicker";
 import { SafeAreaView } from "react-native-safe-area-context";
-import COLORS from '../Conts/Color';
+import {COLORS} from '../Conts/Color';
 import Button from '../Components/Button';
 import Input from '../Components/Input';
 import Loader from '../Components/Loader';

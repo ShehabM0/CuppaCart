@@ -4,11 +4,11 @@ import { StyleSheet, View, Text, SafeAreaView, ScrollView, TouchableOpacity } fr
 import SuccessMessage from '../Components/SuccessMessage';
 import Loader from '../Components/Loader';
 import Input from '../Components/Input';
-
+import {COLORS} from "../Conts/Color";
 import { getCreditCard } from '../firebase/creditcard';
 import { updateUser } from '../firebase/user';
 
-export default RegistrationScreen = ({ route, navigation }) => {
+const RegistrationScreen = ({ route, navigation }) => {
     
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
@@ -188,7 +188,7 @@ export default RegistrationScreen = ({ route, navigation }) => {
         </SafeAreaView>
     );
 }
-
+export default RegistrationScreen
 const styles = StyleSheet.create({
     cont: {
         flexDirection: 'row',

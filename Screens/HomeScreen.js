@@ -12,7 +12,7 @@ import {
   FlatList,
   TextInput,
 } from "react-native";
-import auth from "../firebase/config";
+import {auth} from "../firebase/config";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import {
