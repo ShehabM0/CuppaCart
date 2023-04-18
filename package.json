@@ -42,7 +42,8 @@
     "react-native-textinput-effects": "^0.6.3",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.10",
-    "expo-image-picker": "~14.1.1"
+    "expo-image-picker": "~14.1.1",
+    "expo-haptics": "~12.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
