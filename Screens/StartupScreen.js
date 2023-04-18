@@ -11,11 +11,13 @@ import {
 import Constants from "expo-constants";
 import React from "react";
 import TextAnimator from "../Components/TextAnimator";
-
+import * as Haptics from "expo-haptics";
 
 const Home = ({ navigation }) => {
-
- 
+  function loginnavigation() {
+    navigation.navigate("SignIn");
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  }
   return (
     <ImageBackground
       style={{ flex: 1 }}
@@ -28,8 +30,6 @@ const Home = ({ navigation }) => {
           textStyle={styles.textHeadStyle}
           style={styles.textHeadStyle}
           duration={800}
-         
-          
         />
 
         <TextAnimator
@@ -37,7 +37,6 @@ const Home = ({ navigation }) => {
           textStyle={styles.textFootStyle}
           style={styles.textFootStyle}
           duration={800}
-         
         />
 
         <TouchableOpacity
@@ -48,9 +47,7 @@ const Home = ({ navigation }) => {
             alignItems: "center",
             marginTop: 30,
           }}
-          onPress={() => {
-            navigation.navigate("SignIn");
-          }}
+          onPress={loginnavigation}
         >
           <Text
             style={{
@@ -87,6 +84,6 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
 
-  textHeadStyle: { color: "white", fontWeight: "800", fontSize: 45,  },
+  textHeadStyle: { color: "white", fontWeight: "800", fontSize: 45 },
   textFootStyle: { color: "white", fontWeight: "300", fontSize: 17 },
 });
