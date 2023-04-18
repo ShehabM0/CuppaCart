@@ -44,7 +44,8 @@ const ProfileScreen = ({ navigation }) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullname, setname] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
   const [image, setimage] = useState(null);
   const [proimage, setproimage] = useState(null);
   const [phone, setPhone] = useState("");
@@ -58,6 +59,8 @@ const ProfileScreen = ({ navigation }) => {
         // console.log(user);
         setEmail(user[0].email);
         setPassword(user[0].password);
+        setFirstname(user[0].firstname);
+        setLastname(user[0].lastname);
         setname(user[0].fullname);
         setPhone(user[0].phone);
         setimage(user[0].image);
@@ -91,7 +94,7 @@ const ProfileScreen = ({ navigation }) => {
                   },
                 ]}
               >
-                {fullname}
+                {firstname} {lastname}
               </Title>
             </View>
           </View>
