@@ -56,6 +56,9 @@ const EditUserScreen = ({ navigation }) => {
                 setimage(user[0].image);
                 setPhone(user[0].phone);
                 setEmail(user[0].email);
+                setFirstname(user[0].firstname);
+                setLastname(user[0].lastname);
+                setSelectedStartDate(user[0].selectedStartDate)
             });
         });
     }, []);
@@ -135,7 +138,7 @@ const EditUserScreen = ({ navigation }) => {
                         onFocus={() => handleError(null, firstname)}
                         iconName="account-outline"
                         label="First Name"
-                        placeholder="Enter your first name"
+                        placeholder={firstname}
                         error={errors.firstname}
                     />
                     <Input
@@ -144,7 +147,7 @@ const EditUserScreen = ({ navigation }) => {
                         onFocus={() => handleError(null, fullname)}
                         iconName="account-outline"
                         label="Last Name"
-                        placeholder="Enter your last name"
+                        placeholder={lastname}
                         error={errors.lastname}
                     />
 
