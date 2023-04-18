@@ -109,9 +109,6 @@ const EditUserScreen = ({ navigation }) => {
         }
 
     };
-
-
-
     const uploadImageAsync=async(uri)=>{
         const blob = await new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
@@ -137,6 +134,39 @@ const EditUserScreen = ({ navigation }) => {
           }
     };
 
+
+
+    const handleUpdate=()=>{
+        try {
+            getUserUId().then((id) => {
+                user_id = id;
+                setDoc(doc(db, "users", user_id), {
+                    id: id,
+                    email,
+                    
+                    firstname,
+                    lastname,
+                    phone,
+                    Role: "User",
+                    image,
+                    cart: [],
+                    favorite:[],
+                    balance:0,
+                    selectedStartDate,
+                    creditcard: ""
+                });
+              });
+      
+              Alert.alert(
+                'Profile Updated!',
+                'Your profile has been updated successfully.'
+              );
+          } catch (err) {
+            console(err.massage);
+          }
+    
+    }
+    
 
 
 
@@ -321,7 +351,7 @@ const EditUserScreen = ({ navigation }) => {
                         </KeyboardAvoidingView>
                     </SafeAreaView>
 
-                    <TouchableOpacity style={styles.commandButton} onPress={() => { }}>
+                    <TouchableOpacity style={styles.commandButton} onPress={handleUpdate}>
                         <Text style={{ color: "white", fontSize: 16, }}>Submit</Text>
                     </TouchableOpacity>
                 </View>
