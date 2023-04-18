@@ -61,7 +61,6 @@ const ProfileScreen = ({ navigation }) => {
         setPassword(user[0].password);
         setFirstname(user[0].firstname);
         setLastname(user[0].lastname);
-        setname(user[0].fullname);
         setPhone(user[0].phone);
         setimage(user[0].image);
         setRole(user[0].Role);
@@ -187,6 +186,17 @@ const ProfileScreen = ({ navigation }) => {
         <TouchableOpacity onPress={ss} style={styles.button}>
           <Text style={styles.buttonText}>Sign out</Text>
         </TouchableOpacity>
+
+
+        <TouchableOpacity onPress={() => {
+              navigation.navigate("EditUserScreen");
+            }} style={styles.button}>
+          <Text style={styles.buttonText}>Edit Profile</Text>
+        </TouchableOpacity>
+
+
+
+
       </SafeAreaView>
     </ScrollView>
   );
@@ -248,7 +258,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 5,
     marginLeft: "20%",
   },
   buttonText: {
