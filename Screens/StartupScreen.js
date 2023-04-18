@@ -16,7 +16,7 @@ import * as Haptics from "expo-haptics";
 const Home = ({ navigation }) => {
   function loginnavigation() {
     navigation.navigate("SignIn");
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
   }
   return (
     <ImageBackground
@@ -29,14 +29,14 @@ const Home = ({ navigation }) => {
           content="️Coffee so good, your taste buds will love it."
           textStyle={styles.textHeadStyle}
           style={styles.textHeadStyle}
-          duration={800}
+          duration={1000}
         />
 
         <TextAnimator
           content="The best grain, the finest roast & the powerful flavor"
           textStyle={styles.textFootStyle}
           style={styles.textFootStyle}
-          duration={800}
+          duration={1000}
         />
 
         <TouchableOpacity
