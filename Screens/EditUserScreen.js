@@ -1,6 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { storage } from '../firebase/config';
+import * as ImagePicker from "expo-image-picker";
 import React, { useState, useEffect } from 'react';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {
     View,
     Text,
@@ -47,6 +50,7 @@ const EditUserScreen = ({ navigation }) => {
     );
     const [selectedStartDate, setSelectedStartDate] = useState("");
     const [startedDate, setStartedDate] = useState("12/12/2023");
+    const[isLoading,setIsLoading]=useState(false);
 
 
     useEffect(() => {
@@ -76,6 +80,61 @@ const EditUserScreen = ({ navigation }) => {
     const handleOnPressStartDate = () => {
         setOpenStartDatePicker(!openStartDatePicker);
     };
+
+
+    const pickImage=async()=>
+    {
+        setIsLoading(true);
+        let result=await ImagePicker.launchImageLibraryAsync({
+            mediaTypes:ImagePicker.MediaTypeOptions.All,
+            allowsEditing:true,
+            aspect:[4,3],
+            quality:1,
+        });
+        if(!result.canceled)
+        {
+            //setimage(result.assets[0].uri);
+            const uploadURL=await uploadImageAsync(result.assets[0].uri);
+            setimage(uploadURL);
+            setInterval(() => {
+                setIsLoading(false);
+            }, 2000);
+        }
+        else
+        {
+            setimage(null);
+            setInterval(() => {
+                setIsLoading(false);
+            }, 2000);
+        }
+
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     return (
 
 
@@ -83,7 +142,7 @@ const EditUserScreen = ({ navigation }) => {
 
             <View style={{ margin: 20 }}>
                 <View style={{ alignItems: 'center' }}>
-                    <TouchableOpacity onPress={() => { }}>
+                    <TouchableOpacity onPress={pickImage}>
                         <View
                             style={{
                                 height: 140,
