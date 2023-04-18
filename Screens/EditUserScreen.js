@@ -3,7 +3,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { storage } from '../firebase/config';
 import * as ImagePicker from "expo-image-picker";
 import React, { useState, useEffect } from 'react';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { doc, setDoc } from "firebase/firestore";
 import {
     View,
     Text,
@@ -30,8 +31,9 @@ import Input from '../Components/Input';
 import Loader from '../Components/Loader';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import auth from "../firebase/config";
+//import auth from "../firebase/config";
 import { sendEmailVerification } from "firebase/auth";
+import {auth,db }from "../firebase/config";
 import { register, getUserUId } from "../firebase/auth";
 import { addUser } from "../firebase/user";
 const EditUserScreen = ({ navigation }) => {
