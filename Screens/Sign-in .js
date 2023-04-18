@@ -1,15 +1,17 @@
-import React, { useState,useEffect   } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, SafeAreaView, Keyboard, Alert } from "react-native";
-import {COLORS} from "../Conts/Color";
+import { COLORS } from "../Conts/Color";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Loader from "../Components/Loader";
-import {auth} from "../firebase/config";
-import { GoogleAuthProvider, signInWithPopup, } from "firebase/auth";
+import { auth } from "../firebase/config";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { addUser, getUserById, getUserUId } from "../firebase/user";
 import { login, getUserToken, logout } from "../firebase/auth";
 import { SocialIcon } from "react-native-elements";
+import * as Haptics from "expo-haptics";
+import { StatusBar } from "react-native";
 const provider = new GoogleAuthProvider();
 
 const LoginScreen = ({ navigation }) => {
@@ -17,28 +19,29 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = React.useState({});
   const [loading, setLoading] = React.useState(false);
-  const googleauth=()=>{
+  const googleauth = () => {
     signInWithPopup(auth, provider)
-    .then((result) => {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      // The signed-in user info.
-      const user = result.user;
-      // IdP data available using getAdditionalUserInfo(result)
-      // ...
-      console.log(user.email);
-    }).catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
-    });
-   } 
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+        console.log(user.email);
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  };
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       setLoading(false);
@@ -70,10 +73,12 @@ const LoginScreen = ({ navigation }) => {
           });
         });
         setLoading(true);
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       })
       .catch((e) => {
         alert("invalid email or password");
         console.log(e.message);
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       });
   };
 
@@ -110,7 +115,7 @@ const LoginScreen = ({ navigation }) => {
             placeholder="Enter your email address"
             keyboardType={"email-address"}
             error={errors.email}
-
+            autoCapitalize="none"
           />
           <Input
             onChangeText={(text) => handleOnchange(text, "password")}
@@ -119,7 +124,6 @@ const LoginScreen = ({ navigation }) => {
             iconName="lock-outline"
             label="Password"
             placeholder="Enter your password"
-            
             error={errors.password}
             password
           />
@@ -129,8 +133,7 @@ const LoginScreen = ({ navigation }) => {
             title="Sign In With Google"
             button
             type="google"
-            onPress={()=>googleauth()}
-          
+            onPress={() => googleauth()}
           />
           <Text
             onPress={() => navigation.navigate("SignUp")}
@@ -139,7 +142,7 @@ const LoginScreen = ({ navigation }) => {
               fontWeight: "bold",
               textAlign: "center",
               fontSize: 16,
-              padding:8
+              padding: 8,
             }}
           >
             Don't have account? Register
