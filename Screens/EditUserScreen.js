@@ -137,39 +137,35 @@ const EditUserScreen = ({ navigation }) => {
     };
 
 
-
-    const handleUpdate=()=>{
+    const handleUpdate = () => {
         try {
-            getUserUId().then((id) => {
-                user_id = id;
-                setDoc(doc(db, "users", user_id), {
-                    id: id,
-                    email,
-                    
-                    firstname,
-                    lastname,
-                    phone,
-                    Role: "User",
-                    image,
-                    cart: [],
-                    favorite:[],
-                    balance:0,
-                    selectedStartDate,
-                    creditcard: ""
-                });
-              });
-      
+          getUserUId().then((id) => {
+            user_id = id;
+            setDoc(doc(db, "users", user_id), {
+              id: id,
+              email,
+              firstname,
+              lastname,
+              phone,
+              Role: "User",
+              image,
+              cart: [],
+              favorite:[],
+              balance:0,
+              selectedStartDate,
+              creditcard: ""
+            }).then(() => {
               Alert.alert(
                 'Profile Updated!',
                 'Your profile has been updated successfully.'
               );
-          } catch (err) {
-            console(err.massage);
-          }
-    
-    }
-    
-
+              navigation.navigate('TabsNav'); // Navigate to TabsNav after updating user data
+            });
+          });
+        } catch (err) {
+          console(err.massage);
+        }
+      };
 
 
 
