@@ -22,6 +22,9 @@
     "@react-navigation/stack": "^6.3.16",
     "expo": "~48.0.9",
     "expo-blur": "^12.2.2",
+    "expo-font": "^11.1.1",
+    "expo-haptics": "~12.2.1",
+    "expo-image-picker": "~14.1.1",
     "expo-status-bar": "~1.4.4",
     "firebase": "^9.19.1",
     "firebase-auth": "^0.1.2",
@@ -41,9 +44,7 @@
     "react-native-screens": "~3.20.0",
     "react-native-textinput-effects": "^0.6.3",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-web": "~0.18.10",
-    "expo-image-picker": "~14.1.1",
-    "expo-haptics": "~12.2.1"
+    "react-native-web": "~0.18.10"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
