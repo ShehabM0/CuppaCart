@@ -23,7 +23,7 @@ import {
   getUsers,
   subscribeUser,
 } from "../firebase/user";
-import {COLORS} from "../Conts/Color";
+import { COLORS } from "../Conts/Color";
 import UsersCard from "../Components/UsersCard";
 
 const AllUsersScreen = () => {
@@ -36,48 +36,35 @@ const AllUsersScreen = () => {
     getUsersHandle();
   }, []);
 
-
-
-
-
-    
   return (
     <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
-    
-      <View style={{ paddingTop: 50, paddingHorizontal: 20 ,width:"100%" }}>
+      <View style={{ paddingTop: 50, paddingHorizontal: 20, width: "100%" }}>
         <Text style={{ color: COLORS.black, fontSize: 40, fontWeight: "bold" }}>
-         All Users
+          All Users
         </Text>
         <View style={{ marginVertical: 20 }}>
-        <View >
-          <FlatList
-            data={Users}
-          
-            renderItem={(itemData) => {
-              return (
-                <UsersCard
-                  fullname={itemData.item.fullname}
-                  image={itemData.item.image}
-                  email={itemData.item.email}
-                  phone={itemData.item.phone}
-                  balance={itemData.item.balance}
-                  Role={itemData.item.Role}
-                />
-              );
-            }}
-          />
-        </View>
-
-      
-          
-        
-           
-          
+          <View>
+            <FlatList
+              data={Users}
+              renderItem={(itemData) => {
+                return (
+                  <UsersCard
+                    firstname={itemData.item.firstname}
+                    lastname={itemData.item.lastname}
+                    image={itemData.item.image}
+                    email={itemData.item.email}
+                    phone={itemData.item.phone}
+                    balance={itemData.item.balance}
+                    Role={itemData.item.Role}
+                  />
+                );
+              }}
+            />
+          </View>
         </View>
       </View>
-    
     </ScrollView>
-  )
-}
+  );
+};
 
-export default AllUsersScreen
+export default AllUsersScreen;
