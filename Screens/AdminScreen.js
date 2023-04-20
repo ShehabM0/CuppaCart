@@ -1,152 +1,9 @@
-// import React, { useState, useEffect } from "react";
-// import {
-//   SafeAreaView,
-//   ScrollView,
-//   StyleSheet,
-//   Text,
-//   View,
-//   TouchableOpacity,
-//   Image,
-//   Dimensions,
-// } from "react-native";
-// import auth from "../firebase/config";
-// import { logout } from "../firebase/auth";
-// import {
-//   getUserUId,
-//   addUser,
-//   deleteUser,
-//   editUser,
-//   getUserById,
-//   getUserByName,
-//   getUsers,
-//   subscribeUser,
-// } from "../firebase/user";
-// export default function Admin({ navigation }) {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [fullname, setfullname] = useState("");
-//   const [image, setimage] = useState(null);
-//   const [mobile, setMobile] = useState("");
-//   const [role, setRole] = useState("");
-
-//   const ss = () => {
-//     logout(auth).then(() => {
-//       console.log("sign out done");
-//       navigation.navigate("SignIn");
-//     });
-//   };
-
-//   useEffect(() => {
-//     getUserUId().then((id) => {
-//       //console.log(id);
-//       getUserById(id).then((user) => {
-//         // console.log(user);
-//         setfullname(user[0].fullname);
-//         setimage(user[0].image);
-//         setRole(user[0].Role);
-//       });
-//     });
-//   }, []);
-//   return (
-//     <View>
-//       <View
-//         style={{ padding: 10, flexDirection: "column", alignItems: "center" }}
-//       >
-//         <TouchableOpacity
-//           onPress={() => {
-//             if (role === "Admin") {
-//               navigation.navigate("Admin");
-//             } else {
-//               navigation.navigate("Home");
-//             }
-//           }}
-//         >
-//           <Image
-//             style={{ height: 50, width: 50, borderRadius: 75 }}
-//             source={{ uri: image }}
-//           />
-//         </TouchableOpacity>
-//         <Text>{fullname}</Text>
-//       </View>
-//       <TouchableOpacity
-//         style={{
-//           backgroundColor: "tomato",
-//           width: "90%",
-//           padding: 15,
-//           marginLeft: 24,
-//           marginTop: 20,
-//           borderRadius: 10,
-//           alignItems: "center",
-//           justifyContent: "center",
-//           marginBottom: 5,
-//         }}
-//         onPress={() => {
-//           navigation.navigate("AddProduct");
-//         }}
-//       >
-//         <Text style={{ color: "white", fontSize: 20 }}>Add Product</Text>
-//       </TouchableOpacity>
-//       <TouchableOpacity
-//         style={{
-//           backgroundColor: "tomato",
-//           width: "90%",
-//           padding: 15,
-//           marginLeft: 24,
-//           marginTop: 5,
-//           borderRadius: 10,
-//           alignItems: "center",
-//           justifyContent: "center",
-//           marginBottom: 5,
-//         }}
-//         onPress={() => {
-//           navigation.navigate("AddProduct");
-//         }}
-//       >
-//         <Text style={{ color: "white", fontSize: 20 }}>Edit Product</Text>
-//       </TouchableOpacity>
-//       <TouchableOpacity
-//         style={{
-//           backgroundColor: "tomato",
-//           width: "90%",
-//           padding: 15,
-//           marginLeft: 24,
-//           marginTop: 5,
-//           borderRadius: 10,
-//           alignItems: "center",
-//           justifyContent: "center",
-//           marginBottom: 5,
-//         }}
-//         onPress={() => {
-//           navigation.navigate("AddProduct");
-//         }}
-//       >
-//         <Text style={{ color: "white", fontSize: 20 }}>Delete Product</Text>
-//       </TouchableOpacity>
-//       <TouchableOpacity
-//         style={{
-//           backgroundColor: "tomato",
-//           width: "90%",
-//           padding: 15,
-//           marginLeft: 24,
-//           marginTop: 5,
-//           borderRadius: 10,
-//           alignItems: "center",
-//           justifyContent: "center",
-//           marginBottom: 5,
-//         }}
-//         onPress={ss}
-//       >
-//         <Text style={{ color: "white", fontSize: 20 }}>LogOut</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
-// }
 import { useNavigation } from "@react-navigation/core";
 import React, { useState, useEffect } from "react";
 const backImage = require("../assets/adaptive-icon.png");
 import { Ionicons } from "@expo/vector-icons";
 import { logout } from "../firebase/auth";
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5 } from "@expo/vector-icons";
 import {
   Avatar,
   Title,
@@ -163,8 +20,8 @@ import {
   ScrollView,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { AntDesign } from '@expo/vector-icons';
-import {auth} from "../firebase/config";
+import { AntDesign } from "@expo/vector-icons";
+import { auth } from "../firebase/config";
 import {
   getUserUId,
   addUser,
@@ -190,7 +47,8 @@ const ProfileScreen = ({ navigation }) => {
   const [Products, setProducts] = useState([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullname, setname] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
   const [image, setimage] = useState(null);
   const [proimage, setproimage] = useState(null);
   const [phone, setPhone] = useState("");
@@ -205,7 +63,6 @@ const ProfileScreen = ({ navigation }) => {
     getUsersHandle();
   }, []);
 
-  
   const getProductsHandle = async () => {
     const arr = await getProducts();
     setProducts(arr);
@@ -214,8 +71,6 @@ const ProfileScreen = ({ navigation }) => {
     getProductsHandle();
   }, []);
 
-
-
   useEffect(() => {
     getUserUId().then((id) => {
       //console.log(id);
@@ -223,7 +78,8 @@ const ProfileScreen = ({ navigation }) => {
         // console.log(user);
         setEmail(user[0].email);
         setPassword(user[0].password);
-        setname(user[0].fullname);
+        setFirstname(user[0].firstname);
+        setLastname(user[0].lastname);
         setPhone(user[0].phone);
         setimage(user[0].image);
         setRole(user[0].Role);
@@ -255,7 +111,8 @@ const ProfileScreen = ({ navigation }) => {
                   },
                 ]}
               >
-                {fullname}
+                {firstname}
+                {lastname}
               </Title>
               <Title
                 style={[
@@ -263,7 +120,7 @@ const ProfileScreen = ({ navigation }) => {
                     color: "white",
                     marginTop: -5,
                     fontSize: 14,
-                    fontWeight:600
+                    fontWeight: 600,
                   },
                 ]}
               >
@@ -284,10 +141,12 @@ const ProfileScreen = ({ navigation }) => {
             ]}
           >
             <Title style={{ color: "white" }}>{Users.length}</Title>
-            <TouchableRipple onPress={() => {
-              navigation.navigate("AllUsers");
-            }} >
-            <Caption style={{ color: "white", fontSize: 15 }}>Users</Caption>
+            <TouchableRipple
+              onPress={() => {
+                navigation.navigate("AllUsers");
+              }}
+            >
+              <Caption style={{ color: "white", fontSize: 15 }}>Users</Caption>
             </TouchableRipple>
           </View>
           <View
@@ -316,36 +175,39 @@ const ProfileScreen = ({ navigation }) => {
             }}
           >
             <View style={styles.menuItem}>
-            <Ionicons name="add-circle-outline" size={27} color="#964B00" />
+              <Ionicons name="add-circle-outline" size={27} color="#964B00" />
               <Text style={styles.menuItemText}>Add Product</Text>
             </View>
           </TouchableRipple>
-          <TouchableRipple  onPress={() => {
+          <TouchableRipple
+            onPress={() => {
               navigation.navigate("DeleteProduct");
-            }}>
+            }}
+          >
             <View style={styles.menuItem}>
-            <AntDesign name="delete" size={26} color="#964B00" />
+              <AntDesign name="delete" size={26} color="#964B00" />
               <Text style={styles.menuItemText}>Delete Product</Text>
             </View>
           </TouchableRipple>
 
-          <TouchableRipple onPress={() => {
+          <TouchableRipple
+            onPress={() => {
               navigation.navigate("EditProduct");
-            }}>
+            }}
+          >
             <View style={styles.menuItem}>
-            <FontAwesome5 name="edit" size={25} color="#964B00" />
+              <FontAwesome5 name="edit" size={25} color="#964B00" />
               <Text style={styles.menuItemText}>Edit Product</Text>
             </View>
           </TouchableRipple>
 
           <TouchableRipple
-          onPress={() => {
-            navigation.navigate("AddAdmin");
-          }}
-            
+            onPress={() => {
+              navigation.navigate("AddAdmin");
+            }}
           >
             <View style={styles.menuItem}>
-            <AntDesign name="adduser" size={28} color="#964B00" />
+              <AntDesign name="adduser" size={28} color="#964B00" />
               <Text style={styles.menuItemText}>Add Admin</Text>
             </View>
           </TouchableRipple>
@@ -355,7 +217,7 @@ const ProfileScreen = ({ navigation }) => {
             }}
           >
             <View style={styles.menuItem}>
-            <AntDesign name="deleteuser" size={28} color="#964B00" />
+              <AntDesign name="deleteuser" size={28} color="#964B00" />
               <Text style={styles.menuItemText}>Delete User</Text>
             </View>
           </TouchableRipple>
@@ -436,4 +298,3 @@ const styles = StyleSheet.create({
 });
 
 export default ProfileScreen;
-
