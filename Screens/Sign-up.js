@@ -1,5 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React,{useState} from 'react';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -10,21 +10,21 @@ import {
   StyleSheet,
   TouchableOpacity,
   Modal,
-  Platform
-} from 'react-native'; 
+  Platform,
+} from "react-native";
 import DatePicker from "react-native-modern-datepicker";
 import { getFormatedDate } from "react-native-modern-datepicker";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {COLORS} from '../Conts/Color';
-import Button from '../Components/Button';
-import Input from '../Components/Input';
-import Loader from '../Components/Loader';
+import { COLORS } from "../Conts/Color";
+import Button from "../Components/Button";
+import Input from "../Components/Input";
+import Loader from "../Components/Loader";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import auth from "../firebase/config";
 import { sendEmailVerification } from "firebase/auth";
 import { register, getUserUId } from "../firebase/auth";
 import { addUser } from "../firebase/user";
-const RegistrationScreen = ({navigation}) => {
+const RegistrationScreen = ({ navigation }) => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [isFocused, setIsFocused] = React.useState(false);
@@ -36,7 +36,7 @@ const RegistrationScreen = ({navigation}) => {
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
   const today = new Date();
   const startDate = getFormatedDate(
-    today.setDate(today.getDate() + 1),
+    today.setDate(today.getDate() - 36500),
     "YYYY/MM/DD"
   );
   const [selectedStartDate, setSelectedStartDate] = useState("");
@@ -45,78 +45,76 @@ const RegistrationScreen = ({navigation}) => {
     Keyboard.dismiss();
     let isValid = true;
     let user_id;
-  
+
     if (!email) {
-      handleError('Please enter email', 'email');
+      handleError("Please enter email", "email");
       isValid = false;
     } else if (!email.match(/\S+@\S+\.\S+/)) {
-      handleError('Please enter a valid email', 'email');
+      handleError("Please enter a valid email", "email");
       isValid = false;
     }
-  
+
     if (!firstname) {
-      handleError('Please enter fullname', 'fullname');
+      handleError("Please enter fullname", "fullname");
       isValid = false;
     }
     if (!lastname) {
-      handleError('Please enter fullname', 'fullname');
+      handleError("Please enter fullname", "fullname");
       isValid = false;
     }
-  
+
     if (!phone) {
-      handleError('Please enter phone number', 'phone');
+      handleError("Please enter phone number", "phone");
       isValid = false;
     }
-  
+
     if (!password) {
-      handleError('Please enter password', 'password');
+      handleError("Please enter password", "password");
       isValid = false;
     } else if (password.length < 5) {
-      handleError('Min password length of 5', 'password');
+      handleError("Min password length of 5", "password");
       isValid = false;
     }
-  
+
     if (isValid) {
       register(email, password)
-      .then(() => {
-        getUserUId().then((id) => {
-          user_id = id;
-          addUser({
-            id: id,
-            email,
-            password,
-            firstname,
-            lastname,
-            phone,
-            Role: "User",
-            image:
-              "https://64.media.tumblr.com/d82d24956974272dff1f745a004a43bf/tumblr_o51oavbMDx1ugpbmuo3_540.png",
-            cart: [],
-            favorite:[],
-            balance:0,
-            selectedStartDate,
-            creditcard: ""
+        .then(() => {
+          getUserUId().then((id) => {
+            user_id = id;
+            addUser({
+              id: id,
+              email,
+              password,
+              firstname,
+              lastname,
+              phone,
+              Role: "User",
+              image:
+                "https://64.media.tumblr.com/d82d24956974272dff1f745a004a43bf/tumblr_o51oavbMDx1ugpbmuo3_540.png",
+              cart: [],
+              favorite: [],
+              balance: 0,
+              selectedStartDate,
+              creditcard: "",
+            });
           });
+          setLoading(true);
+          setTimeout(() => {
+            setLoading(false);
+            navigation.navigate("CreditCard", { user_id: user_id });
+          }, 2000);
+        })
+        .catch((error) => {
+          alert(error.message);
         });
-        setLoading(true);
-        setTimeout(() => {
-          setLoading(false);
-          navigation.navigate('CreditCard', { user_id: user_id });
-        }, 2000);
-      })
-      .catch((error)=>{
-        alert(error.message);
-      }) 
-       
-      }
+    }
   };
-  
 
   const handleOnchange = (text, input) => {
-    setInputs(prevState => ({...prevState, [input]: text}));
+    setInputs((prevState) => ({ ...prevState, [input]: text }));
   };
   const handleError = (error, input) => {
-    setErrors(prevState => ({...prevState, [input]: error}));
+    setErrors((prevState) => ({ ...prevState, [input]: error }));
   };
   function handleChangeStartDate(propDate) {
     setStartedDate(propDate);
@@ -126,20 +124,21 @@ const RegistrationScreen = ({navigation}) => {
     setOpenStartDatePicker(!openStartDatePicker);
   };
   return (
-    <View style={{backgroundColor: COLORS.white, flex: 1}}>
+    <View style={{ backgroundColor: COLORS.white, flex: 1 }}>
       <Loader visible={loading} />
       <ScrollView
-        contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
-        <Text style={{color: COLORS.black, fontSize: 40, fontWeight: 'bold'}}>
+        contentContainerStyle={{ paddingTop: 50, paddingHorizontal: 20 }}
+      >
+        <Text style={{ color: COLORS.black, fontSize: 40, fontWeight: "bold" }}>
           Register
         </Text>
-        <Text style={{color: COLORS.grey, fontSize: 18, marginVertical: 10}}>
+        <Text style={{ color: COLORS.grey, fontSize: 18, marginVertical: 10 }}>
           Enter Your Details to Register
         </Text>
-        <View style={{marginVertical: 20}}>
+        <View style={{ marginVertical: 20 }}>
           <Input
-             value={email}
-             onChangeText={setEmail}
+            value={email}
+            onChangeText={setEmail}
             onFocus={() => handleError(null, email)}
             iconName="email-outline"
             label="Email"
@@ -156,7 +155,7 @@ const RegistrationScreen = ({navigation}) => {
             placeholder="Enter your first name"
             error={errors.firstname}
           />
-           <Input
+          <Input
             value={lastname}
             onChangeText={setLastname}
             onFocus={() => handleError(null, lastname)}
@@ -186,80 +185,85 @@ const RegistrationScreen = ({navigation}) => {
             error={errors.password}
             password
           />
-      <SafeAreaView style={{ flex: 1  ,padding:-65}}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS == "ios" ? "padding" : ""}
-          style={{
-            width: "100%",
-            height: "100%",
-            backgroundColor: "#fff",
-          }}
-        >
-          <View >
-            <View style={{marginBottom: 5 ,width:"100%" ,}}>
-              <View>
-                <Text style={{marginVertical: 5,
-    fontSize: 14,
-    color: COLORS.grey, }}>Select Date</Text>
-                <TouchableOpacity
-                value={selectedStartDate}
-                onChangeText={setSelectedStartDate}
-                  style={styles.inputBtn}
-                  onPress={handleOnPressStartDate}
-                >
-                  <Text>{selectedStartDate}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-  
-            {/* Create modal for date picker */}
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={openStartDatePicker}
+          <SafeAreaView style={{ flex: 1, padding: -65 }}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS == "ios" ? "padding" : ""}
+              style={{
+                width: "100%",
+                height: "100%",
+                backgroundColor: "#fff",
+              }}
             >
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  <DatePicker
-                    mode="calendar"
-                    minimumDate={startDate}
-                    selected={startedDate}
-                    onDateChanged={handleChangeStartDate}
-                    onSelectedChange={(date) => setSelectedStartDate(date)}
-                    options={{
-                      backgroundColor: "#080516",
-                      textHeaderColor: "#469ab6",
-                      textDefaultColor: "#FFFFFF",
-                      selectedTextColor: "#FFF",
-                      mainColor: "#469ab6",
-                      textSecondaryColor: "#FFFFFF",
-                      borderColor: "rgba(122, 146, 165, 0.1)",
-                    }}
-                  />
-                  <TouchableOpacity onPress={handleOnPressStartDate}>
-                    <Text style={{ color: "white" }}>Close</Text>
-                  </TouchableOpacity>
+              <View>
+                <View style={{ marginBottom: 5, width: "100%" }}>
+                  <View>
+                    <Text
+                      style={{
+                        marginVertical: 5,
+                        fontSize: 14,
+                        color: COLORS.grey,
+                      }}
+                    >
+                      Select Date
+                    </Text>
+                    <TouchableOpacity
+                      value={selectedStartDate}
+                      onChangeText={setSelectedStartDate}
+                      style={styles.inputBtn}
+                      onPress={handleOnPressStartDate}
+                    >
+                      <Text>{selectedStartDate}</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
+
+                {/* Create modal for date picker */}
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={openStartDatePicker}
+                >
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                      <DatePicker
+                        mode="calendar"
+                        minimumDate={startDate}
+                        selected={startedDate}
+                        onDateChanged={handleChangeStartDate}
+                        onSelectedChange={(date) => setSelectedStartDate(date)}
+                        options={{
+                          backgroundColor: "#080516",
+                          textHeaderColor: "#469ab6",
+                          textDefaultColor: "#FFFFFF",
+                          selectedTextColor: "#FFF",
+                          mainColor: "#469ab6",
+                          textSecondaryColor: "#FFFFFF",
+                          borderColor: "rgba(122, 146, 165, 0.1)",
+                        }}
+                      />
+                      <TouchableOpacity onPress={handleOnPressStartDate}>
+                        <Text style={{ color: "white" }}>Close</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </Modal>
               </View>
-            </Modal>
-          </View>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
-          
-  
+            </KeyboardAvoidingView>
+          </SafeAreaView>
+
           <Button title="Register" onPress={validate} />
           <Text
-            onPress={() => navigation.navigate('SignIn')}
+            onPress={() => navigation.navigate("SignIn")}
             style={{
               color: COLORS.black,
-              fontWeight: 'bold',
-              textAlign: 'center',
+              fontWeight: "bold",
+              textAlign: "center",
               fontSize: 16,
-            }}>
+            }}
+          >
             Already have account ?Login
           </Text>
         </View>
-      
       </ScrollView>
     </View>
   );
