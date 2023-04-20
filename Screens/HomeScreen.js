@@ -12,27 +12,11 @@ import {
   FlatList,
   TextInput,
 } from "react-native";
-import {auth} from "../firebase/config";
+import { auth } from "../firebase/config";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import {
-  getUserUId,
-  addUser,
-  deleteUser,
-  editUser,
-  getUserById,
-  getUserByName,
-  getUsers,
-  subscribeUser,
-} from "../firebase/user";
-import {
-  addProduct,
-  deleteProduct,
-  editProduct,
-  getProductByName,
-  getProducts,
-  subscribeProduct,
-} from "../firebase/products";
+import { getUserUId, getUserById } from "../firebase/user";
+import { getProducts } from "../firebase/products";
 import ProductCard from "../Components/productCard";
 import { logout } from "../firebase/auth";
 
@@ -67,7 +51,6 @@ export default function ProfileScreen({ navigation }) {
       });
     });
   }, []);
-  const [searchTerm, setSearchTerm] = useState("");
   return (
     <ScrollView
       style={{
@@ -75,171 +58,133 @@ export default function ProfileScreen({ navigation }) {
         backgroundColor: "#2E333E",
         height: "100%",
       }}
+      horizontal={false}
     >
-      <View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              borderRadius: 25,
-              overflow: "hidden",
-              width: 50,
-              height: 40,
-            }}
-            onPress={ss}
-          >
-            <SimpleLineIcons name="logout" size={35} color="tomato" />
-          </TouchableOpacity>
-
-          <View
-            style={{
-              width: 50,
-              height: 50,
-              overflow: "hidden",
-              borderRadius: 15,
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("ProfileTab");
-              }}
-            >
-              <Image
-                style={{
-                  height: "100%",
-                  width: "100%",
-                  borderRadius: 15,
-                }}
-                source={{ uri: image }}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={{ width: "80%", marginVertical: 30 }}>
-          <Text
-            style={{
-              color: "white",
-              fontSize: 28,
-              fontWeight: "500",
-            }}
-          >
-            Find the best coffee for you
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <TextInput
-            placeholder="Search"
-            style={{
-              paddingVertical: 8,
-              paddingHorizontal: 15,
-              width: "100%",
-              backgroundColor: "gray",
-              borderRadius: 10,
-              color: "white",
-              fontSize: 16,
-            }}
-            onChangeText={(text) => {
-              setSearchTerm(text);
-            }}
-          />
-        </View>
-        <View
-          style={{
-            padding: 16,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
+      <ScrollView horizontal={true}>
+        <View>
           <View
             style={{
               flexDirection: "row",
-              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            <Text
+            <TouchableOpacity
               style={{
-                fontSize: 18,
-                color: "white",
-                fontWeight: "500",
-                letterSpacing: 1,
+                borderRadius: 25,
+                overflow: "hidden",
+                width: 50,
+                height: 40,
+              }}
+              onPress={ss}
+            >
+              <SimpleLineIcons name="logout" size={35} color="tomato" />
+            </TouchableOpacity>
+
+            <View
+              style={{
+                width: 50,
+                height: 50,
+                overflow: "hidden",
+                borderRadius: 15,
               }}
             >
-              Products
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("ProfileTab");
+                }}
+              >
+                <Image
+                  style={{
+                    height: "100%",
+                    width: "100%",
+                    borderRadius: 15,
+                  }}
+                  source={{ uri: image }}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{ width: "80%", marginVertical: 30 }}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 28,
+                fontWeight: "500",
+              }}
+            >
+              Find the best coffee for you
             </Text>
           </View>
-          <TouchableOpacity
+          <View
             style={{
-              fontSize: 14,
-              color: "tomato",
-              fontWeight: "400",
-              marginRight: 5,
+              padding: 16,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
-            // onPress={() => {
-            //   navigation.navigate("Products");
-            // }}
           >
-            <Text
+            <View
               style={{
-                fontSize: 15,
-                color: "tomato",
-                fontWeight: "400",
+                flexDirection: "row",
+                alignItems: "center",
               }}
             >
-              SeeAll
-            </Text>
-          </TouchableOpacity>
-        </View>
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: "white",
+                  fontWeight: "500",
+                  letterSpacing: 1,
+                }}
+              >
+                Products
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={{
+                fontSize: 14,
+                color: "tomato",
+                fontWeight: "400",
+                marginRight: 5,
+              }}
+              // onPress={() => {
+              //   navigation.navigate("Products");
+              // }}
+            >
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: "tomato",
+                  fontWeight: "400",
+                }}
+              >
+                SeeAll
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-        <View style={{ paddingLeft: 5 }}>
-          <FlatList
-            data={products.slice(0, 4)}
-            horizontal
-            showsHorizontalScrollIndicator={true}
-            renderItem={(itemData) => {
-              return (
-                <ProductCard
-                  productName={itemData.item.productName}
-                  price={itemData.item.price}
-                  details={itemData.item.details}
-                  image={itemData.item.image}
-                  Rate={itemData.item.Rate}
-                  id={itemData.item.id}
-                />
-              );
-            }}
-          />
+          <View style={{ paddingLeft: 5 }}>
+            <FlatList
+              data={products.slice(0, 8)}
+              horizontal={false}
+              numColumns={2}
+              showsHorizontalScrollIndicator={true}
+              renderItem={(itemData) => {
+                return (
+                  <ProductCard
+                    productName={itemData.item.productName}
+                    price={itemData.item.price}
+                    details={itemData.item.details}
+                    image={itemData.item.image}
+                    Rate={itemData.item.Rate}
+                    id={itemData.item.id}
+                  />
+                );
+              }}
+            />
+          </View>
         </View>
-        <View style={{ paddingLeft: 5 }}>
-          <FlatList
-            data={products.slice(7, 10)}
-            horizontal
-            showsHorizontalScrollIndicator={true}
-            renderItem={(itemData) => {
-              return (
-                <ProductCard
-                  productName={itemData.item.productName}
-                  price={itemData.item.price}
-                  details={itemData.item.details}
-                  image={itemData.item.image}
-                  Rate={itemData.item.Rate}
-                  id={itemData.item.id}
-                />
-              );
-            }}
-          />
-        </View>
-        
-      </View>
+      </ScrollView>
     </ScrollView>
   );
 }
