@@ -12,6 +12,9 @@ import { login, getUserToken, logout } from "../firebase/auth";
 import { SocialIcon } from "react-native-elements";
 import * as Haptics from "expo-haptics";
 import { StatusBar } from "react-native";
+import { useFonts } from 'expo-font';
+import * as Font from 'expo-font';
+
 const provider = new GoogleAuthProvider();
 
 const LoginScreen = ({ navigation }) => {
@@ -19,6 +22,9 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = React.useState({});
   const [loading, setLoading] = React.useState(false);
+  const [givenName, setgivenName] = useState("");
+  const [familyName, setfamilyName] = useState("");
+  const [fontLoaded, setFontLoaded] = useState(false);
   const googleauth = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
@@ -27,9 +33,17 @@ const LoginScreen = ({ navigation }) => {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
+        const fname = result.user.displayName;
         // IdP data available using getAdditionalUserInfo(result)
         // ...
-        console.log(user.email);
+        navigation.navigate("TabsNav");
+        console.log(
+          "welcome",
+          result.user.displayName,
+          result.user.phoneNumber,
+          result.user.email,
+          result.user.photoUrl
+        );
       })
       .catch((error) => {
         // Handle Errors here.
@@ -95,6 +109,22 @@ const LoginScreen = ({ navigation }) => {
   const handleError = (error, input) => {
     setErrors((prevState) => ({ ...prevState, [input]: error }));
   };
+
+  const loadFonts = async () => {
+    await Font.loadAsync({
+      'Coffee-Shop': require('../assets/Fonts/coffee_shop/Coffee-Shop.ttf'),
+    });
+    setFontLoaded(true);
+  };
+
+  useEffect(() => {
+    loadFonts();
+  }, []);
+
+  if (!fontLoaded) {
+    return null;
+  }
+
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
       <Loader visible={loading} />
@@ -102,7 +132,7 @@ const LoginScreen = ({ navigation }) => {
         <Text style={{ color: COLORS.black, fontSize: 40, fontWeight: "bold" }}>
           Log In
         </Text>
-        <Text style={{ color: COLORS.grey, fontSize: 18, marginVertical: 10 }}>
+        <Text style={{ fontFamily:"Coffee-Shop", color: COLORS.grey, fontSize: 18, marginVertical: 10 }}>
           Enter Your Details to Login
         </Text>
         <View style={{ marginVertical: 20 }}>
