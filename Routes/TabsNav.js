@@ -24,6 +24,15 @@ const TabsNav = () => {
           left: 16,
           borderRadius: 16,
           shadowRadius: 10,
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingBottom: 5,
+          borderTopWidth: 0, // use borderTopWidth instead of borderWidth for iOS Handling
+          borderTopColor: 'transparent', // use borderTopColor instead of borderColor for removing the white line in iOS
+          overflow: 'hidden',
+          shadowColor: 'transparent',
+          elevation: 0,
         },
         tabBarInactiveTintColor: "white",
         tabBarActiveTintColor: "yellow",
