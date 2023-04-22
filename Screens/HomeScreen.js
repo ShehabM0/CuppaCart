@@ -11,6 +11,7 @@ import {
   ImageBackground,
   FlatList,
   TextInput,
+  StatusBar
 } from "react-native";
 import { auth } from "../firebase/config";
 import { SimpleLineIcons } from "@expo/vector-icons";
@@ -52,11 +53,11 @@ export default function ProfileScreen({ navigation }) {
     });
   }, []);
   return (
+    <SafeAreaView style={{paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + -1 : 0,backgroundColor:"#865439"}}>
     <ScrollView
       style={{
-        padding: 26,
+        padding: 10,
         backgroundColor: "#2E333E",
-        height: "100%",
       }}
       horizontal={false}
     >
@@ -66,6 +67,8 @@ export default function ProfileScreen({ navigation }) {
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
+              marginTop: 18
+
             }}
           >
             <TouchableOpacity
@@ -104,12 +107,13 @@ export default function ProfileScreen({ navigation }) {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={{ width: "80%", marginVertical: 30 }}>
+          <View style={{ width: "100%", marginVertical: 15 }}>
             <Text
               style={{
                 color: "white",
                 fontSize: 28,
                 fontWeight: "500",
+                marginLeft:8
               }}
             >
               Find the best coffee for you
@@ -163,7 +167,7 @@ export default function ProfileScreen({ navigation }) {
             </TouchableOpacity>
           </View>
 
-          <View style={{ paddingLeft: 5 }}>
+          <View>
             <FlatList
               data={products.slice(0, 8)}
               horizontal={false}
@@ -186,6 +190,7 @@ export default function ProfileScreen({ navigation }) {
         </View>
       </ScrollView>
     </ScrollView>
+    </SafeAreaView>
   );
 }
 
