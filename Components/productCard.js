@@ -40,7 +40,7 @@ const ProductCard = ({
     >
       <View
         style={{
-          width: 200,
+          width: 185,
           marginBottom: 15,
           marginRight: 10,
           borderRadius: 10 * 2,
