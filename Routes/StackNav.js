@@ -9,15 +9,6 @@ import ForgetPasswordScreen from '../Screens/ForgetPasswordScreen';
 import AdminScreen from '../Screens/AdminScreen';
 import AddProductScrenn from '../Screens/AddProductScreen';
 import TabsNav from './TabsNav';
-import HomeScreen from '../Screens/HomeScreen';
-import ProductScreen from '../Screens/ProductScreen';
-import AddReviewScreen from '../Screens/AddReviewScreen';
-import ReviewsScreen from '../Screens/ReviewsScreen';
-import CheckoutScreen from '../Screens/CheckoutScreen';
-import CartScreen from '../Screens/CartScreen';
-import PaymentScreen from '../Screens/PaymentScreen';
-import CheckoutCart from '../Screens/CheckoutCart';
-import PaymentCart from '../Screens/PaymentCart';
 import DeleteProductScreen from '../Screens/DeleteProductScreen';
 import EditProductScreen from '../Screens/EditProductScreen';
 import EditUserScreen from '../Screens/EditUserScreen';
@@ -49,28 +40,5 @@ const MainStack = () => {
   )
 }
 
-const ProductStack = () => {
-  return (
-    <Stack.Navigator screenOptions={{headerShown:false}}>
-      <Stack.Screen name='Product' component={ProductScreen}/>
-      <Stack.Screen name='Reviews' component={ReviewsScreen}/>
-      <Stack.Screen name='AddReview' component={AddReviewScreen}/>
-      <Stack.Screen name='Home' component={HomeScreen}/>
-      <Stack.Screen name='Checkout' component={CheckoutScreen}/>
-      <Stack.Screen name='Payment' component={PaymentScreen}/>
-    </Stack.Navigator>
-  )
-}
-
-const CartStack = () => {
-  return (
-    <Stack.Navigator screenOptions={{headerShown:false}}>
-      <Stack.Screen name='Cart' component={CartScreen}/>
-      <Stack.Screen name='CheckoutCart' component={CheckoutCart}/>
-      <Stack.Screen name='PaymentCart' component={PaymentCart}/>
-    </Stack.Navigator>
-  )
-}
-
   
-export  {MainStack,ProductStack,CartStack}
+export {MainStack}
