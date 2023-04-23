@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import StartupScreen from '../Screens/StartupScreen';
@@ -12,6 +11,8 @@ import AddProductScrenn from '../Screens/AddProductScreen';
 import TabsNav from './TabsNav';
 import HomeScreen from '../Screens/HomeScreen';
 import ProductScreen from '../Screens/ProductScreen';
+import AddReviewScreen from '../Screens/AddReviewScreen';
+import ReviewsScreen from '../Screens/ReviewsScreen';
 import CheckoutScreen from '../Screens/CheckoutScreen';
 import CartScreen from '../Screens/CartScreen';
 import PaymentScreen from '../Screens/PaymentScreen';
@@ -23,8 +24,6 @@ import EditUserScreen from '../Screens/EditUserScreen';
 import AddAdminScreen from '../Screens/AddAdminScreen';
 import DeleteUserScreen from '../Screens/DeleteUserScreen';
 import AllUsersScreen from '../Screens/AllUsersScreen';
-
-
 
 const Stack = createNativeStackNavigator();
 
@@ -53,8 +52,10 @@ const MainStack = () => {
 const ProductStack = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown:false}}>
-      <Stack.Screen name='Home' component={HomeScreen}/>
       <Stack.Screen name='Product' component={ProductScreen}/>
+      <Stack.Screen name='Reviews' component={ReviewsScreen}/>
+      <Stack.Screen name='AddReview' component={AddReviewScreen}/>
+      <Stack.Screen name='Home' component={HomeScreen}/>
       <Stack.Screen name='Checkout' component={CheckoutScreen}/>
       <Stack.Screen name='Payment' component={PaymentScreen}/>
     </Stack.Navigator>
