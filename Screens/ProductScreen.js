@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import { Platform, StatusBar, ScrollView, Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View, SafeAreaView } from 'react-native';
-import {COLORS} from '../Conts/Color'
+import { Platform, StatusBar, ScrollView, Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View, SafeAreaView, Pressable } from 'react-native';
+
+import ReviewButtonLink from '../Components/ReviewButtonLink';
+
+import { COLORS } from '../Conts/Color';
 
 export default function ProductScreen() {
 
   const [arrow, setArrow] = useState(true);
   const [price, setPrice] = useState(21.99);
   const [coin, setCoin] = useState(40);
+  const [qnt, setQnt] = useState(1);
 
   function setSmall() {
     setPrice(19.99);
@@ -21,6 +25,15 @@ export default function ProductScreen() {
   function setLarge() {
     setPrice(23.99);
     setCoin(50);
+  }
+
+  function increaseQnt() {
+    setQnt(qnt + 1);
+  }
+  
+  function decreaseQnt() {
+    if(qnt - 1)
+      setQnt(qnt - 1);
   }
 
   return (
@@ -44,7 +57,7 @@ export default function ProductScreen() {
                     source={require('../assets/star.png')}>
                   </Image>
                   <Text style={styles.revRate}> 4.8</Text> 
-                  <Text style={styles.revNumber}> (1,254)</Text>
+                  <Text style={{ color: '#A9A9A9', }}> (1,254)</Text>
                 </Text>
               </View>
 
@@ -110,20 +123,50 @@ export default function ProductScreen() {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.cartContCont}>
-            <TouchableOpacity style={styles.cart}>
-              <View style={styles.cartCont}>
-                <Text style={styles.cartTxt}>Add To Cart</Text>
-                <Image 
-                  style={styles.cartImg}
-                  source={require('../assets/cart.png')}
-                />
-              </View>
-            </TouchableOpacity>
+          <View style={styles.qntcartCont}>
+            <View style={styles.qntCont}>
+                <Pressable onPress={decreaseQnt}>
+                  <Image 
+                    style={styles.qntSignImg}
+                    source={require('../assets/minus_sign.png')}
+                  />
+                </Pressable>
+                <Text style={styles.qntTxt}> {qnt} </Text>
+                <Pressable onPress={increaseQnt}>
+                  <Image 
+                    style={styles.qntSignImg}
+                    source={require('../assets/plus_sign.png')}
+                  />
+                </Pressable>
+            </View>
+
+            <View>
+              <TouchableOpacity style={styles.cart}>
+                <View style={styles.cartCont}>
+                  <Text style={styles.cartTxt}>Add To Cart</Text>
+                  <Image 
+                    style={styles.cartImg}
+                    source={require('../assets/cart_black.png')}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
+
+          <View style={styles.horizontalLineCont}>
+            <View style={styles.horizontalLine} />
+          </View>
+
+          <ReviewButtonLink
+            image={"reviewsImg"}
+            name={"Add Review"}
+            bgcolor={COLORS.lightOrange}
+            nav={"Reviews"}
+          />
+
         </ScrollView>
       </SafeAreaView>
-      </>
+    </>
   );
 }
 
@@ -147,7 +190,6 @@ const styles = StyleSheet.create({
   imgTitlePriceCont: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'red'
   },
   img: {
     width: '100%',
@@ -188,33 +230,28 @@ const styles = StyleSheet.create({
     height: 22,
   },
   imgStar: {
-    marginTop: 5,
-    width: 25,
-    height: 25,
+    width: 20,
+    height: 20,
   },
   revRate: {
     color: COLORS.white,
     fontWeight: 'bold',
     fontSize: 15,
   },
-  revNumber: {
-    color: '#A9A9A9',
-  },
 
   descCont: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.lightOrange,
     borderRadius: 20,
     padding: 5,
     marginVertical: 10,
     borderWidth: 1,
-    borderColor: COLORS.lightOrange,
   },
   descTitle: {
     fontWeight: 'bold',
     fontSize: 18,
-    color: COLORS.white,
+    color: COLORS.black,
     paddingLeft: 10,
   },
   desc: {
@@ -236,42 +273,95 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   size: {
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.lightOrange,
     padding: 10,
     borderRadius: 10,
     borderWidth:  1,
-    borderColor: COLORS.lightOrange,
   },
   sizeTxt: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: COLORS.white,
+    color: COLORS.black,
   },
 
 
-  cartContCont: {
+  qntcartCont: {
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 20,
+    marginHorizontal: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   cartCont: {
     flexDirection: 'row',
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.lightOrange,
     borderRadius: 15,
-    paddingHorizontal: 50,
+    paddingHorizontal: 10,
     paddingVertical: 10,
     borderWidth:  1,
-    borderColor: COLORS.lightOrange,
   },
   cartTxt: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: COLORS.white,
+    color: COLORS.black,
   },
   cartImg: {
     width: 30,
     height: 30,
     marginLeft: 20,
   },
+
+  qntCont: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '30%'
+  },
+  qntSignImg: {
+    backgroundColor: COLORS.lightOrange, 
+    borderRadius: 100,
+  },
+  qntTxt: {
+    fontSize: 24,
+    color: COLORS.white,
+  },
+
+  reviewsCont: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 20,
+    marginBottom: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    padding: 5,
+    backgroundColor: COLORS.lightOrange,
+  },
+  reviewImg: {
+    width: 30,
+    height: 30,
+    backgroundColor: COLORS.lightOrange
+  },
+  reviewTxt: {
+    paddingLeft: 10,
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: COLORS.black,
+  },
+  rightArrow: {
+    width: 25,
+    height: 25,
+  },
+
+  horizontalLineCont: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  horizontalLine: {
+    borderBottomColor: 'grey',
+    width: '80%',
+    borderBottomWidth: 0.5,
+    marginBottom: 20
+  }
 });
 
