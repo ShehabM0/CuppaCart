@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
-  SafeAreaView,
+  
   ScrollView,
   StyleSheet,
   Text,
@@ -11,8 +11,13 @@ import {
   ImageBackground,
   FlatList,
   TextInput,
-  StatusBar
+  
 } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { StatusBar } from 'expo-status-bar';
+
+import Carousel from 'react-native-snap-carousel';
+import Card from '../Components/coffeeCard';
 import { auth } from "../firebase/config";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
@@ -20,7 +25,8 @@ import { getUserUId, getUserById } from "../firebase/user";
 import { getProducts } from "../firebase/products";
 import ProductCard from "../Components/productCard";
 import { logout } from "../firebase/auth";
-
+import { BellIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline'
+import { MapPinIcon } from 'react-native-heroicons/solid'
 const { width } = Dimensions.get("window");
 const d = Dimensions.get("window");
 export default function ProfileScreen({ navigation }) {
@@ -28,7 +34,30 @@ export default function ProfileScreen({ navigation }) {
   const [image, setimage] = useState(null);
   const [role, setRole] = useState("");
   const [products, setProducts] = useState([]);
-
+  const [activeCategory, setActiveCategory] = useState(1);
+   const categories = [
+    {
+      id: 1,
+      title: "Cappuccino",
+    },
+    {
+      id: 2,
+      title: "Latte",
+    },
+    {
+      id: 3,
+      title: "Espresso",
+    },
+    {
+      id: 4,
+      title: "Mocha",
+    },
+    {
+      id: 5,
+      title: "Americano",
+    },
+  ]
+  
   const getProductHandle = async () => {
     const arr = await getProducts();
     setProducts(arr);
@@ -53,144 +82,94 @@ export default function ProfileScreen({ navigation }) {
     });
   }, []);
   return (
-    <SafeAreaView style={{paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + -1 : 0,backgroundColor:"#865439"}}>
-    <ScrollView
-      style={{
-        padding: 10,
-        backgroundColor: "#2E333E",
-      }}
-      horizontal={false}
-    >
-      <ScrollView horizontal={true}>
-        <View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: 18
+    <View className="flex-1 relative bg-white">
+  <StatusBar />
 
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                borderRadius: 25,
-                overflow: "hidden",
-                width: 50,
-                height: 40,
-              }}
-              onPress={ss}
-            >
-              <SimpleLineIcons name="logout" size={35} color="tomato" />
-            </TouchableOpacity>
-
-            <View
-              style={{
-                width: 50,
-                height: 50,
-                overflow: "hidden",
-                borderRadius: 15,
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("ProfileTab");
-                }}
-              >
-                <Image
-                  style={{
-                    height: "100%",
-                    width: "100%",
-                    borderRadius: 15,
-                  }}
-                  source={{ uri: image }}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={{ width: "100%", marginVertical: 15 }}>
-            <Text
-              style={{
-                color: "white",
-                fontSize: 28,
-                fontWeight: "500",
-                marginLeft:8
-              }}
-            >
-              Find the best coffee for you
-            </Text>
-          </View>
-          <View
-            style={{
-              padding: 16,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 18,
-                  color: "white",
-                  fontWeight: "500",
-                  letterSpacing: 1,
-                }}
-              >
-                Products
-              </Text>
-            </View>
-            <TouchableOpacity
-              style={{
-                fontSize: 14,
-                color: "tomato",
-                fontWeight: "400",
-                marginRight: 5,
-              }}
-              // onPress={() => {
-              //   navigation.navigate("Products");
-              // }}
-            >
-              <Text
-                style={{
-                  fontSize: 15,
-                  color: "tomato",
-                  fontWeight: "400",
-                }}
-              >
-                SeeAll
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View>
-            <FlatList
-              data={products.slice(0, 8)}
-              horizontal={false}
-              numColumns={2}
-              showsHorizontalScrollIndicator={true}
-              renderItem={(itemData) => {
-                return (
-                  <ProductCard
-                    productName={itemData.item.productName}
-                    price={itemData.item.price}
-                    details={itemData.item.details}
-                    image={itemData.item.image}
-                    Rate={itemData.item.Rate}
-                    id={itemData.item.id}
-                  />
-                );
-              }}
-            />
-          </View>
+    <Image 
+      source={require('../assets/beansBackground1.png')} 
+      style={{height: 220}} 
+      className="w-full absolute -top-5 opacity-10" />
+    <SafeAreaView className="flex-1">
+      {/* avatar and bell icon */}
+      <View className="mx-4 flex-row justify-between items-center">
+        <TouchableOpacity  onPress={() => {
+              navigation.navigate("ProfileTab");
+            }}>
+        <Image source={require('../assets/avatar.png')} 
+          className="h-9 w-9 rounded-full" />
+        </TouchableOpacity>
+        <View className="flex-row items-center space-x-2">
+          <MapPinIcon size="25" color={ '#d4a574'} />
+          <Text className="font-semibold text-base">
+            New York, NYC
+          </Text>
         </View>
-      </ScrollView>
-    </ScrollView>
+        <BellIcon size="27" color="black" />
+      </View>
+      {/* search bar */}
+      <View className="mx-5 mt-14 shadow">
+        <View className="flex-row items-center rounded-full p-1 bg-[#e6e6e6]">
+          <TextInput placeholder='Search' className="p-4 flex-1 font-semibold text-gray-700" />
+          <TouchableOpacity 
+            className="rounded-full p-2" 
+            style={{backgroundColor:  '#d4a574'}}>
+            <MagnifyingGlassIcon size="25" strokeWidth={2} color="white" />
+          </TouchableOpacity>
+        </View>
+      </View>
+      {/* categories */}
+      <View className="px-5 mt-6">
+
+        <FlatList 
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={categories}
+          keyExtractor={item=> item.id}
+          className="overflow-visible"
+          renderItem={({item})=>{
+            isActive = item.id==activeCategory;
+            let activeTextClass = isActive? 'text-white': 'text-gray-700';
+            return (
+              <TouchableOpacity 
+              onPress={()=> setActiveCategory(item.id)}
+              style={{backgroundColor: isActive?  '#d4a574': 'rgba(0,0,0,0.07)'}} 
+              className="p-4 px-5 mr-2 rounded-full shadow">
+                <Text className={"font-semibold " + activeTextClass}>{item.title}</Text>
+              </TouchableOpacity>
+            )
+          }}
+        />
+      </View>
+        
+        {/* coffee cards */}
+       <View className="mt-16 py-2">
+    <Carousel
+      data={products}
+      firstItem={1}
+      inactiveSlideScale={0.77}
+      inactiveSlideOpacity={0.75}
+      sliderWidth={400}
+      itemWidth={260}
+      slideStyle={{display: 'flex', alignItems: 'center'}}
+      renderItem={(itemData) => {
+        return (
+          <Card
+            productName={itemData.item.productName}
+            price={itemData.item.price}
+            details={itemData.item.details}
+            image={itemData.item.image}
+            Rate={itemData.item.Rate}
+            id={itemData.item.id}
+          />
+        );
+      }}
+    />
+     </View>
     </SafeAreaView>
+    
+    
+  </View>
+ 
   );
 }
 
