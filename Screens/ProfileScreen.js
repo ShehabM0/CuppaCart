@@ -188,11 +188,7 @@ const ProfileScreen = ({ navigation }) => {
         </TouchableOpacity>
 
 
-        <TouchableOpacity onPress={() => {
-              navigation.navigate("EditUserScreen");
-            }} style={styles.button}>
-          <Text style={styles.buttonText}>Edit Profile</Text>
-        </TouchableOpacity>
+        
 
 
 
