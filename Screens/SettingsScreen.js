@@ -116,7 +116,7 @@ const SettingsScreen = ({navigation}) => {
         <Text style={styles.subtitle}>Update your preferences here</Text>
       </View>
 
-      <TouchableRipple onPress={() => {}}>
+      <TouchableRipple onPress={() => {navigation.navigate("EditUserScreen");}}>
             <View style={styles.menuItem}>
               <Icon name="account-edit" color='orange' size={25} />
               <Text style={styles.menuItemText}>Edit my profile</Text>
