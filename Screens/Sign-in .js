@@ -90,8 +90,14 @@ const LoginScreen = ({ navigation }) => {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       })
       .catch((e) => {
-        alert("invalid email or password");
-        console.log(e.message);
+        if(e.message=='Firebase: Error (auth/user-not-found).')
+        {
+          Alert.alert('User Not Found')
+        }
+        else
+        {
+          Alert.alert('Invalid Email or Password')
+        }
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       });
   };
