@@ -177,21 +177,18 @@ const ProfileScreen = ({ navigation }) => {
             }}
           >
             <View style={styles.menuItem}>
-              <Ionicons name="settings-outline" size={25} color="#964B00" />
+              <Ionicons name="settings-outline" size={25} color="#964B00"  />
               <Text style={styles.menuItemText}>Settings</Text>
             </View>
           </TouchableRipple>
         </View>
 
         <TouchableOpacity onPress={ss} style={styles.button}>
-          <Text style={styles.buttonText}>Sign out</Text>
+        <View style={styles.menuItem}>
+              <Icon name="account-arrow-left-outline" size={25} color="#fff" />
+              <Text style={styles.menuItemTextt }>logout</Text>
+            </View>
         </TouchableOpacity>
-
-
-        
-
-
-
 
       </SafeAreaView>
     </ScrollView>
@@ -247,11 +244,20 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
     lineHeight: 26,
+    
+  },
+  menuItemTextt: {
+    color: "#fff",
+    marginLeft: 5,
+    fontWeight: "700",
+    fontSize: 16,
+    lineHeight: 26,
+    
   },
   button: {
     backgroundColor: "#964B00",
     width: "60%",
-    padding: 15,
+    padding: -1,
     borderRadius: 10,
     alignItems: "center",
     marginTop: 5,
