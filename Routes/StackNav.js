@@ -6,6 +6,7 @@ import Signup from '../Screens/Sign-up';
 import CreditCard from '../Screens/CreditCard';
 import CreateCreditCard from '../Screens/CreateCreditCard';
 import ForgetPasswordScreen from '../Screens/ForgetPasswordScreen';
+import ChangePassword from "../Screens/ChangePassword"
 import AdminScreen from '../Screens/AdminScreen';
 import AddProductScrenn from '../Screens/AddProductScreen';
 import TabsNav from './TabsNav';
@@ -27,6 +28,7 @@ const MainStack = () => {
      <Stack.Screen name='CreditCard' component={CreditCard}/>
      <Stack.Screen name='CreateCreditCard' component={CreateCreditCard}/>
      <Stack.Screen name='ForgetPassword' component={ForgetPasswordScreen}/>
+     <Stack.Screen name = "ChangePassword" component={ChangePassword}/>
      <Stack.Screen name='Admin' component={AdminScreen}/>
      <Stack.Screen name='AddProduct' component={AddProductScrenn}/>
      <Stack.Screen name='DeleteProduct' component={DeleteProductScreen}/>
