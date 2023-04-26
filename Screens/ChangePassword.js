@@ -110,6 +110,18 @@ const ChangePassword = ({ navigation }) => {
           />
 
           <Button title="Change Password" onPress={validate} />
+          <Text
+            onPress={() => navigation.navigate("ForgetPassword")}
+            style={{
+              color: COLORS.black,
+              fontWeight: "bold",
+              textAlign: "center",
+              fontSize: 16,
+              padding: 2,
+            }}
+          >
+            Forgot password?
+          </Text>
         </View>
       </View>
     </SafeAreaView>
