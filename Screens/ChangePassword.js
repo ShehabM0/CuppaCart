@@ -7,38 +7,57 @@ import Input from "../Components/Input";
 import Loader from "../Components/Loader";
 import { auth, db } from "../firebase/config";
 import {
-  sendPasswordResetEmail,
-} from "firebase/auth";
+  reauthenticateWithCredential, updatePassword, EmailAuthProvider } from "firebase/auth";
 
 const ChangePassword = ({ navigation }) => {
-  const [email, setEmail] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = React.useState({});
   const [loading, setLoading] = React.useState(false);
+  const currentUser = auth.currentUser;
 
   const validate = async () => {
     Keyboard.dismiss();
     setLoading(true);
     let isValid = true;
-    if (!email) {
+    if (!oldPassword) {
       setLoading(false);
-      handleError('Please enter email', 'email');
+      handleError('Please enter your old password', 'oldPassword');
       isValid = false;
-      return;
+      
+    }
+    else if(!newPassword){
+      setLoading(false);
+      handleError('Please enter your new password', 'newPassword');
+      isValid = false;
+    }
+    else if (!confirmPassword){
+      setLoading(false);
+      handleError('Please confirm your new password', 'confirmPassword');
+      isValid = false;
+      return
     }
     if (isValid) {
-          sendPasswordResetEmail(auth, email)
-            .then(() => {
-              setLoading(false);
-              alert("password email sent");
-              navigation.navigate("TabsNav")
-           })
-      .catch((error) => {
+      const credential = EmailAuthProvider.credential(currentUser.email, oldPassword);
+      try {
+        await reauthenticateWithCredential(currentUser, credential);
+      } catch (error) {
         setLoading(false);
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorMessage);
-      });
-    }
+        handleError('Invalid old password', 'oldPassword');
+        return;
+      }
+  
+      try {
+        await updatePassword(currentUser, newPassword);
+        setLoading(false);
+       
+        navigation.navigate("SignIn")
+      } catch (error) {
+        setLoading(false);
+        handleError(error.message);
+      }
+    };
   };
 
   const handleOnchange = (text, input) => {
@@ -60,16 +79,37 @@ const ChangePassword = ({ navigation }) => {
         </Text>
         <View style={{ marginVertical: 20 }}>
           <Input
-            onChangeText={setEmail}
-            value={email}
-            onFocus={() => handleError(null, "email")}
-            iconName="email-outline"
-            label="Email"
-            placeholder="Enter your email address"
-            error={errors.email}
+            onChangeText={setOldPassword}
+            value={oldPassword}
+            onFocus={() => handleError(null, "oldPassword")}
+            iconName="lock-outline"
+            label="Password"
+            placeholder="Enter your old password"
+            error={errors.oldPassword}
+            password
+          />
+          <Input
+            onChangeText={setNewPassword}
+            value={newPassword}
+            onFocus={() => handleError(null, "newPassword")}
+            iconName="onepassword"
+            label="Password"
+            placeholder="Enter your new password"
+            error={errors.newPassword}
+            password
+          />
+          <Input
+            onChangeText={setConfirmPassword}
+            value={confirmPassword}
+            onFocus={() => handleError(null, "confirmPassword")}
+            iconName="lock"
+            label="Password"
+            placeholder="Confirm your new passsword"
+            error={errors.confirmPassword}
+            password
           />
 
-          <Button title="Send E-mail" onPress={validate} />
+          <Button title="Change Password" onPress={validate} />
         </View>
       </View>
     </SafeAreaView>
