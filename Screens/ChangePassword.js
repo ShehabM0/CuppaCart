@@ -38,6 +38,12 @@ const ChangePassword = ({ navigation }) => {
       isValid = false;
       return
     }
+    else if (newPassword !== confirmPassword) { // <-- Check if passwords match
+      setLoading(false);
+      handleError('New password and confirm password do not match', 'confirmPassword');
+      isValid = false;
+      return;
+    }
     if (isValid) {
       const credential = EmailAuthProvider.credential(currentUser.email, oldPassword);
       try {
@@ -93,7 +99,7 @@ const ChangePassword = ({ navigation }) => {
             value={newPassword}
             onFocus={() => handleError(null, "newPassword")}
             iconName="onepassword"
-            label="Password"
+            label="New Password"
             placeholder="Enter your new password"
             error={errors.newPassword}
             password
@@ -103,7 +109,7 @@ const ChangePassword = ({ navigation }) => {
             value={confirmPassword}
             onFocus={() => handleError(null, "confirmPassword")}
             iconName="lock"
-            label="Password"
+            label="Confirm Password"
             placeholder="Confirm your new passsword"
             error={errors.confirmPassword}
             password
