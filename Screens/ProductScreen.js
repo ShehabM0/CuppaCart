@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import { Platform, StatusBar, ScrollView, Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View, SafeAreaView, Pressable } from 'react-native';
+import { Platform, StatusBar, ImageBackground,Dimensions,ScrollView, Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View, SafeAreaView, Pressable } from 'react-native';
 
 import ReviewButtonLink from '../Components/ReviewButtonLink';
-
+import { Ionicons } from "@expo/vector-icons";
+import { BlurView } from "expo-blur";
 import { COLORS } from '../Conts/Color';
-
-export default function ProductScreen() {
+import { AntDesign } from '@expo/vector-icons';
+export default function ProductScreen({navigation}) {
 
   const [arrow, setArrow] = useState(true);
   const [price, setPrice] = useState(21.99);
   const [coin, setCoin] = useState(40);
   const [qnt, setQnt] = useState(1);
+  const { height, width } = Dimensions.get("window");
 
   function setSmall() {
     setPrice(19.99);
@@ -35,84 +37,225 @@ export default function ProductScreen() {
     if(qnt - 1)
       setQnt(qnt - 1);
   }
+  const sizes = ["S", "M", "L"];
+  const [activeSize, setActiveSize] = useState(null);
 
   return (
     <>
       <View style={styles.imgbgLayout}/>
       <SafeAreaView style={{paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 2 : 0,}}>
         <ScrollView>
-          <View style={styles.imgTitlePriceCont}>
-            <Image 
-              style={styles.img}
-              source={require('../assets/nathan-dumlao-3.jpg')}>
-            </Image>
-            <View style={styles.titlePriceCont}>
-              <View style={styles.title}>
-                <Text style={styles.titlepriceTxt}>
-                  Cappuccino
-                </Text>
-                <Text>
-                  <Image
-                    style={styles.imgStar}
-                    source={require('../assets/star.png')}>
-                  </Image>
-                  <Text style={styles.revRate}> 4.8</Text> 
-                  <Text style={{ color: '#A9A9A9', }}> (1,254)</Text>
-                </Text>
+        <ImageBackground
+              source={require("../assets/nathan-dumlao-1.jpg")}
+              style={{
+                height: height / 2 + 20,
+  
+                justifyContent: "space-between",
+              }}
+              imageStyle={{
+                borderRadius: 30,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  padding: 20,
+                  
+                }}
+              >
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#0C0F14",
+                    padding: 10,
+                    borderRadius:15,
+                  }}
+                  onPress={() => navigation.goBack()}
+                >
+                  <Ionicons
+                    name="arrow-back"
+                    color="white"
+                    size={20}
+                   
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor:  "#0C0F14",
+                    padding: 10,
+                    borderRadius:15,
+                  }}
+                  onPress={() => {
+                    handleAddto();
+                  }}
+                 
+                >
+                  <Ionicons
+                    name="heart"
+                    color="white"
+                    size={20}
+                  />
+                </TouchableOpacity>
               </View>
-
-              <View style={styles.priceCont}>
-                <Text style={styles.titlepriceTxt}>
-                  <Image 
-                    style={styles.dollarImg} 
-                    source={require('../assets/blue_dollar_sign.png')}
-                  /> {price}
-                </Text>
-
-                <Text style={styles.titlepriceTxt}>
-                  <Image 
-                    style={styles.coinImg} 
-                    source={require('../assets/coin.png')}
-                  />  {coin}
-                </Text>
+  
+              <View
+                style={{
+                  borderRadius: 30,
+                  overflow: "hidden",
+                }}
+              >
+                <BlurView
+                  intensity={120}
+                  tint="dark"
+                  style={{
+                    padding: 20,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <View>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: "white",
+                        fontWeight: "600",
+                        marginBottom: 10,
+                      }}
+                    >
+                   productName
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize:18,
+                        color:"#b5b5b5",
+                        fontWeight: "500",
+                        marginBottom: 10,
+                      }}
+                    >
+                    Price:${price}
+                    </Text>
+                    <View style={{ flexDirection: "row", marginTop: 10 }}>
+                      <Ionicons
+                        name="star"
+                        size={15}
+                        color="#D17842"
+                      />
+                      <Text
+                        style={{
+                          color: "white",
+                          marginLeft: 10,
+                        }}
+                      >
+                       4
+                      </Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      width: "35%",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        
+                      }}
+                    >
+                      <View
+                        style={{
+                          padding: 5,
+                          width: 50,
+                          height:50,
+                          backgroundColor: "#0C0F14",
+                          borderRadius: 10,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Ionicons
+                          name="cafe"
+                          size={20}
+                          color="white"
+                        />
+                        <Text
+                          style={{
+                            color:"#b5b5b5",
+                            fontSize: 10,
+                          }}
+                        >
+                          Coffee
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          padding: 5,
+                          width: 50,
+                          height: 50,
+                          backgroundColor: "#0C0F14",
+                          borderRadius: 10,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Ionicons
+                          name="water"
+                          size={20}
+                          color={"#D17842"}
+                        />
+                        <Text
+                          style={{
+                            color:  "#b5b5b5",
+                            fontSize: 10,
+                          }}
+                        >
+                          Milk
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        backgroundColor: "#0C0F14",
+                        padding: 5,
+                        borderRadius: 5,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          color:  "#b5b5b5",
+                          fontSize: 13,
+                        }}
+                      >
+                        Medium roasted
+                      </Text>
+                    </View>
+                  </View>
+                </BlurView>
               </View>
-            </View>
-          </View>
+            </ImageBackground>
 
 
           <View style={styles.cont}>
-            <TouchableWithoutFeedback onPress={() => setArrow(!arrow)}>
-                <View style={styles.descCont}>
-                  <Text style={styles.descTitle}>Description</Text>
-                  { 
-                    arrow &&
-                    <Image 
-                      style={styles.downArrow} 
-                      source={require('../assets/arrow_down_icon.png')}
-                    />
-                  } 
-                  { 
-                    !arrow && 
-                    <Image 
-                      style={styles.downArrow} 
-                      source={require('../assets/arrow_up_icon.png')}
-                    />
-                  }
-                </View>
-            </TouchableWithoutFeedback>
-            { 
-              !arrow && 
-              <View>
-                <Text style={styles.desc}>
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                </Text>
-              </View>
-            }
+          <Text
+                style={{
+                  color:  "#b5b5b5",
+                  fontSize: 30,
+                  marginBottom: 10,
+                }}
+              >
+                Description
+              </Text>
+             
+              <Text numberOfLines={8} style={{ color:  "white",fontSize:15 }}>
+              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s             </Text>
           </View>
 
 
           <View style={styles.sizesCont}>
-            <TouchableOpacity style={styles.size} onPress={setSmall}>
+            {/* <TouchableOpacity style={styles.size} onPress={setSmall}>
               <Text style={styles.sizeTxt}>Small</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.size} onPress={setMedium}>
@@ -120,30 +263,67 @@ export default function ProductScreen() {
             </TouchableOpacity>
             <TouchableOpacity style={styles.size} onPress={setLarge}>
               <Text style={styles.sizeTxt}>Large</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+               <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {sizes.map((size, index) => (
+                    <TouchableOpacity
+                      onPress={() => setActiveSize(size)}
+                      key={index}
+                      style={[
+                        {
+                          borderWidth: 2,
+                          marginLeft: 12,
+                          paddingVertical: 5,
+                          borderRadius: 10,
+                          backgroundColor: "#D17842",
+                          width: width / 3 - 20,
+                          alignItems: "center",
+                        },
+                        activeSize == size && {
+                          borderColor: "#D17842",
+                          backgroundColor: "#0C0F14",
+                        },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          {
+                            color:  "white",
+                            fontSize: 19,
+                          },
+                          activeSize === size && {
+                            color: "#D17842",
+                          },
+                        ]}
+                      >
+                        {size}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
           </View>
 
           <View style={styles.qntcartCont}>
             <View style={styles.qntCont}>
                 <Pressable onPress={decreaseQnt}>
-                  <Image 
-                    style={styles.qntSignImg}
-                    source={require('../assets/minus_sign.png')}
-                  />
+                <AntDesign name="minuscircleo" size={28} color={COLORS.lightOrange} />
                 </Pressable>
                 <Text style={styles.qntTxt}> {qnt} </Text>
                 <Pressable onPress={increaseQnt}>
-                  <Image 
-                    style={styles.qntSignImg}
-                    source={require('../assets/plus_sign.png')}
-                  />
+                <AntDesign name="pluscircleo" size={28} color={COLORS.lightOrange} />
+
                 </Pressable>
             </View>
 
             <View>
               <TouchableOpacity style={styles.cart}>
                 <View style={styles.cartCont}>
-                  <Text style={styles.cartTxt}>Add To Cart</Text>
+                  <Text style={styles.cartTxt}>Buy Now</Text>
                   <Image 
                     style={styles.cartImg}
                     source={require('../assets/cart_black.png')}
