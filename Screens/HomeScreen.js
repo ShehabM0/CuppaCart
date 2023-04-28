@@ -13,14 +13,11 @@ import { StatusBar } from 'expo-status-bar';
 import { SearchBar } from 'react-native-elements';
 
 import Carousel from 'react-native-snap-carousel';
-import Card from '../Components/coffeeCard';
 import { auth } from "../firebase/config";
 import { getUserUId, getUserById } from "../firebase/user";
 import { getProducts } from "../firebase/products";
 import ProductCard from "../Components/productCard";
 import { logout } from "../firebase/auth";
-import { BellIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline'
-import { MapPinIcon } from 'react-native-heroicons/solid'
 import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
 
