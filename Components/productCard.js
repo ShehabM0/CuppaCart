@@ -118,7 +118,7 @@ const ProductCard = ({
           </Text>
           <Text
             numberOfLines={1}
-            style={{ color: "#52555A", fontSize: 10 * 1.2 }}
+            style={{ color:"#1C0A00", fontSize: 10 * 1.2 }}
           >
             With Oat milk
           </Text>
