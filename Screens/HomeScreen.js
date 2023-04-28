@@ -55,7 +55,7 @@ export default function ProfileScreen({ navigation }) {
     });
   }, []);
   return (
-    <SafeAreaView style={{backgroundColor:"#361500", height:"100%"}}>
+    <SafeAreaView style={{backgroundColor:"white", height:"100%"}}>
     <ScrollView
       style={{
         padding: 10,
@@ -118,7 +118,7 @@ export default function ProfileScreen({ navigation }) {
       <View style={{ width: "80%", marginVertical: 10 * 3 }}>
         <Text
           style={{
-            color: "white",
+            color: "black",
             fontSize: 10 * 3.5,
             fontWeight: "600",
           }}
