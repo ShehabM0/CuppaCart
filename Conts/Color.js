@@ -11,7 +11,8 @@ export const COLORS = {
     darkModOrange:"#865439",
     lightBlue:"#ADD8E6",
     lightOrange: "#FBBF77",
-    darkBlue1: "#16161d"
+    darkBlue1: "#16161d",
+    softOrange:"#dbc1ac"
   };
   
   
