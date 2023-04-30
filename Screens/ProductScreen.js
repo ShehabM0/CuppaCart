@@ -14,33 +14,18 @@ import {
   SafeAreaView,
   Pressable,
 } from "react-native";
-
+import { Feather } from "@expo/vector-icons";
+import { Fontisto } from "@expo/vector-icons";
 import ReviewButtonLink from "../Components/ReviewButtonLink";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { COLORS } from "../Conts/Color";
 import { AntDesign } from "@expo/vector-icons";
-export default function ProductScreen({ navigation }) {
-  const [arrow, setArrow] = useState(true);
-  const [price, setPrice] = useState(21.99);
-  const [coin, setCoin] = useState(40);
+export default function ProductScreen({ navigation, route }) {
   const [qnt, setQnt] = useState(1);
   const { height, width } = Dimensions.get("window");
 
-  function setSmall() {
-    setPrice(19.99);
-    setCoin(30);
-  }
-
-  function setMedium() {
-    setPrice(21.99);
-    setCoin(40);
-  }
-
-  function setLarge() {
-    setPrice(23.99);
-    setCoin(50);
-  }
+  const { productName, price, image, details, type, id } = route.params;
 
   function increaseQnt() {
     setQnt(qnt + 1);
@@ -61,11 +46,14 @@ export default function ProductScreen({ navigation }) {
             Platform.OS === "android" ? StatusBar.currentHeight + 2 : 0,
         }}
       >
-        <ScrollView>
+        <ScrollView >
           <ImageBackground
-            source={require("../assets/nathan-dumlao-1.jpg")}
+            source={{ uri: image }}
             style={{
-              height: height / 2 + 20,
+              height: height / 2 + 12,
+              marginTop:8,
+              marginLeft:6,
+              marginRight:6,
 
               justifyContent: "space-between",
             }}
@@ -111,7 +99,7 @@ export default function ProductScreen({ navigation }) {
               }}
             >
               <BlurView
-                intensity={120}
+                intensity={150}
                 tint="dark"
                 style={{
                   padding: 20,
@@ -128,7 +116,7 @@ export default function ProductScreen({ navigation }) {
                       marginBottom: 10,
                     }}
                   >
-                    productName
+                    {productName}
                   </Text>
                   <Text
                     style={{
@@ -138,7 +126,8 @@ export default function ProductScreen({ navigation }) {
                       marginBottom: 10,
                     }}
                   >
-                    Price:${price}
+                    Price : {price}{" "}
+                    <Fontisto name="dollar" size={15} color="orange" />
                   </Text>
                   <View style={{ flexDirection: "row", marginTop: 10 }}>
                     <Ionicons name="star" size={15} color="#D17842" />
@@ -207,24 +196,6 @@ export default function ProductScreen({ navigation }) {
                       </Text>
                     </View>
                   </View>
-                  <View
-                    style={{
-                      backgroundColor: "#0C0F14",
-                      padding: 5,
-                      borderRadius: 5,
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: "#b5b5b5",
-                        fontSize: 13,
-                      }}
-                    >
-                      Medium roasted
-                    </Text>
-                  </View>
                 </View>
               </BlurView>
             </View>
@@ -242,9 +213,7 @@ export default function ProductScreen({ navigation }) {
             </Text>
 
             <Text numberOfLines={8} style={{ color: "white", fontSize: 15 }}>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s{" "}
+              {details}
             </Text>
           </View>
 
@@ -305,19 +274,11 @@ export default function ProductScreen({ navigation }) {
           <View style={styles.qntcartCont}>
             <View style={styles.qntCont}>
               <Pressable onPress={decreaseQnt}>
-                <AntDesign
-                  name="minuscircleo"
-                  size={28}
-                  color={"#D17842"}
-                />
+                <AntDesign name="minuscircleo" size={28} color={"#D17842"} />
               </Pressable>
               <Text style={styles.qntTxt}> {qnt} </Text>
               <Pressable onPress={increaseQnt}>
-                <AntDesign
-                  name="pluscircleo"
-                  size={28}
-                  color={"#D17842"}
-                />
+                <AntDesign name="pluscircleo" size={28} color={"#D17842"} />
               </Pressable>
             </View>
 
@@ -325,10 +286,6 @@ export default function ProductScreen({ navigation }) {
               <TouchableOpacity>
                 <View style={styles.cartCont}>
                   <Text style={styles.cartTxt}>Buy Now</Text>
-                  <Image
-                    style={styles.cartImg}
-                    source={require("../assets/cart_black.png")}
-                  />
                 </View>
               </TouchableOpacity>
             </View>
@@ -362,7 +319,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   imgbgLayout: {
-    backgroundColor: COLORS.darkBlue1,
+    backgroundColor: "grey",
     position: "absolute",
     width: "100%",
     height: "100%",
@@ -474,9 +431,9 @@ const styles = StyleSheet.create({
   },
   cartCont: {
     flexDirection: "row",
-    marginRight:10,
+    marginRight: 10,
     backgroundColor: "#D17842",
-    borderRadius: 20,
+    borderRadius: 12,
     paddingHorizontal: 10,
     paddingVertical: 10,
     borderWidth: 1,

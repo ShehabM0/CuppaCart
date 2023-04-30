@@ -1,21 +1,41 @@
-import { View, Text,TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text,FlatList } from 'react-native'
+import React, { useState, useEffect } from "react";
 
-const CartScreen = ({navigation}) => {
+import { getProducts } from "../firebase/products";
+import Cartcard from '../Components/cartcard';
+
+const CartScreen = () => {
+  const [products, setProducts] = useState([]);
+
+  const getProductHandle = async () => {
+    const arr = await getProducts();
+    setProducts(arr);
+  };
+
+  useEffect(() => {
+    getProductHandle();
+  }, []);
   return (
-    <View style={{
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}>
-      <Text>CartScreen</Text>
-      <TouchableOpacity  onPress={() => {
-          navigation.navigate("CheckoutCart");
-        
-       }}>
-        <Text>Go</Text>
-        </TouchableOpacity>
+    <View>
+      <View style={{ marginVertical: 20 }}>
+          <View>
+            <FlatList
+              data={products}
+              renderItem={(itemData) => {
+                return (
+                  <Cartcard
+                  productName={itemData.item.productName}
+                  price={itemData.item.price}
+                  details={itemData.item.details}
+                  image={itemData.item.image}
+                  Rate={itemData.item.Rate}
+                  id={itemData.item.id}
+                  />
+                );
+              }}
+            />
+          </View>
+        </View>
     </View>
   )
 }
