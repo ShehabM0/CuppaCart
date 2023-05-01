@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Platform,
   StatusBar,
@@ -21,10 +21,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { COLORS } from "../Conts/Color";
 import { AntDesign } from "@expo/vector-icons";
+import { editUser, getUserById, getUsers, getUserUId } from "../firebase/user";
+
 export default function ProductScreen({ navigation, route }) {
   const [qnt, setQnt] = useState(1);
   const { height, width } = Dimensions.get("window");
-
+  const sizes = ["S", "M", "L"];
+  const [activeSize, setActiveSize] = useState(null);
+  const [userCart, setUserCart] = useState([]);
+  const [userfavorite, setUserFavorite] = useState([]);
+  const [user, setUser] = useState();
   const { productName, price, image, details, type, id } = route.params;
 
   function increaseQnt() {
@@ -34,9 +40,30 @@ export default function ProductScreen({ navigation, route }) {
   function decreaseQnt() {
     if (qnt - 1) setQnt(qnt - 1);
   }
-  const sizes = ["S", "M", "L"];
-  const [activeSize, setActiveSize] = useState(null);
-
+  
+  useEffect(() => {
+    getUserUId().then((id) => {
+      getUserById(id).then((user) => {
+        setUserCart(user[0].cart);
+        setUserFavorite(user[0].favorite);
+        setUser(user[0]);
+      });
+    });
+  }, []);
+  const handleAdd = () => {
+    editUser({
+      ...user,
+      cart: [...userCart, id],
+    });
+    alert("Product Added to Cart");
+  };
+  const handleAddto = () => {
+    editUser({
+      ...user,
+      favorite: [...userfavorite, id],
+    });
+    alert("Product Added to favorite");
+  };
   return (
     <>
       <View style={styles.imgbgLayout} />
@@ -283,7 +310,7 @@ export default function ProductScreen({ navigation, route }) {
             </View>
 
             <View>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleAdd}>
                 <View style={styles.cartCont}>
                   <Text style={styles.cartTxt}>Buy Now</Text>
                 </View>
