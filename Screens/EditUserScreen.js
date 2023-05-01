@@ -236,6 +236,9 @@ const EditUserScreen = ({ navigation }) => {
                         </View>
                     </TouchableOpacity>
                     <Text style={{ marginTop: 10, fontSize: 18, fontWeight: 'bold' }}>
+                        {firstname} {lastname}
+                    </Text>
+                    <Text style={{ marginTop: 10, fontSize: 18, fontWeight: 'bold' }}>
                         {email}
                     </Text>
                 </View>
