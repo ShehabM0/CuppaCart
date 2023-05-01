@@ -13,7 +13,6 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { SearchBar } from "react-native-elements";
 import { TextInput, Searchbar } from "react-native-paper";
-import Carousel from "react-native-snap-carousel";
 import { auth } from "../firebase/config";
 import { getUserUId, getUserById } from "../firebase/user";
 import { getProducts } from "../firebase/products";
