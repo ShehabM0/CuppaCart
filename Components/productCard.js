@@ -40,9 +40,9 @@ const ProductCard = ({
     >
       <View
         style={{
-          width: 185,
+          width: 180,
           marginBottom: 15,
-          marginRight: 10,
+          marginRight: 8,
           borderRadius: 10 * 2,
           overflow: "hidden",
         }}
@@ -118,7 +118,7 @@ const ProductCard = ({
           </Text>
           <Text
             numberOfLines={1}
-            style={{ color:"#1C0A00", fontSize: 10 * 1.2 }}
+            style={{ color: "#1C0A00", fontSize: 10 * 1.2 }}
           >
             With Oat milk
           </Text>
