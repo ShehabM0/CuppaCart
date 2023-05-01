@@ -32,7 +32,7 @@ import {
   getUsers,
   subscribeUser,
 } from "../firebase/user";
-import { getProducts } from "../firebase/products";
+import { getProducts,subscribeProduct } from "../firebase/products";
 // import 'firebase/firestore';
 // import {getUsers}from"../firebase/user";
 
@@ -63,6 +63,7 @@ const ProfileScreen = ({ navigation }) => {
     getUsersHandle();
   }, []);
 
+
   const getProductsHandle = async () => {
     const arr = await getProducts();
     setProducts(arr);
@@ -70,7 +71,53 @@ const ProfileScreen = ({ navigation }) => {
   useEffect(() => {
     getProductsHandle();
   }, []);
+  
 
+  useEffect(() => {
+    const unsubscribeUser = subscribeUser(({ change, snapshot }) => {
+      if (change.type === "added") {
+        getUsersHandle();
+        
+
+      }
+      if (change.type === "modified") {
+        getUsersHandle();
+       
+      }
+      if (change.type === "removed") {
+        getUsersHandle();
+       
+      }
+    });
+
+    return () => {
+      unsubscribeUser();
+    };
+  }, []);
+  useEffect(() => {
+    const unsubscribe = subscribeProduct(({ change, snapshot }) => {
+      if (change.type === "added") {
+        getProductsHandle();
+
+        
+
+      }
+      if (change.type === "modified") {
+        getProductsHandle();
+
+       
+      }
+      if (change.type === "removed") {
+        getProductsHandle();
+
+       
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
   useEffect(() => {
     getUserUId().then((id) => {
       //console.log(id);
