@@ -2,20 +2,27 @@ import React, { useEffect, useState } from "react";
 import { Platform, StatusBar, ScrollView, Image, StyleSheet, Text, TouchableOpacity, View, SafeAreaView, Pressable } from 'react-native';
 
 import { Ionicons, Feather, FontAwesome5, FontAwesome, AntDesign } from '@expo/vector-icons'; 
+import { getCurrUserId, getUserById, updateUser } from "../firebase/user";
 import ReviewButtonLink from '../Components/ReviewButtonLink';
 import { getStarsAvg } from "../firebase/reviews";
 import { COLORS } from '../Conts/Color';
+
+import SuccessMessage from "../Components/SuccessMessage"
 
 export default function ProductScreen({ navigation, route }) {
 
   const { productName, image, details, id } = route.params;
 
+  const user_id = getCurrUserId();
   const prices = [20, 25, 30];
   const coins = [30, 40, 50];
 
+  const [userFavorite, setUserFavorite] = useState([]);
   const [selectedSize, setSelectedSize] = useState(1);
-  const [favourite, setFavourite] = useState('white');
+  const [favorite, setFavorite] = useState('white');
   const [starsCount, setStarsCount] = useState(0);
+  const [success, setSuccess] = useState(false);
+  const [userCart, setUserCart] = useState('');
   const [starsAvg, setStarsAvg] = useState(0);
   const [price, setPrice] = useState(25);
   const [coin, setCoin] = useState(40);
@@ -34,15 +41,51 @@ export default function ProductScreen({ navigation, route }) {
     }
   }, [qnt]);
 
-  getStarsAvg(id)
-  .then(({ starsCount, starsAvg }) => {
-    setStarsCount(starsCount);
-    setStarsAvg(starsAvg);
-  })
-  .catch(err => alert(err.message));
+  useEffect(() => {
+    getUserById(user_id)
+    .then(user => {
+      setUserFavorite(user[0].favorite);
+      setUserCart(user[0].cart);
+    })
+    .catch(err => alert(err.message));
+
+    getStarsAvg(id)
+    .then(({ starsCount, starsAvg }) => {
+      setStarsCount(starsCount);
+      setStarsAvg(starsAvg);
+    })
+    .catch(err => alert(err.message));
+  }, []);
+
+  useEffect(() => {
+    (userFavorite.includes(id)) ? setFavorite('orange') : setFavorite('white');
+  }, [userFavorite])
+
 
   function handleFav() {
-    setFavourite((favourite == 'white') ? 'orange' : 'white');
+    if(favorite == 'white') {
+      setFavorite('orange');
+      updateUser(user_id, { favorite: [...userFavorite, id] })
+    } else {
+      setFavorite('white');
+      const id_idx = userFavorite.indexOf(id);
+      userFavorite.splice(id_idx, 1);
+      updateUser(user_id, { favorite: [...userFavorite] })
+    }
+    getUserById(user_id)
+    .then(user => {
+      setUserFavorite(user[0].favorite);
+    })
+    .catch(err => alert(err.message));
+  }
+
+  function handleCart() {
+    //userCart.map((stringArray) => console.log(JSON.parse(stringArray)))
+    updateUser(user_id, { cart: [ ...userCart, JSON.stringify([id, qnt])] })
+    .then(() => {
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 2000);
+    })
   }
 
 
@@ -75,6 +118,10 @@ export default function ProductScreen({ navigation, route }) {
 
   return (
     <>
+    {
+      success && 
+      <SuccessMessage message={"Product added to your cart"}/>
+    }
       <View style={styles.imgbgLayout}/>
       <SafeAreaView style={{paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 2 : 0,}}>
         <ScrollView>
@@ -90,7 +137,7 @@ export default function ProductScreen({ navigation, route }) {
                   <Ionicons name="arrow-back" color="white" size={20} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.arrowHeartStyle} onPress={handleFav}>
-                  <Ionicons name="heart" color={favourite} size={20} />
+                  <Ionicons name="heart" color={favorite} size={20} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -152,7 +199,7 @@ export default function ProductScreen({ navigation, route }) {
             </View>
 
             <View>
-              <TouchableOpacity style={styles.cart}>
+              <TouchableOpacity style={styles.cart} onPress={handleCart}>
                 <View style={styles.cartCont}>
                   <Text style={styles.cartTxt}>Add To Cart</Text>
                   <AntDesign name="shoppingcart" size={30} color="black" />
@@ -182,21 +229,6 @@ export default function ProductScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-
-  descCont: {
-    padding: 10
-  },
-  descTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  descBody: {
-    fontSize: 15,
-    color: 'rgba(0, 0, 0, 0.65)',
-    padding: 5
-  },
-
-
   cont: {
     flexDirection: 'column',
     margin: 10,
