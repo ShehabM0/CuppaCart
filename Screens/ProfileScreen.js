@@ -252,6 +252,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
     lineHeight: 26,
+   
     
   },
   button: {
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
     padding: -1,
     borderRadius: 10,
     alignItems: "center",
-    marginTop: 5,
+    marginTop: 50,
     marginLeft: "20%",
   },
   buttonText: {
