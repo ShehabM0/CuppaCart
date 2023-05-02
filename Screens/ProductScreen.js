@@ -1,318 +1,159 @@
-import React, { useState,useEffect } from "react";
-import {
-  Platform,
-  StatusBar,
-  ImageBackground,
-  Dimensions,
-  ScrollView,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-  SafeAreaView,
-  Pressable,
-} from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { Fontisto } from "@expo/vector-icons";
-import ReviewButtonLink from "../Components/ReviewButtonLink";
-import { Ionicons } from "@expo/vector-icons";
-import { BlurView } from "expo-blur";
-import { COLORS } from "../Conts/Color";
-import { AntDesign } from "@expo/vector-icons";
-import { editUser, getUserById, getUsers, getUserUId } from "../firebase/user";
+import React, { useEffect, useState } from "react";
+import { Platform, StatusBar, ScrollView, Image, StyleSheet, Text, TouchableOpacity, View, SafeAreaView, Pressable } from 'react-native';
+
+import { Ionicons, Feather, FontAwesome5, FontAwesome, AntDesign } from '@expo/vector-icons'; 
+import ReviewButtonLink from '../Components/ReviewButtonLink';
+import { getStarsAvg } from "../firebase/reviews";
+import { COLORS } from '../Conts/Color';
 
 export default function ProductScreen({ navigation, route }) {
+
+  const { productName, prices, image, details, id } = route.params;
+  const [selectedSize, setSelectedSize] = useState(1);
+  const [starsAvg, setStarsAvg] = useState(0);
+  const [starsCount, setStarsCount] = useState(0);
+  const [price, setPrice] = useState(25);
+  const [coin, setCoin] = useState(40);
   const [qnt, setQnt] = useState(1);
-  const { height, width } = Dimensions.get("window");
-  const sizes = ["S", "M", "L"];
-  const [activeSize, setActiveSize] = useState(null);
-  const [userCart, setUserCart] = useState([]);
-  const [userfavorite, setUserFavorite] = useState([]);
-  const [user, setUser] = useState();
-  const { productName, price, image, details, type, id } = route.params;
+  const [favourite, setFavourite] = useState('white');
+
+  useEffect(() => {
+    switch(selectedSize) {
+      case 0: 
+        setSmall();
+        break;
+      case 2: 
+        setLarge();
+        break;
+      default: 
+        setMedium();
+    }
+  }, [qnt]);
+
+  getStarsAvg(id)
+  .then(({ starsCount, starsAvg }) => {
+    setStarsCount(starsCount);
+    setStarsAvg(starsAvg);
+  })
+  .catch(err => console.log(err.message));
+
+  function handleFav() {
+    setFavourite((favourite == 'white') ? 'orange' : 'white');
+  }
+
+
+  function setSmall() {
+    setSelectedSize(0);
+    setPrice(qnt * 20);
+    setCoin(qnt * 30);
+  }
+
+  function setMedium() {
+    setSelectedSize(1);
+    setPrice(qnt * 25);
+    setCoin(qnt * 40);
+  }
+
+  function setLarge() {
+    setSelectedSize(2);
+    setPrice(qnt * 30);
+    setCoin(qnt * 50);
+  }
 
   function increaseQnt() {
     setQnt(qnt + 1);
   }
-
-  function decreaseQnt() {
-    if (qnt - 1) setQnt(qnt - 1);
-  }
   
-  useEffect(() => {
-    getUserUId().then((id) => {
-      getUserById(id).then((user) => {
-        setUserCart(user[0].cart);
-        setUserFavorite(user[0].favorite);
-        setUser(user[0]);
-      });
-    });
-  }, []);
-  const handleAdd = () => {
-    editUser({
-      ...user,
-      cart: [...userCart, id],
-    });
-    alert("Product Added to Cart");
-  };
-  const handleAddto = () => {
-    editUser({
-      ...user,
-      favorite: [...userfavorite, id],
-    });
-    alert("Product Added to favorite");
-  };
+  function decreaseQnt() {
+    if(qnt - 1)
+      setQnt(qnt - 1);
+  }
+
   return (
     <>
-      <View style={styles.imgbgLayout} />
-      <SafeAreaView
-        style={{
-          paddingTop:
-            Platform.OS === "android" ? StatusBar.currentHeight + 2 : 0,
-        }}
-      >
-        <ScrollView >
-          <ImageBackground
-            source={{ uri: image }}
-            style={{
-              height: height / 2 + 12,
-              marginTop:8,
-              marginLeft:6,
-              marginRight:6,
-
-              justifyContent: "space-between",
-            }}
-            imageStyle={{
-              borderRadius: 30,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                padding: 20,
-              }}
-            >
-              <TouchableOpacity
-                style={{
-                  backgroundColor: "#0C0F14",
-                  padding: 10,
-                  borderRadius: 15,
-                }}
-                onPress={() => navigation.goBack()}
-              >
-                <Ionicons name="arrow-back" color="white" size={20} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  backgroundColor: "#0C0F14",
-                  padding: 10,
-                  borderRadius: 15,
-                }}
-                onPress={() => {
-                  handleAddto();
-                }}
-              >
-                <Ionicons name="heart" color="white" size={20} />
-              </TouchableOpacity>
-            </View>
-
-            <View
-              style={{
-                borderRadius: 30,
-                overflow: "hidden",
-              }}
-            >
-              <BlurView
-                intensity={150}
-                tint="dark"
-                style={{
-                  padding: 20,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <View>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      color: "white",
-                      fontWeight: "600",
-                      marginBottom: 10,
-                    }}
-                  >
-                    {productName}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      color: "#b5b5b5",
-                      fontWeight: "500",
-                      marginBottom: 10,
-                    }}
-                  >
-                    Price : {price}{" "}
-                    <Fontisto name="dollar" size={15} color="orange" />
-                  </Text>
-                  <View style={{ flexDirection: "row", marginTop: 10 }}>
-                    <Ionicons name="star" size={15} color="#D17842" />
-                    <Text
-                      style={{
-                        color: "white",
-                        marginLeft: 10,
-                      }}
-                    >
-                      4
-                    </Text>
-                  </View>
-                </View>
-                <View
-                  style={{
-                    width: "35%",
-                    justifyContent: "space-between",
-                  }}
+      <View style={styles.imgbgLayout}/>
+      <SafeAreaView style={{paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 2 : 0,}}>
+        <ScrollView>
+          <View style={styles.imgTitlePriceCont}>
+            <Image 
+              style={styles.img}
+              source={{uri: image}}>
+            </Image>
+            <View style={styles.arrowHeartCont}>
+              <View style={styles.arrowHeart}>
+                <TouchableOpacity
+                  style={styles.arrowHeartStyle}
+                  onPress={() => navigation.goBack()}
                 >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <View
-                      style={{
-                        padding: 5,
-                        width: 50,
-                        height: 50,
-                        backgroundColor: "#0C0F14",
-                        borderRadius: 10,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Ionicons name="cafe" size={20} color="white" />
-                      <Text
-                        style={{
-                          color: "#b5b5b5",
-                          fontSize: 10,
-                        }}
-                      >
-                        Coffee
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        padding: 5,
-                        width: 50,
-                        height: 50,
-                        backgroundColor: "#0C0F14",
-                        borderRadius: 10,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Ionicons name="water" size={20} color={"#D17842"} />
-                      <Text
-                        style={{
-                          color: "#b5b5b5",
-                          fontSize: 10,
-                        }}
-                      >
-                        Milk
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </BlurView>
+                  <Ionicons name="arrow-back" color="white" size={20} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.arrowHeartStyle} onPress={handleFav}>
+                  <Ionicons name="heart" color={favourite} size={20} />
+                </TouchableOpacity>
+              </View>
             </View>
-          </ImageBackground>
+            
+            <View style={styles.titlePriceCont}>
+              <View style={styles.title}>
+                <Text style={styles.titlepriceTxt}>
+                  {productName}
+                </Text>
+                <Text>
+                  <FontAwesome name="star" size={15} color="orange" />
+                  <Text style={styles.revRate}> {starsAvg}</Text> 
+                  <Text style={{ color: '#A9A9A9', }}> ({starsCount})</Text>
+                </Text>
+              </View>
 
-          <View style={styles.cont}>
-            <Text
-              style={{
-                color: "#b5b5b5",
-                fontSize: 20,
-                marginBottom: 10,
-              }}
-            >
-              Description
-            </Text>
+              <View style={styles.priceCont}>
+                <Text style={styles.titlepriceTxt}>
+                  <Feather name="dollar-sign" size={15} color="orange"/> {price}
+                </Text>
 
-            <Text numberOfLines={8} style={{ color: "white", fontSize: 15 }}>
+                <Text style={styles.titlepriceTxt}>
+                  <FontAwesome5 name="coins" size={15} color="orange" /> {coin}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+
+          <View style={styles.descCont}>
+            <Text style={styles.descTitle}>Description</Text>
+            <Text style={styles.descBody}>
               {details}
             </Text>
           </View>
 
+
           <View style={styles.sizesCont}>
-            {/* <TouchableOpacity style={styles.size} onPress={setSmall}>
-              <Text style={styles.sizeTxt}>Small</Text>
+            <TouchableOpacity style={[styles.size, selectedSize == 0 && styles.enableSize]} onPress={setSmall}>
+              <Text style={[styles.sizeTxt, selectedSize == 0 && styles.enableSizeTxt]}>Small</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.size} onPress={setMedium}>
-              <Text style={styles.sizeTxt}>Medium</Text>
+            <TouchableOpacity style={[styles.size, selectedSize == 1 && styles.enableSize]} onPress={setMedium}>
+              <Text style={[styles.sizeTxt, selectedSize == 1 && styles.enableSizeTxt]}>Medium</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.size} onPress={setLarge}>
-              <Text style={styles.sizeTxt}>Large</Text>
-            </TouchableOpacity> */}
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              {sizes.map((size, index) => (
-                <TouchableOpacity
-                  onPress={() => setActiveSize(size)}
-                  key={index}
-                  style={[
-                    {
-                      borderWidth: 2,
-                      marginLeft: 12,
-                      paddingVertical: 5,
-                      borderRadius: 10,
-                      backgroundColor: "#D17842",
-                      width: width / 3 - 20,
-                      alignItems: "center",
-                    },
-                    activeSize == size && {
-                      borderColor: "#D17842",
-                      backgroundColor: "#0C0F14",
-                    },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      {
-                        color: "white",
-                        fontSize: 19,
-                      },
-                      activeSize === size && {
-                        color: "#D17842",
-                      },
-                    ]}
-                  >
-                    {size}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+            <TouchableOpacity style={[styles.size, selectedSize == 2 && styles.enableSize]} onPress={setLarge}>
+              <Text style={[styles.sizeTxt, selectedSize == 2 && styles.enableSizeTxt]}>Large</Text>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.qntcartCont}>
             <View style={styles.qntCont}>
-              <Pressable onPress={decreaseQnt}>
-                <AntDesign name="minuscircleo" size={28} color={"#D17842"} />
-              </Pressable>
-              <Text style={styles.qntTxt}> {qnt} </Text>
-              <Pressable onPress={increaseQnt}>
-                <AntDesign name="pluscircleo" size={28} color={"#D17842"} />
-              </Pressable>
+                <Pressable onPress={decreaseQnt}>
+                  <AntDesign name="minuscircle" size={28} color="black" />
+                </Pressable>
+                <Text style={styles.qntTxt}> {qnt} </Text>
+                <Pressable onPress={increaseQnt}>
+                  <AntDesign name="pluscircle" size={28} color="black" />
+                </Pressable>
             </View>
 
             <View>
-              <TouchableOpacity onPress={handleAdd}>
+              <TouchableOpacity style={styles.cart}>
                 <View style={styles.cartCont}>
-                  <Text style={styles.cartTxt}>Buy Now</Text>
+                  <Text style={styles.cartTxt}>Add To Cart</Text>
+                  <AntDesign name="shoppingcart" size={30} color="black" />
                 </View>
               </TouchableOpacity>
             </View>
@@ -324,10 +165,14 @@ export default function ProductScreen({ navigation, route }) {
 
           <ReviewButtonLink
             image={"reviewsImg"}
-            name={"Add Review"}
-            bgcolor={"#D17842"}
+            name={"Reviews"}
+            bgcolor={COLORS.lightOrange}
             nav={"Reviews"}
+            product_id={id}
           />
+
+          <View style={{marginBottom: 100}}/>
+
         </ScrollView>
       </SafeAreaView>
     </>
@@ -335,196 +180,165 @@ export default function ProductScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+
+  descCont: {
+    padding: 10
+  },
+  descTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  descBody: {
+    fontSize: 15,
+    color: 'rgba(0, 0, 0, 0.65)',
+    padding: 5
+  },
+
+
   cont: {
-    flexDirection: "column",
+    flexDirection: 'column',
     margin: 10,
   },
 
   imgbg: {
     flex: 1,
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
   },
   imgbgLayout: {
-    backgroundColor: "grey",
-    position: "absolute",
-    width: "100%",
-    height: "100%",
+    backgroundColor: "#F1F1F1",
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   },
   imgTitlePriceCont: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   img: {
-    width: "100%",
+    width: '100%',
     height: undefined,
-    aspectRatio: 1,
+    aspectRatio: 1.25,
+  },
+
+  arrowHeartCont: {
+    top: 0, 
+    position: 'absolute', 
+    width: '100%',
+  },
+  arrowHeart: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 20,
+  },
+  arrowHeartStyle: {
+    backgroundColor: "#0C0F14",
+    padding: 10,
+    borderRadius: 15,
   },
 
   titlePriceCont: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    width: "100%",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
     padding: 10,
     fontSize: 22,
-    fontWeight: "bold",
-    backgroundColor: "rgba(0,0,0,0.45)",
+    fontWeight: 'bold',
+    backgroundColor: 'rgba(0,0,0,0.45)',
     borderRadius: 20,
   },
   title: {
-    width: "70%",
+    width: '70%',
     paddingLeft: 20,
   },
   priceCont: {
-    width: "40%",
+    width: '40%',
   },
   titlepriceTxt: {
     color: COLORS.white,
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  dollarImg: {
-    width: 30,
-    height: 30,
-  },
-  coinImg: {
-    width: 22,
-    height: 22,
-  },
-  imgStar: {
-    width: 20,
-    height: 20,
+    fontSize: 15,
+    fontWeight: 'bold',
   },
   revRate: {
     color: COLORS.white,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 15,
   },
 
-  descCont: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: COLORS.lightOrange,
-    borderRadius: 20,
-    padding: 5,
-    marginVertical: 10,
-    borderWidth: 1,
-  },
-  descTitle: {
-    fontWeight: "bold",
-    fontSize: 18,
-    color: COLORS.black,
-    paddingLeft: 10,
-  },
-  desc: {
-    fontWeight: "bold",
-    padding: 10,
-    color: "rgba(255, 255, 255, 0.8)",
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
-    borderRadius: 20,
-    lineHeight: 25,
-  },
-  downArrow: {
-    width: 30,
-    height: 30,
-  },
-
+ 
   sizesCont: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginVertical: 10,
   },
   size: {
     backgroundColor: COLORS.lightOrange,
     padding: 10,
     borderRadius: 10,
-    borderWidth: 1,
+    borderWidth:  1,
+  },
+  enableSize: {
+    backgroundColor: COLORS.black,
+    borderColor: COLORS.lightOrange,
   },
   sizeTxt: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: COLORS.black,
+  },
+  enableSizeTxt: {
+    color: COLORS.lightOrange,
+    borderColor: COLORS.black,
+  },
+
+
+  qntcartCont: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
+    marginHorizontal: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  cartCont: {
+    flexDirection: 'row',
+    backgroundColor: COLORS.lightOrange,
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderWidth:  1,
+  },
+  cartTxt: {
+    fontSize: 17,
+    fontWeight: 'bold',
     color: COLORS.black,
   },
 
-  qntcartCont: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginVertical: 20,
-    marginHorizontal: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  cartCont: {
-    flexDirection: "row",
-    marginRight: 10,
-    backgroundColor: "#D17842",
-    borderRadius: 12,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    borderWidth: 1,
-  },
-  cartTxt: {
-    fontSize: 20,
-    color: COLORS.white,
-    fontWeight: "700",
-  },
-  cartImg: {
-    width: 30,
-    height: 30,
-    marginLeft: 20,
-  },
-
   qntCont: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "30%",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '30%'
   },
   qntSignImg: {
-    backgroundColor: COLORS.lightOrange,
+    backgroundColor: COLORS.lightOrange, 
     borderRadius: 100,
   },
   qntTxt: {
     fontSize: 24,
-    color: COLORS.white,
-  },
-
-  reviewsCont: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginHorizontal: 20,
-    marginBottom: 20,
-    borderRadius: 10,
-    borderWidth: 1,
-    padding: 5,
-    backgroundColor: COLORS.lightOrange,
-  },
-  reviewImg: {
-    width: 30,
-    height: 30,
-    backgroundColor: COLORS.lightOrange,
-  },
-  reviewTxt: {
-    paddingLeft: 10,
-    fontWeight: "bold",
-    fontSize: 18,
     color: COLORS.black,
-  },
-  rightArrow: {
-    width: 25,
-    height: 25,
   },
 
   horizontalLineCont: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   horizontalLine: {
-    borderBottomColor: "grey",
-    width: "80%",
+    borderBottomColor: 'grey',
+    width: '80%',
     borderBottomWidth: 0.5,
-    marginBottom: 20,
-  },
+    marginBottom: 10
+  }
 });
