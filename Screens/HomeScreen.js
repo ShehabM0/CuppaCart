@@ -57,7 +57,7 @@ export default function ProfileScreen({ navigation }) {
   return (
     <SafeAreaView style={{ backgroundColor: "grey", flex: 1 }}>
   <FlatList
-    style={{ padding: 10, marginTop: 16 }}
+    style={{ padding: 10, marginTop: 30 }}
     showsVerticalScrollIndicator={false}
     ListHeaderComponent={
       <>
