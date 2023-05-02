@@ -39,10 +39,10 @@ useEffect(() => {
   (async () => {
     let ar = [];
     let prod;
-    for (let i = 0; i < 2; i++) {
-        prod = await getProductByID(userFav[i]);
-        ar.push(prod);
-    }
+    for (let i = 0; i < 2 && i < userFav.length; i++) {
+      prod = await getProductByID(userFav[i]);
+      ar.push(prod);
+  }
 
     //console.log(prod);
     // console.log(ar);
