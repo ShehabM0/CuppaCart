@@ -1,38 +1,29 @@
 import React from "react";
-import { Image, StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import {  StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
+import { MaterialIcons, Feather } from '@expo/vector-icons'; 
 import { useNavigation } from "@react-navigation/native";
 import { COLORS } from "../Conts/Color"
-
 
 export default function ReviewButtonLink({ image, name, bgcolor, nav, product_id }) {
 
   const navigation = useNavigation();
-
-  const images = {
-    addImg: require("../assets/add_review_icon.png"),
-    reviewsImg: require("../assets/review_icon_black.png"),
-  }
+  const icons = [
+    <MaterialIcons name="rate-review" size={24} color="black" />,
+    <MaterialIcons name="add-comment" size={24} color="black" />
+  ];
 
   return (
     <TouchableOpacity onPress={() => navigation.navigate(nav, { product_id })}>
       <View style={[styles.addReviewCont, {backgroundColor: bgcolor}]}>
         <View style={{ flexDirection: "row" }}>
-          <View style={{ paddingTop: 2, paddingLeft: 5 }}>
-            <Image
-              style={[styles.addReviewImg, {backgroundColor: bgcolor}]}
-              source={images[image]}
-            />
+          <View style={{ justifyContent: "center", marginHorizontal: 5 }}>
+            {icons[image]}
           </View>
           <Text style={styles.addReviewTxt}> {name} </Text>
         </View>
-        <View>
-          <View style={{ paddingTop: 5, marginRight: 10 }}>
-            <Image
-              style={styles.rightArrow}
-              source={require("../assets/arrow_right_icon.png")}
-            />
-          </View>
+        <View style={{ justifyContent: 'center', marginHorizontal: 10 }}>
+          <Feather name="arrow-right-circle" size={24} color="black" />
         </View>
       </View>
     </TouchableOpacity>
@@ -50,18 +41,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
   },
-  addReviewImg: {
-    width: 30,
-    height: 30,
-  },
   addReviewTxt: {
-    paddingLeft: 5,
+    textAlignVertical: "center",
     fontWeight: "bold",
     fontSize: 18,
     color: COLORS.black,
-  },
-  rightArrow: {
-    width: 25,
-    height: 25,
   },
 });
