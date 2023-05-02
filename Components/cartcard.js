@@ -99,7 +99,7 @@ const cartcard = ({productName,
               maxWidth: '85%',
               marginRight: 4,
             }}>
-            &#8377;{price}
+           ${price}
           </Text>
         </View>
         </TouchableOpacity>
