@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
 
   questionTxt: {
     marginTop: 20,
-    paddingLeft: 10,
+    marginHorizontal: 20,
     fontSize: 16,
     fontWeight: 'bold'
   },
