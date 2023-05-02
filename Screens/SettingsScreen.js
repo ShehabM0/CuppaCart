@@ -110,12 +110,25 @@ const SettingsScreen = ({ navigation }) => {
           </View>
         </TouchableRipple>
 
-        <TouchableRipple onPress={handleDelete}>
+        <TouchableRipple onPress={() => {
+            navigation.navigate("EditUserScreen");
+          }}>
+          <View style={styles.menuItem}>
+            <Icon name="credit-card" color="#00ff00" size={25} />
+            <Text style={styles.menuItemText}>Add credit card</Text>
+          </View>
+        </TouchableRipple>
+
+          <TouchableRipple onPress={handleDelete}>
           <View style={styles.menuItem}>
             <Icon name="account-remove" color="red" size={25} />
             <Text style={styles.menuItemText}>Delete my account</Text>
           </View>
         </TouchableRipple>
+
+
+
+
       </ScrollView>
     </SafeAreaView>
   );
