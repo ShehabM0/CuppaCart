@@ -55,19 +55,13 @@ export default function ProfileScreen({ navigation }) {
   }, []);
 
   return (
-    <SafeAreaView style={{ backgroundColor: "grey", height: "100%" }}>
-      <ScrollView
-        style={{
-          padding: 10,
-          marginTop: 16,
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
+    <SafeAreaView style={{ backgroundColor: "grey", flex: 1 }}>
+  <FlatList
+    style={{ padding: 10, marginTop: 16 }}
+    showsVerticalScrollIndicator={false}
+    ListHeaderComponent={
+      <>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <TouchableOpacity
             style={{
               borderRadius: 10,
@@ -122,39 +116,26 @@ export default function ProfileScreen({ navigation }) {
             Find the best coffee for you
           </Text>
         </View>
-        <View style={{ flex: 1, backgroundColor: "##fff" }}>
+        <View style={{ marginBottom: 15 }}>
           <Searchbar placeholder="Search" value={searchTerm} />
         </View>
-        {/* 
-      <Categories onChange={(id) => setActiveCategoryId(id)} /> */}
-
-        <View
-          style={{
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            marginTop: 15,
-          }}
-        >
-          <FlatList
-            data={products}
-            numColumns={2}
-            showsHorizontalScrollIndicator={true}
-            renderItem={(itemData) => {
-              return (
-                <ProductCard
-                  productName={itemData.item.productName}
-                  price={itemData.item.price}
-                  details={itemData.item.details}
-                  image={itemData.item.image}
-                  Rate={itemData.item.Rate}
-                  id={itemData.item.id}
-                />
-              );
-            }}
-          />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
+      </>
+    }
+    data={products}
+    numColumns={2}
+    renderItem={(itemData) => {
+      return (
+        <ProductCard
+          productName={itemData.item.productName}
+          price={itemData.item.price}
+          details={itemData.item.details}
+          image={itemData.item.image}
+          Rate={itemData.item.Rate}
+          id={itemData.item.id}
+        />
+      );
+    }}
+  />
+</SafeAreaView>
+  )
 }
