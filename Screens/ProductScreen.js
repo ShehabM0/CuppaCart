@@ -182,6 +182,21 @@ export default function ProductScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+
+  descCont: {
+    padding: 10
+  },
+  descTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  descBody: {
+    fontSize: 15,
+    color: 'rgba(0, 0, 0, 0.65)',
+    padding: 5
+  },
+
+
   cont: {
     flexDirection: 'column',
     margin: 10,
