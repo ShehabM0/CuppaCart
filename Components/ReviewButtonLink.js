@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { COLORS } from "../Conts/Color"
 
 
-export default function ReviewButtonLink({ image, name, bgcolor, nav }) {
+export default function ReviewButtonLink({ image, name, bgcolor, nav, product_id }) {
 
   const navigation = useNavigation();
 
@@ -15,7 +15,7 @@ export default function ReviewButtonLink({ image, name, bgcolor, nav }) {
   }
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate(nav)}>
+    <TouchableOpacity onPress={() => navigation.navigate(nav, { product_id })}>
       <View style={[styles.addReviewCont, {backgroundColor: bgcolor}]}>
         <View style={{ flexDirection: "row" }}>
           <View style={{ paddingTop: 2, paddingLeft: 5 }}>
