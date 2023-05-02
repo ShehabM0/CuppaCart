@@ -101,10 +101,6 @@ const cartcard = ({productName,
             }}>
             &#8377;{price}
           </Text>
-          <Text>
-            (~&#8377;
-            {price + price / 20})
-          </Text>
         </View>
         </TouchableOpacity>
       </View>
