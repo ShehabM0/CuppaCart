@@ -87,6 +87,7 @@ export default function ProfileScreen({ navigation }) {
               overflow: "hidden",
               borderRadius: 10,
             }}
+            
           >
             <BlurView
               style={{
@@ -94,14 +95,17 @@ export default function ProfileScreen({ navigation }) {
                 padding: 10 / 2,
               }}
             >
+              <TouchableOpacity onPress={()=> navigation.navigate("ProfileTab")}>
               <Image
                 style={{
                   height: "100%",
                   width: "100%",
                   borderRadius: 10,
                 }}
+                
                 source={{ uri: image }}
               />
+              </TouchableOpacity>
             </BlurView>
           </View>
         </View>
