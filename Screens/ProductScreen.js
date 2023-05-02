@@ -8,14 +8,18 @@ import { COLORS } from '../Conts/Color';
 
 export default function ProductScreen({ navigation, route }) {
 
-  const { productName, prices, image, details, id } = route.params;
+  const { productName, image, details, id } = route.params;
+
+  const prices = [20, 25, 30];
+  const coins = [30, 40, 50];
+
   const [selectedSize, setSelectedSize] = useState(1);
-  const [starsAvg, setStarsAvg] = useState(0);
+  const [favourite, setFavourite] = useState('white');
   const [starsCount, setStarsCount] = useState(0);
+  const [starsAvg, setStarsAvg] = useState(0);
   const [price, setPrice] = useState(25);
   const [coin, setCoin] = useState(40);
   const [qnt, setQnt] = useState(1);
-  const [favourite, setFavourite] = useState('white');
 
   useEffect(() => {
     switch(selectedSize) {
@@ -35,7 +39,7 @@ export default function ProductScreen({ navigation, route }) {
     setStarsCount(starsCount);
     setStarsAvg(starsAvg);
   })
-  .catch(err => console.log(err.message));
+  .catch(err => alert(err.message));
 
   function handleFav() {
     setFavourite((favourite == 'white') ? 'orange' : 'white');
@@ -44,20 +48,20 @@ export default function ProductScreen({ navigation, route }) {
 
   function setSmall() {
     setSelectedSize(0);
-    setPrice(qnt * 20);
-    setCoin(qnt * 30);
+    setPrice(qnt * prices[0]);
+    setCoin(qnt * coins[0]);
   }
 
   function setMedium() {
     setSelectedSize(1);
-    setPrice(qnt * 25);
-    setCoin(qnt * 40);
+    setPrice(qnt * prices[1]);
+    setCoin(qnt * coins[1]);
   }
 
   function setLarge() {
     setSelectedSize(2);
-    setPrice(qnt * 30);
-    setCoin(qnt * 50);
+    setPrice(qnt * prices[2]);
+    setCoin(qnt * coins[2]);
   }
 
   function increaseQnt() {
@@ -79,12 +83,10 @@ export default function ProductScreen({ navigation, route }) {
               style={styles.img}
               source={{uri: image}}>
             </Image>
+
             <View style={styles.arrowHeartCont}>
               <View style={styles.arrowHeart}>
-                <TouchableOpacity
-                  style={styles.arrowHeartStyle}
-                  onPress={() => navigation.goBack()}
-                >
+                <TouchableOpacity style={styles.arrowHeartStyle} onPress={() => navigation.goBack()}>
                   <Ionicons name="arrow-back" color="white" size={20} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.arrowHeartStyle} onPress={handleFav}>
@@ -164,7 +166,7 @@ export default function ProductScreen({ navigation, route }) {
           </View>
 
           <ReviewButtonLink
-            image={"reviewsImg"}
+            image={0}
             name={"Reviews"}
             bgcolor={COLORS.lightOrange}
             nav={"Reviews"}
@@ -180,21 +182,6 @@ export default function ProductScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-
-  descCont: {
-    padding: 10
-  },
-  descTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  descBody: {
-    fontSize: 15,
-    color: 'rgba(0, 0, 0, 0.65)',
-    padding: 5
-  },
-
-
   cont: {
     flexDirection: 'column',
     margin: 10,
@@ -267,7 +254,19 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 
- 
+  descCont: {
+    padding: 10
+  },
+  descTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  descBody: {
+    fontSize: 15,
+    color: 'rgba(0, 0, 0, 0.65)',
+    padding: 5
+  },
+
   sizesCont: {
     flexDirection: 'row',
     justifyContent: 'space-around',
