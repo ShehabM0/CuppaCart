@@ -21,6 +21,8 @@ const ProductCard = ({
 }) => {
   const navigation = useNavigation();
   const { width } = Dimensions.get("window");
+  const screenWidth = Math.round(Dimensions.get('window').width);
+  const cardWidth = screenWidth - 40;
   return (
     <TouchableOpacity
       onPress={() => {
@@ -39,14 +41,15 @@ const ProductCard = ({
       }}
     >
       <View
-        style={{
-          width: 180,
-          marginBottom: 15,
-          marginRight: 8,
-          borderRadius: 10 * 2,
-          overflow: "hidden",
-        }}
-      >
+  style={{
+    width: (cardWidth/2) -5 ,
+    marginBottom: 15,
+    marginRight: 20,
+    marginLeft: 3,
+    borderRadius: 10 * 2,
+    overflow: "hidden",
+  }}
+>
         <BlurView
           tint="dark"
           intensity={95}
