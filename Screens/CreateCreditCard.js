@@ -105,7 +105,7 @@ const RegistrationScreen = ({ navigation }) => {
             <Loader visible={loading} />
             <ScrollView contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
                 <Text style={{color: COLORS.black, fontSize: 40, fontWeight: 'bold'}}>
-                    CreditCard
+                    Credit Card
                 </Text>
                 <Text style={{color: COLORS.grey, fontSize: 18, marginVertical: 10}}>
                     Enter CreditCard Details
