@@ -16,7 +16,7 @@ const TabsNav = () => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: "#967259",
+          backgroundColor: "#FFFFFF",
           // height: 60,
           // position: "absolute",
           // bottom: 20,
@@ -34,8 +34,8 @@ const TabsNav = () => {
           shadowColor: "transparent",
           elevation: 0,
         },
-        tabBarInactiveTintColor: "white",
-        tabBarActiveTintColor: "#664E3D",
+        tabBarInactiveTintColor: "#8D8D8D",
+        tabBarActiveTintColor: "#C67C4E",
       }}
     >
       <Tab.Screen
