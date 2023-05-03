@@ -22,7 +22,7 @@ export default function ProductScreen({ navigation, route }) {
   const [favorite, setFavorite] = useState('white');
   const [starsCount, setStarsCount] = useState(0);
   const [success, setSuccess] = useState(false);
-  const [userCart, setUserCart] = useState('');
+  const [userCart, setUserCart] = useState([]);
   const [starsAvg, setStarsAvg] = useState(0);
   const [price, setPrice] = useState(25);
   const [coin, setCoin] = useState(40);
@@ -59,10 +59,10 @@ export default function ProductScreen({ navigation, route }) {
 
   useEffect(() => {
     (userFavorite.includes(id)) ? setFavorite('orange') : setFavorite('white');
-  }, [userFavorite])
+  }, [userFavorite]);
 
 
-  function handleFav() {
+  function addToFavorite() {
     if(favorite == 'white') {
       setFavorite('orange');
       updateUser(user_id, { favorite: [...userFavorite, id] })
@@ -70,7 +70,7 @@ export default function ProductScreen({ navigation, route }) {
       setFavorite('white');
       const id_idx = userFavorite.indexOf(id);
       userFavorite.splice(id_idx, 1);
-      updateUser(user_id, { favorite: [...userFavorite] })
+      updateUser(user_id, { favorite: [...userFavorite] });
     }
     getUserById(user_id)
     .then(user => {
@@ -79,13 +79,12 @@ export default function ProductScreen({ navigation, route }) {
     .catch(err => alert(err.message));
   }
 
-  function handleCart() {
-    //userCart.map((stringArray) => console.log(JSON.parse(stringArray)))
-    updateUser(user_id, { cart: [ ...userCart, JSON.stringify([id, qnt])] })
+  function addToCart() {
+    updateUser(user_id, { cart: [ ...userCart, { product_id: id, qnt: qnt, size: selectedSize} ] })
     .then(() => {
       setSuccess(true);
       setTimeout(() => setSuccess(false), 2000);
-    })
+    });
   }
 
 
@@ -136,7 +135,7 @@ export default function ProductScreen({ navigation, route }) {
                 <TouchableOpacity style={styles.arrowHeartStyle} onPress={() => navigation.goBack()}>
                   <Ionicons name="arrow-back" color="white" size={20} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.arrowHeartStyle} onPress={handleFav}>
+                <TouchableOpacity style={styles.arrowHeartStyle} onPress={addToFavorite}>
                   <Ionicons name="heart" color={favorite} size={20} />
                 </TouchableOpacity>
               </View>
@@ -199,7 +198,7 @@ export default function ProductScreen({ navigation, route }) {
             </View>
 
             <View>
-              <TouchableOpacity style={styles.cart} onPress={handleCart}>
+              <TouchableOpacity style={styles.cart} onPress={addToCart}>
                 <View style={styles.cartCont}>
                   <Text style={styles.cartTxt}>Add To Cart</Text>
                   <AntDesign name="shoppingcart" size={30} color="black" />
