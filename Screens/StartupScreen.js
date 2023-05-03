@@ -21,7 +21,7 @@ const Home = ({ navigation }) => {
   return (
     <ImageBackground
       style={{ flex: 1 }}
-      source={require("../assets/coffee.jpg")}
+      source={require("../assets/coffee1.jpg")}
     >
       <View style={styles.container} />
       <View style={styles.textHead}>
@@ -42,7 +42,7 @@ const Home = ({ navigation }) => {
         <TouchableOpacity
           style={{
             padding: 20,
-            backgroundColor: "white",
+            backgroundColor: "#C67C4E",
             borderRadius: 20,
             alignItems: "center",
             marginTop: 30,
@@ -51,7 +51,7 @@ const Home = ({ navigation }) => {
         >
           <Text
             style={{
-              color: "black",
+              color: "white",
               fontSize: 20,
               fontWeight: "700",
             }}
@@ -85,5 +85,5 @@ const styles = StyleSheet.create({
   },
 
   textHeadStyle: { color: "white", fontWeight: "800", fontSize: 45 },
-  textFootStyle: { color: "white", fontWeight: "300", fontSize: 17 },
+  textFootStyle: { color: "#A9A9A9", fontWeight: "300", fontSize: 17 },
 });
