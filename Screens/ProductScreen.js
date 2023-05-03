@@ -201,7 +201,7 @@ export default function ProductScreen({ navigation, route }) {
               <TouchableOpacity style={styles.cart} onPress={addToCart}>
                 <View style={styles.cartCont}>
                   <Text style={styles.cartTxt}>Add To Cart</Text>
-                  <AntDesign name="shoppingcart" size={30} color="black" />
+                  
                 </View>
               </TouchableOpacity>
             </View>
@@ -214,7 +214,7 @@ export default function ProductScreen({ navigation, route }) {
           <ReviewButtonLink
             image={0}
             name={"Reviews"}
-            bgcolor={COLORS.lightOrange}
+            bgcolor={"#C67C4E"}
             nav={"Reviews"}
             product_id={id}
           />
@@ -319,10 +319,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   size: {
-    backgroundColor: COLORS.lightOrange,
+    backgroundColor: "#FFFFFF",
     padding: 10,
     borderRadius: 10,
-    borderWidth:  1,
+    borderWidth:  0.7,
   },
   enableSize: {
     backgroundColor: COLORS.black,
@@ -331,11 +331,11 @@ const styles = StyleSheet.create({
   sizeTxt: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: COLORS.black,
+    color: "#2F2D2C",
   },
   enableSizeTxt: {
     color: COLORS.lightOrange,
-    borderColor: COLORS.black,
+    borderColor: "#DEDEDE",
   },
 
 
@@ -349,16 +349,15 @@ const styles = StyleSheet.create({
   },
   cartCont: {
     flexDirection: 'row',
-    backgroundColor: COLORS.lightOrange,
+    backgroundColor: "#C67C4E",
     borderRadius: 15,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    borderWidth:  1,
+    padding:15
+    
   },
   cartTxt: {
     fontSize: 17,
     fontWeight: 'bold',
-    color: COLORS.black,
+    color: "#FFFFFF",
   },
 
   qntCont: {
