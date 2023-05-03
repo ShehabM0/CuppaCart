@@ -9,8 +9,8 @@ export default function ReviewButtonLink({ image, name, bgcolor, nav, product_id
 
   const navigation = useNavigation();
   const icons = [
-    <MaterialIcons name="rate-review" size={24} color="black" />,
-    <MaterialIcons name="add-comment" size={24} color="black" />
+    <MaterialIcons name="rate-review" size={24} color="white" />,
+    <MaterialIcons name="add-comment" size={24} color="white" />
   ];
 
   return (
@@ -23,7 +23,7 @@ export default function ReviewButtonLink({ image, name, bgcolor, nav, product_id
           <Text style={styles.addReviewTxt}> {name} </Text>
         </View>
         <View style={{ justifyContent: 'center', marginHorizontal: 10 }}>
-          <Feather name="arrow-right-circle" size={24} color="black" />
+          <Feather name="arrow-right-circle" size={24} color="white" />
         </View>
       </View>
     </TouchableOpacity>
@@ -38,13 +38,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 20,
     borderRadius: 10,
-    borderWidth: 1,
-    padding: 5,
+    padding: 8,
   },
   addReviewTxt: {
     textAlignVertical: "center",
     fontWeight: "bold",
     fontSize: 18,
-    color: COLORS.black,
+    color:"#ffffff",
   },
 });
