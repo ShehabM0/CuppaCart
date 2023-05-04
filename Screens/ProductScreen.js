@@ -55,27 +55,22 @@ export default function ProductScreen({ navigation, route }) {
     })
     .catch(err => alert(err.message));
   }, []);
-
-  useEffect(() => {
+ useEffect(() => {
     (userFavorite.includes(id)) ? setFavorite('orange') : setFavorite('white');
   }, [userFavorite]);
 
-
-  function addToFavorite() {
+function addToFavorite() {
     if(favorite == 'white') {
+      setFavorite('orange');
       updateUser(user_id, { favorite: [...userFavorite, id] })
     } else {
+      setFavorite('white');
       const id_idx = userFavorite.indexOf(id);
       userFavorite.splice(id_idx, 1);
       updateUser(user_id, { favorite: [...userFavorite] });
     }
-    getUserById(user_id)
-    .then(user => {
-      setUserFavorite(user[0].favorite);
-    })
-    .catch(err => alert(err.message));
   }
-
+  
   function addToCart() {
     updateUser(user_id, { cart: [ ...userCart, { product_id: id, qnt: qnt, size: selectedSize} ] })
     .then(() => {
