@@ -105,6 +105,6 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
 
-  textHeadStyle: { fontFamily:"Sora-SemiBold", color: "white",  fontSize: 40 },
-  textFootStyle: { fontFamily:"Sora-SemiBold",color: "#A9A9A9", fontWeight: "300", fontSize: 17 },
+  textHeadStyle: { fontFamily:"Sora-SemiBold", color: "white",  fontSize: 40,textAlign:"center" ,justifyContent:"center"},
+  textFootStyle: { fontFamily:"Sora-SemiBold",color: "#A9A9A9", fontWeight: "300", fontSize: 17,textAlign:"center" ,justifyContent:"center" },
 });

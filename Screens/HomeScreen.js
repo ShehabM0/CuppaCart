@@ -65,7 +65,7 @@ export default function ProfileScreen({ navigation }) {
   useEffect(() => {
     const loadFonts = async () => {
       await Font.loadAsync({
-        'Sora-SemiBold': require('../assets/Fonts/static/Sora-SemiBold.ttf'),
+        "Sora-SemiBold": require("../assets/Fonts/static/Sora-SemiBold.ttf"),
       });
       setFontLoaded(true);
     };
@@ -76,7 +76,6 @@ export default function ProfileScreen({ navigation }) {
   if (!fontLoaded) {
     return null; // Render nothing until the font is loaded
   }
-
 
   return (
     <SafeAreaView
@@ -110,9 +109,9 @@ export default function ProfileScreen({ navigation }) {
               color: "#DDDDDD",
               left: 15,
               fontSize: 25,
-             
+
               top: 60,
-              fontFamily: "Sora-SemiBold"
+              fontFamily: "Sora-SemiBold",
             }}
           >
             Hello, {firstname}
