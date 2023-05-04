@@ -121,8 +121,9 @@ export default function ProductScreen({ navigation, route }) {
       success && 
       <SuccessMessage message={"Product added to your cart"}/>
     }
+    
       <View style={styles.imgbgLayout}/>
-      <SafeAreaView style={{paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 2 : 0,}}>
+      <SafeAreaView style={{paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 2 : 0,backgroundColor:"#E4EDFA"}}>
         <ScrollView>
           <View style={styles.imgTitlePriceCont}>
             <Image 
@@ -147,7 +148,7 @@ export default function ProductScreen({ navigation, route }) {
                   {productName}
                 </Text>
                 <Text>
-                  <FontAwesome name="star" size={15} color="orange" />
+                  <FontAwesome name="star" size={15} color="#FBBE21" />
                   <Text style={styles.revRate}> {starsAvg}</Text> 
                   <Text style={{ color: '#A9A9A9', }}> ({starsCount})</Text>
                 </Text>
@@ -155,11 +156,11 @@ export default function ProductScreen({ navigation, route }) {
 
               <View style={styles.priceCont}>
                 <Text style={styles.titlepriceTxt}>
-                  <Feather name="dollar-sign" size={15} color="orange"/> {price}
+                  <Feather name="dollar-sign" size={15} color="#C67C4E"/> {price}
                 </Text>
 
                 <Text style={styles.titlepriceTxt}>
-                  <FontAwesome5 name="coins" size={15} color="orange" /> {coin}
+                  <FontAwesome5 name="coins" size={15} color="#C67C4E" /> {coin}
                 </Text>
               </View>
             </View>
@@ -176,13 +177,13 @@ export default function ProductScreen({ navigation, route }) {
 
           <View style={styles.sizesCont}>
             <TouchableOpacity style={[styles.size, selectedSize == 0 && styles.enableSize]} onPress={setSmall}>
-              <Text style={[styles.sizeTxt, selectedSize == 0 && styles.enableSizeTxt]}>Small</Text>
+              <Text style={[styles.sizeTxt, selectedSize == 0 && styles.enableSizeTxt]}>S</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.size, selectedSize == 1 && styles.enableSize]} onPress={setMedium}>
-              <Text style={[styles.sizeTxt, selectedSize == 1 && styles.enableSizeTxt]}>Medium</Text>
+              <Text style={[styles.sizeTxt, selectedSize == 1 && styles.enableSizeTxt]}>M</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.size, selectedSize == 2 && styles.enableSize]} onPress={setLarge}>
-              <Text style={[styles.sizeTxt, selectedSize == 2 && styles.enableSizeTxt]}>Large</Text>
+              <Text style={[styles.sizeTxt, selectedSize == 2 && styles.enableSizeTxt]}>L</Text>
             </TouchableOpacity>
           </View>
 
@@ -223,6 +224,7 @@ export default function ProductScreen({ navigation, route }) {
 
         </ScrollView>
       </SafeAreaView>
+     
     </>
   );
 }
@@ -241,17 +243,21 @@ const styles = StyleSheet.create({
   imgbgLayout: {
     backgroundColor: "#F1F1F1",
     position: 'absolute',
-    width: '100%',
-    height: '100%',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: StatusBar.currentHeight,
+    zIndex: 1,
   },
+  
   imgTitlePriceCont: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   img: {
     width: '100%',
-    height: undefined,
-    aspectRatio: 1.25,
+    height: 300, // Set the desired height for the image
+    resizeMode: 'cover', // Make the image cover the container
   },
 
   arrowHeartCont: {
@@ -320,21 +326,27 @@ const styles = StyleSheet.create({
   },
   size: {
     backgroundColor: "#FFFFFF",
-    padding: 10,
+    padding: 15,
+    width:96,
+    height:43,
     borderRadius: 10,
     borderWidth:  0.7,
+    borderColor:"#DEDEDE",
   },
   enableSize: {
-    backgroundColor: COLORS.black,
-    borderColor: COLORS.lightOrange,
+    backgroundColor: "#FFF5EE",
+    borderColor: "#C67C4E",
   },
   sizeTxt: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: "#2F2D2C",
+    fontSize: 20,
+    height:25,
+    justifyContent:"center",
+    color: "#2F2D2C",textAlign: 'center',
+    textAlignVertical: 'center',
+    marginTop:-10
   },
   enableSizeTxt: {
-    color: COLORS.lightOrange,
+    color: "#C67C4E",
     borderColor: "#DEDEDE",
   },
 
@@ -381,7 +393,7 @@ const styles = StyleSheet.create({
   },
   horizontalLine: {
     borderBottomColor: 'grey',
-    width: '80%',
+    width: 320,
     borderBottomWidth: 0.5,
     marginBottom: 10
   }
