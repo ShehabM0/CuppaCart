@@ -116,29 +116,30 @@ const LoginScreen = ({ navigation }) => {
     setErrors((prevState) => ({ ...prevState, [input]: error }));
   };
 
-  const loadFonts = async () => {
-    await Font.loadAsync({
-      'Coffee-Shop': require('../assets/Fonts/coffee_shop/Coffee-Shop.ttf'),
-    });
-    setFontLoaded(true);
-  };
-
   useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        'Sora-SemiBold': require('../assets/Fonts/static/Sora-SemiBold.ttf'),
+      });
+      setFontLoaded(true);
+    };
+
     loadFonts();
   }, []);
 
   if (!fontLoaded) {
-    return null;
+    return null; // Render nothing until the font is loaded
   }
+
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
       <Loader visible={loading} />
       <View style={{ paddingTop: 50, paddingHorizontal: 20 }}>
-        <Text style={{ color: COLORS.black, fontSize: 40, fontWeight: "bold" }}>
+        <Text style={{ color: COLORS.black, fontSize: 40,fontFamily:"Sora-SemiBold" }}>
           Log In
         </Text>
-        <Text style={{ fontFamily:"Coffee-Shop", color: COLORS.grey, fontSize: 18, marginVertical: 10 }}>
+        <Text style={{ fontFamily:"Sora-SemiBold", color: COLORS.grey, fontSize: 18, marginVertical: 10 }}>
           Enter Your Details to Login
         </Text>
         <View style={{ marginVertical: 20 }}>
@@ -170,16 +171,19 @@ const LoginScreen = ({ navigation }) => {
             button
             type="google"
             onPress={() => googleauth()}
+            
           />
           <Text
             onPress={() => navigation.navigate("SignUp")}
             style={{
               color: COLORS.black,
-              fontWeight: "bold",
+              
               textAlign: "center",
-              fontSize: 16,
+              fontSize: 14,
               padding: 8,
+              fontFamily:"Sora-SemiBold"
             }}
+            
           >
             Don't have account? Register
           </Text>
@@ -187,9 +191,9 @@ const LoginScreen = ({ navigation }) => {
             onPress={() => navigation.navigate("ForgetPassword")}
             style={{
               color: COLORS.black,
-              fontWeight: "bold",
+              fontFamily:"Sora-SemiBold",
               textAlign: "center",
-              fontSize: 16,
+              fontSize: 14,
               padding: 2,
             }}
           >

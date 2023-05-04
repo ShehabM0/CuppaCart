@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import {
   View,
   Text,
@@ -24,6 +24,8 @@ import auth from "../firebase/config";
 import { sendEmailVerification } from "firebase/auth";
 import { register, getUserUId } from "../firebase/auth";
 import { addUser } from "../firebase/user";
+import * as Font from 'expo-font';
+
 const RegistrationScreen = ({ navigation }) => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -34,6 +36,7 @@ const RegistrationScreen = ({ navigation }) => {
   const [errors, setErrors] = React.useState({});
   const [loading, setLoading] = React.useState(false);
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
+  const [fontLoaded, setFontLoaded] = useState(false);
   const today = new Date();
   const startDate = getFormatedDate(
     today.setDate(today.getDate() - 36500),
@@ -109,7 +112,20 @@ const RegistrationScreen = ({ navigation }) => {
         });
     }
   };
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        'Sora-SemiBold': require('../assets/Fonts/static/Sora-SemiBold.ttf'),
+      });
+      setFontLoaded(true);
+    };
 
+    loadFonts();
+  }, []);
+
+  if (!fontLoaded) {
+    return null; // Render nothing until the font is loaded
+  }
   const handleOnchange = (text, input) => {
     setInputs((prevState) => ({ ...prevState, [input]: text }));
   };
@@ -129,10 +145,10 @@ const RegistrationScreen = ({ navigation }) => {
       <ScrollView
         contentContainerStyle={{ paddingTop: 50, paddingHorizontal: 20 }}
       >
-        <Text style={{ color: COLORS.black, fontSize: 40, fontWeight: "bold" }}>
+        <Text style={{ color: COLORS.black, fontSize: 40, fontFamily:"Sora-SemiBold" }}>
           Register
         </Text>
-        <Text style={{ color: COLORS.grey, fontSize: 18, marginVertical: 10 }}>
+        <Text style={{ color: COLORS.grey, fontSize: 18, marginVertical: 10, fontFamily:"Sora-SemiBold" }}>
           Enter Your Details to Register
         </Text>
         <View style={{ marginVertical: 20 }}>
@@ -201,7 +217,7 @@ const RegistrationScreen = ({ navigation }) => {
                       style={{
                         marginVertical: 5,
                         fontSize: 14,
-                        color: COLORS.grey,
+                        color: COLORS.grey
                       }}
                     >
                       Select Date
@@ -242,7 +258,7 @@ const RegistrationScreen = ({ navigation }) => {
                         }}
                       />
                       <TouchableOpacity onPress={handleOnPressStartDate}>
-                        <Text style={{ color: "white" }}>Close</Text>
+                        <Text style={{ color: "white" , fontFamily:"Sora-SemiBold"}}>Close</Text>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -256,9 +272,9 @@ const RegistrationScreen = ({ navigation }) => {
             onPress={() => navigation.navigate("SignIn")}
             style={{
               color: COLORS.black,
-              fontWeight: "bold",
+             fontFamily:"Sora-SemiBold",
               textAlign: "center",
-              fontSize: 16,
+              fontSize: 14,
             }}
           >
             Already have account ?Login
