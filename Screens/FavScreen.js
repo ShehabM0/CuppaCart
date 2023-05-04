@@ -25,15 +25,6 @@ const CheckoutScreen = ({ navigation }) => {
   const [userFav, setUserFav] = useState([]);
   const [user, setUser] = useState();
   const [ProductInFav, setProductInFav] = useState();
-  const getProductHandle = async () => {
-    const arr = await getProducts();
-    setProducts(arr);
-  };
-
-  useEffect(() => {
-    getProductHandle();
-  }, []);
-
 //--------------------------------------------------------------------------//
 useEffect(() => {
   (async () => {
@@ -43,7 +34,6 @@ useEffect(() => {
       prod = await getProductByID(userFav[i]);
       ar.push(prod);
   }
-
     //console.log(prod);
     // console.log(ar);
     setProductInFav(ar);
