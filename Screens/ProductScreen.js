@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Platform, StatusBar, ScrollView, Image, StyleSheet, Text, TouchableOpacity, View, SafeAreaView, Pressable } from 'react-native';
-
 import { Ionicons, Feather, FontAwesome5, FontAwesome, AntDesign } from '@expo/vector-icons'; 
 import { getCurrUserId, getUserById, updateUser } from "../firebase/user";
 import ReviewButtonLink from '../Components/ReviewButtonLink';
@@ -64,10 +63,8 @@ export default function ProductScreen({ navigation, route }) {
 
   function addToFavorite() {
     if(favorite == 'white') {
-      setFavorite('orange');
       updateUser(user_id, { favorite: [...userFavorite, id] })
     } else {
-      setFavorite('white');
       const id_idx = userFavorite.indexOf(id);
       userFavorite.splice(id_idx, 1);
       updateUser(user_id, { favorite: [...userFavorite] });
@@ -123,7 +120,7 @@ export default function ProductScreen({ navigation, route }) {
     }
     
       <View style={styles.imgbgLayout}/>
-      <SafeAreaView style={{paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 2 : 0,backgroundColor:"#E4EDFA"}}>
+      <SafeAreaView style={{paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,backgroundColor:"#E4EDFA"}}>
         <ScrollView>
           <View style={styles.imgTitlePriceCont}>
             <Image 
