@@ -119,6 +119,17 @@ const SettingsScreen = ({ navigation }) => {
           </View>
         </TouchableRipple>
 
+
+        <TouchableRipple onPress={() => {
+            navigation.navigate("LocationScreen");
+          }}>
+          <View style={styles.menuItem}>
+            <Icon name="map-marker" color="orange" size={25} />
+            <Text style={styles.menuItemText}>Add location</Text>
+          </View>
+        </TouchableRipple>
+
+
           <TouchableRipple onPress={handleDelete}>
           <View style={styles.menuItem}>
             <Icon name="account-remove" color="red" size={25} />
