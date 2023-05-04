@@ -1,4 +1,4 @@
-import { View, Text,FlatList } from 'react-native'
+import { View, Text,FlatList, SafeAreaView } from 'react-native'
 import React, { useState, useEffect } from "react";
 import FavCard from "../Components/FavCard";
 import { getProductByID, getProducts } from "../firebase/products";
@@ -12,6 +12,8 @@ import {
   getUsers,
   subscribeUser,
 } from "../firebase/user";
+import Loader from "../Components/Loader";
+
 const CheckoutScreen = ({ navigation }) => {
   const [products, setProducts] = useState([]);
   // const {id} = route.params;
@@ -25,6 +27,7 @@ const CheckoutScreen = ({ navigation }) => {
   const [userFav, setUserFav] = useState([]);
   const [user, setUser] = useState();
   const [ProductInFav, setProductInFav] = useState();
+  const [loading, setLoading] = useState(false);
 //--------------------------------------------------------------------------//
 useEffect(() => {
   (async () => {
@@ -40,24 +43,29 @@ useEffect(() => {
   })();
 }, [userFav]);
 useEffect(() => {
-  getUserUId().then((id) => {
-    //console.log(id);
-    getUserById(id).then((user) => {
-      user.forEach((user) => {
-      //  console.log("first elemet is ", user);
-        console.log("fav is ", user.favorite);
-       
-        setUserFav(user.favorite);
-        setUser(user);
-      
-        
+  const a = navigation.addListener("focus", () => {
+    setLoading(true); // Show the loader when the event occurs
+
+    getUserUId().then((id) => {
+      getUserById(id).then((user) => {
+        user.forEach((user) => {
+          console.log("fav is ", user.favorite);
+          setUserFav(user.favorite);
+          setUser(user);
+        });
+        setLoading(false); // Hide the loader when the data fetching is complete
       });
     });
   });
-}, []);
+
+  return () => {
+    a.remove(); // Clean up the listener when the component unmounts
+  };
+}, [navigation]);
+
 
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
         backgroundColor: "#fff",
@@ -65,6 +73,8 @@ useEffect(() => {
         justifyContent: "center",
       }}
     >
+       <Loader visible={loading}
+  />
        <View
           style={{
             flexDirection: "row",
@@ -73,6 +83,8 @@ useEffect(() => {
             marginTop: 15,
           }}
         >
+      
+          
           <FlatList
             data={ProductInFav}
             numColumns={1}
@@ -93,7 +105,7 @@ useEffect(() => {
           />
         </View>
         
-    </View>
+    </SafeAreaView>
   );
 };
 
