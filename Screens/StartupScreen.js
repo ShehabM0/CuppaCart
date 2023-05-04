@@ -9,15 +9,35 @@ import {
   Image,
 } from "react-native";
 import Constants from "expo-constants";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import TextAnimator from "../Components/TextAnimator";
 import * as Haptics from "expo-haptics";
-
+import { useFonts } from 'expo-font';
+import * as Font from 'expo-font';
+import { AppLoading } from 'expo';
 const Home = ({ navigation }) => {
   function loginnavigation() {
     navigation.navigate("SignIn");
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
   }
+
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        'Sora-SemiBold': require('../assets/Fonts/static/Sora-SemiBold.ttf'),
+      });
+      setFontLoaded(true);
+    };
+
+    loadFonts();
+  }, []);
+
+  if (!fontLoaded) {
+    return null; // Render nothing until the font is loaded
+  }
+
   return (
     <ImageBackground
       style={{ flex: 1 }}
@@ -25,12 +45,12 @@ const Home = ({ navigation }) => {
     >
       <View style={styles.container} />
       <View style={styles.textHead}>
-        <TextAnimator
-          content="️Coffee so good, your taste buds will love it."
-          textStyle={styles.textHeadStyle}
-          style={styles.textHeadStyle}
-          duration={1000}
-        />
+      <TextAnimator
+  content="️Coffee so good, your taste buds will love it."
+  textStyle={[styles.textHeadStyle, { fontFamily: "Sora-SemiBold" }]}
+  style={styles.textHeadStyle}
+  duration={1000}
+/>
 
         <TextAnimator
           content="The best grain, the finest roast & the powerful flavor"
@@ -52,8 +72,8 @@ const Home = ({ navigation }) => {
           <Text
             style={{
               color: "white",
-              fontSize: 20,
-              fontWeight: "700",
+              fontSize: 18,
+              fontFamily:"Sora-SemiBold"
             }}
           >
             Get Started
@@ -75,6 +95,7 @@ const styles = StyleSheet.create({
 
   containerStyle: {},
   textHead: {
+    fontFamily:"Sora-SemiBold",
     position: "absolute",
     height: "100%",
     zIndex: 2,
@@ -84,6 +105,6 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
 
-  textHeadStyle: { color: "white", fontWeight: "800", fontSize: 45 },
-  textFootStyle: { color: "#A9A9A9", fontWeight: "300", fontSize: 17 },
+  textHeadStyle: { fontFamily:"Sora-SemiBold", color: "white",  fontSize: 40 },
+  textFootStyle: { fontFamily:"Sora-SemiBold",color: "#A9A9A9", fontWeight: "300", fontSize: 17 },
 });

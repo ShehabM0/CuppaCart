@@ -10,7 +10,7 @@ import {
   Dimensions,
   FlatList,
   ImageBackground,
-  Platform
+  Platform,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { SearchBar } from "react-native-elements";
@@ -22,7 +22,8 @@ import ProductCard from "../Components/productCard";
 import { logout } from "../firebase/auth";
 import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
-
+import * as Font from "expo-font";
+import { AppLoading } from "expo";
 const { width } = Dimensions.get("window");
 const d = Dimensions.get("window");
 export default function ProfileScreen({ navigation }) {
@@ -32,10 +33,11 @@ export default function ProfileScreen({ navigation }) {
   const [role, setRole] = useState("");
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
-  
-  const isIOS = Platform.OS === 'ios';
+  const windowWidth = Dimensions.get("window").width;
+  const windowHeight = Dimensions.get("window").height;
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  const isIOS = Platform.OS === "ios";
   const getProductHandle = async () => {
     const arr = await getProducts();
     setProducts(arr);
@@ -60,13 +62,30 @@ export default function ProfileScreen({ navigation }) {
     });
   }, []);
 
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        'Sora-SemiBold': require('../assets/Fonts/static/Sora-SemiBold.ttf'),
+      });
+      setFontLoaded(true);
+    };
+
+    loadFonts();
+  }, []);
+
+  if (!fontLoaded) {
+    return null; // Render nothing until the font is loaded
+  }
+
+
   return (
     <SafeAreaView
       style={{
         backgroundColor: "#E4EDFA",
         flex: 1,
         justifyContent: "center",
-        alignItems: "center",paddingTop: isIOS ? 0 : StatusBar.currentHeight,
+        alignItems: "center",
+        paddingTop: isIOS ? 0 : StatusBar.currentHeight,
       }}
     >
       <View
@@ -91,8 +110,9 @@ export default function ProfileScreen({ navigation }) {
               color: "#DDDDDD",
               left: 15,
               fontSize: 25,
-              fontWeight:"bold",
-              top:60
+             
+              top: 60,
+              fontFamily: "Sora-SemiBold"
             }}
           >
             Hello, {firstname}
@@ -160,7 +180,6 @@ export default function ProfileScreen({ navigation }) {
                 backgroundColor: "#313131",
                 borderRadius: 20,
               }}
-              
             />
           </View>
         </ImageBackground>
