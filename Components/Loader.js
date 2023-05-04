@@ -14,7 +14,7 @@ const Loader = ({visible = false}) => {
       <View style={[style.container, {height, width}]}>
         <View style={style.loader}>
           <ActivityIndicator size="large" color={COLORS.blue} />
-          <Text style={{marginLeft: 10, fontSize: 16}}>Loading...</Text>
+          <Text style={{marginLeft: 10, fontSize: 16, fontFamily:"Sora-SemiBold"}}>Loading...</Text>
         </View>
       </View>
     )

@@ -10,6 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/core";
 import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
+import * as Font from 'expo-font';
 const ProductCard = ({
   productName,
   price,
@@ -23,6 +24,23 @@ const ProductCard = ({
   const { width } = Dimensions.get("window");
   const screenWidth = Math.round(Dimensions.get('window').width);
   const cardWidth = screenWidth - 40;
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        'Sora-SemiBold': require('../assets/Fonts/static/Sora-SemiBold.ttf'),
+      });
+      setFontLoaded(true);
+    };
+
+    loadFonts();
+  }, []);
+
+  if (!fontLoaded) {
+    return null; // Render nothing until the font is loaded
+  }
   return (
     <TouchableOpacity
       onPress={() => {
@@ -100,6 +118,8 @@ const ProductCard = ({
                   style={{
                     color: "white",
                     marginLeft: 10 / 2,
+                    fontSize:11,
+                    fontFamily:"Sora-SemiBold"
                   }}
                 >
                   {Rate}
@@ -115,13 +135,14 @@ const ProductCard = ({
               fontSize: 10 * 1.7,
               marginTop: 10,
               marginBottom: 10 / 2,
+              fontFamily:"Sora-SemiBold"
             }}
           >
             {productName}
           </Text>
           <Text
             numberOfLines={1}
-            style={{ color: "#9B9B9B", fontSize: 10 * 1.2 }}
+            style={{ color: "#9B9B9B", fontSize: 10 * 1.2 , fontFamily:"Sora-SemiBold"}}
           >
             With Oat milk
           </Text>
@@ -138,12 +159,12 @@ const ProductCard = ({
                 style={{
                   color: "#D17842",
                   marginRight: 10 / 2,
-                  fontSize: 10 * 1.6,
+                  fontSize: 10 * 1.6, fontFamily:"Sora-SemiBold"
                 }}
               >
                 $
               </Text>
-              <Text style={{ color: "#2F4B4E", fontSize: 10 * 1.6,fontWeight:"bold" }}>
+              <Text style={{ color: "#2F4B4E", fontSize: 10 * 1.6,fontFamily:"Sora-SemiBold" }}>
               {price}
               </Text>
             </View>
@@ -154,7 +175,7 @@ const ProductCard = ({
                 borderRadius: 10,
               }}
             >
-              <Ionicons name="add" size={10 * 2} color={"white"} />
+              <Ionicons name="add" size={10 * 2} color={"white"}  />
             </TouchableOpacity>
           </View>
         </BlurView>
