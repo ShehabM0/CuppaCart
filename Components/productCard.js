@@ -51,8 +51,8 @@ const ProductCard = ({
   }}
 >
         <BlurView
-          tint="dark"
-          intensity={95}
+          tint="light"
+          intensity={900}
           style={{
             padding: 10,
           }}
@@ -93,7 +93,7 @@ const ProductCard = ({
                     marginLeft: 10 / 2,
                   }}
                   name="star"
-                  color={"#D17842"}
+                  color={"#FBBE21"}
                   size={10 * 1.7}
                 />
                 <Text
@@ -110,7 +110,7 @@ const ProductCard = ({
           <Text
             numberOfLines={2}
             style={{
-              color: "white",
+              color: "#2F2D2C",
               fontWeight: "600",
               fontSize: 10 * 1.7,
               marginTop: 10,
@@ -121,7 +121,7 @@ const ProductCard = ({
           </Text>
           <Text
             numberOfLines={1}
-            style={{ color: "#1C0A00", fontSize: 10 * 1.2 }}
+            style={{ color: "#9B9B9B", fontSize: 10 * 1.2 }}
           >
             With Oat milk
           </Text>
@@ -143,8 +143,8 @@ const ProductCard = ({
               >
                 $
               </Text>
-              <Text style={{ color: "white", fontSize: 10 * 1.6 }}>
-                {price}
+              <Text style={{ color: "#2F4B4E", fontSize: 10 * 1.6,fontWeight:"bold" }}>
+              {price}
               </Text>
             </View>
             <TouchableOpacity
