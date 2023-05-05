@@ -4,14 +4,16 @@ import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { ProductStack, CartStack } from "./ProductCartStack";
 import ProfileScreen from "../Screens/ProfileScreen";
+import ProfileScreen2 from "../Screens/ProfileScreen2";
 import { FontAwesome } from "@expo/vector-icons";
 import SettingsScreen from "../Screens/SettingsScreen";
 import Fav from "../Screens/FavScreen";
 
+
 const Tab = createBottomTabNavigator();
 const TabsNav = () => {
   return (
-    <Tab.Navigator initialRouteName="Checkout"
+    <Tab.Navigator
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
@@ -58,7 +60,7 @@ const TabsNav = () => {
       />
       <Tab.Screen
         name="ProfileTab"
-        component={ProfileScreen}
+        component={ProfileScreen2}
         options={{
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="user-o" size={size} color={color} />
