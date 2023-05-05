@@ -12,10 +12,11 @@ import {
   ImageBackground,
   Platform,
 } from "react-native";
+import { doc, setDoc } from "firebase/firestore";
 import { StatusBar } from "expo-status-bar";
 import { SearchBar } from "react-native-elements";
 import { TextInput, Searchbar } from "react-native-paper";
-import { auth } from "../firebase/config";
+import { auth,db } from "../firebase/config";
 import { getUserUId, getUserById } from "../firebase/user";
 import { getProducts } from "../firebase/products";
 import ProductCard from "../Components/productCard";
@@ -36,16 +37,25 @@ export default function ProfileScreen({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
   const [fontLoaded, setFontLoaded] = useState(false);
-
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const isIOS = Platform.OS === "ios";
+
   const getProductHandle = async () => {
     const arr = await getProducts();
-    setProducts(arr);
+    if (searchTerm) {
+      const filteredArr = arr.filter((product) =>
+        product.productName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredProducts(filteredArr);
+    } else {
+      setFilteredProducts(arr);
+    }
   };
 
   useEffect(() => {
     getProductHandle();
-  }, []);
+  }, [searchTerm]);
+
   const ss = () => {
     logout(auth).then(() => {
       console.log("sign out done");
@@ -174,6 +184,8 @@ export default function ProfileScreen({ navigation }) {
               placeholderTextColor="#989898"
               iconColor="white"
               value={searchTerm}
+              onChangeText={(query) => setSearchTerm(query)}
+              onIconPress={getProductHandle}
               style={{
                 width: "90%",
                 backgroundColor: "#313131",
@@ -192,7 +204,7 @@ export default function ProfileScreen({ navigation }) {
             <View style={{ width: "80%", marginVertical: 10 * 3 }}></View>
           </>
         }
-        data={products}
+        data={filteredProducts}
         numColumns={2}
         renderItem={(itemData) => {
           return (
