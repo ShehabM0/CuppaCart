@@ -11,7 +11,7 @@ import Fav from "../Screens/FavScreen";
 const Tab = createBottomTabNavigator();
 const TabsNav = () => {
   return (
-    <Tab.Navigator
+    <Tab.Navigator initialRouteName="Checkout"
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
