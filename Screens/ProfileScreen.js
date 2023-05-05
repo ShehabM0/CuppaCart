@@ -35,7 +35,7 @@ import {
 // import {getUsers}from"../firebase/user";
 
 const ProfileScreen = ({ navigation }) => {
-  const ss = () => {
+  const logout = () => {
     logout(auth).then(() => {
       console.log("sign out done");
       navigation.navigate("SignIn");
@@ -153,20 +153,20 @@ const ProfileScreen = ({ navigation }) => {
             }}
           >
             <View style={styles.menuItem}>
-              <Icon name="heart-outline" color="#964B00" size={25} />
+              <Icon name="heart-outline" color="#C67C4E" size={25} />
               <Text style={styles.menuItemText}>Favourites</Text>
             </View>
           </TouchableRipple>
           <TouchableRipple onPress={() => {}}>
             <View style={styles.menuItem}>
-              <Icon name="credit-card" color="#964B00" size={25} />
+              <Icon name="credit-card" color="#C67C4E" size={25} />
               <Text style={styles.menuItemText}>Payment</Text>
             </View>
           </TouchableRipple>
 
           <TouchableRipple onPress={() => {}}>
             <View style={styles.menuItem}>
-              <Icon name="account-check-outline" color="#964B00" size={25} />
+              <Icon name="account-check-outline" color="#C67C4E" size={25} />
               <Text style={styles.menuItemText}>Support</Text>
             </View>
           </TouchableRipple>
@@ -177,16 +177,16 @@ const ProfileScreen = ({ navigation }) => {
             }}
           >
             <View style={styles.menuItem}>
-              <Ionicons name="settings-outline" size={25} color="#964B00"  />
+              <Ionicons name="settings-outline" size={25} color="#C67C4E"  />
               <Text style={styles.menuItemText}>Settings</Text>
             </View>
           </TouchableRipple>
         </View>
 
-        <TouchableOpacity onPress={ss} style={styles.button}>
+        <TouchableOpacity onPress={logout} style={styles.button}>
         <View style={styles.menuItem}>
               <Icon name="account-arrow-left-outline" size={25} color="#fff" />
-              <Text style={styles.menuItemTextt }>logout</Text>
+              <Text style={styles.menuItemTextt }>log out</Text>
             </View>
         </TouchableOpacity>
 
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     
   },
   button: {
-    backgroundColor: "#964B00",
+    backgroundColor: "#C67C4E",
     width: "60%",
     padding: -1,
     borderRadius: 10,
