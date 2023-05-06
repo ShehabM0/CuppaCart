@@ -187,7 +187,7 @@ const CheckoutScreen = ({ navigation }) => {
               flexDirection: "row",
               alignItems: "center",
               padding: 0,
-              gap: 7,
+              gap: 10,
               width: 159,
               height: 54,
             }}
