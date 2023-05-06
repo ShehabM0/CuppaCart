@@ -179,7 +179,7 @@ const CheckoutScreen = ({ navigation }) => {
             height: 54,
             left: 30,
             top: 310,
-            backgroundColor: "orange",
+            backgroundColor: "white",
           }}
         >
           <View
@@ -187,7 +187,7 @@ const CheckoutScreen = ({ navigation }) => {
               flexDirection: "row",
               alignItems: "center",
               padding: 0,
-              gap: 5,
+              gap: 7,
               width: 159,
               height: 54,
             }}
@@ -198,7 +198,7 @@ const CheckoutScreen = ({ navigation }) => {
                 height: 54,
                 borderRadius: 12,
               }}
-              source={require("../assets/Rectangle.png")}
+              source={require("../assets/coffee.jpg")}
             />
             <View
               style={{
@@ -208,7 +208,7 @@ const CheckoutScreen = ({ navigation }) => {
                 gap: 4,
                 width: 93,
                 height: 39,
-                backgroundColor: "black",
+              
               }}
             >
               <Text
@@ -259,7 +259,7 @@ const CheckoutScreen = ({ navigation }) => {
                 marginHorizontal: 55,
 
                 height: 28,
-                backgroundColor: "black",
+         
               }}
             ></View>
           </View>
@@ -478,27 +478,7 @@ const CheckoutScreen = ({ navigation }) => {
         />
 
         <Text style={styles.totalPayment}>Total Payment</Text>
-
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: 21,
-            paddingHorizontal: 109,
-            marginHorizontal: 30,
-            marginTop: 707,
-            width: 315,
-            height: 62,
-            top:-20,
-            backgroundColor: "#C67C4E",
-            borderRadius: 16,
-          }}
-        >
-          {/* content goes here */}
-        </View>
-        <Text
+   <Text
           style={{
             position: "absolute",
             width: 43,
@@ -516,7 +496,36 @@ const CheckoutScreen = ({ navigation }) => {
         >
           $ 5.53
         </Text>
-
+        <TouchableOpacity style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 21,
+            paddingHorizontal: 109,
+            marginHorizontal: 30,
+            marginTop: 707,
+            width: 315,
+            height: 62,
+            top:-20,
+            backgroundColor: "#C67C4E",
+            borderRadius: 16,
+          }}>
+        
+          <Text style={{ width: 49,
+    height: 20,
+    fontStyle: 'normal',
+    fontFamily:"sora-regular",
+    fontWeight: '600',
+    fontSize: 16,
+    lineHeight: 20,
+    color: '#FFFFFF',
+    flex: 0,
+    flexGrow: 0,
+    alignSelf: 'flex-start',}}>Order</Text>
+       
+     
+        </TouchableOpacity>
         {/*  */}
         {/* <Text style={styles.price}>Price</Text>
         <Text style={styles.delivery}>Delivery Fee</Text>
