@@ -142,6 +142,7 @@ export default function AddReviewScreen({ navigation, route }) {
           </TouchableOpacity>
         </View>
 
+        <View style={{marginBottom: 25}}/>
 
       </ScrollView>
       {
@@ -217,7 +218,6 @@ const styles = StyleSheet.create({
   submitCont: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 100
   },
   submitBtn: {
     height: 55,

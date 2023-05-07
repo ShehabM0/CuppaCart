@@ -5,7 +5,7 @@ import { MaterialIcons, Feather } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { COLORS } from "../Conts/Color"
 
-export default function ReviewButtonLink({ image, name, bgcolor, nav, product_id }) {
+export default function ReviewButtonLink({ image, name, nav, product_id }) {
 
   const navigation = useNavigation();
   const icons = [
@@ -15,7 +15,7 @@ export default function ReviewButtonLink({ image, name, bgcolor, nav, product_id
 
   return (
     <TouchableOpacity onPress={() => navigation.navigate(nav, { product_id })}>
-      <View style={[styles.addReviewCont, {backgroundColor: bgcolor}]}>
+      <View style={[styles.addReviewCont, {backgroundColor: "#C67C4E"}]}>
         <View style={{ flexDirection: "row" }}>
           <View style={{ justifyContent: "center", marginHorizontal: 5 }}>
             {icons[image]}
