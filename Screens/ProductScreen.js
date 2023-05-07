@@ -5,6 +5,7 @@ import { getCurrUserId, getUserById, updateUser } from "../firebase/user";
 import ReviewButtonLink from '../Components/ReviewButtonLink';
 import { getStarsAvg } from "../firebase/reviews";
 import { COLORS } from '../Conts/Color';
+import ReadMore from 'react-native-read-more-text';
 
 import SuccessMessage from "../Components/SuccessMessage"
 
@@ -107,6 +108,22 @@ function addToFavorite() {
       setQnt(qnt - 1);
   }
 
+  function ShowMore(handlePress) {
+    return (
+      <TouchableOpacity onPress={handlePress}>
+        <Text style={{ color: "#C67C4E", fontWeight: 'bold' }}>Show More</Text>
+      </TouchableOpacity>
+    );
+  }
+
+  function ShowLess(handlePress) {
+    return (
+      <TouchableOpacity onPress={handlePress}>
+        <Text style={{ color: "#C67C4E", fontWeight: 'bold' }}>Show Less</Text>
+      </TouchableOpacity>
+    );
+  }
+
   return (
     <>
     {
@@ -161,9 +178,14 @@ function addToFavorite() {
 
           <View style={styles.descCont}>
             <Text style={styles.descTitle}>Description</Text>
-            <Text style={styles.descBody}>
-              {details}
-            </Text>
+              <ReadMore
+                textProps={{ allowFontScaling: false }}
+                numberOfLines={3}
+                renderTruncatedFooter={ShowMore}
+                renderRevealedFooter={ShowLess}
+              >
+              <Text>{details}</Text>
+            </ReadMore>
           </View>
 
 
@@ -190,11 +212,10 @@ function addToFavorite() {
                 </Pressable>
             </View>
 
-            <View>
-              <TouchableOpacity style={styles.cart} onPress={addToCart}>
+            <View style={{ width: '60%' }}>
+              <TouchableOpacity onPress={addToCart}>
                 <View style={styles.cartCont}>
                   <Text style={styles.cartTxt}>Add To Cart</Text>
-                  
                 </View>
               </TouchableOpacity>
             </View>
@@ -207,16 +228,14 @@ function addToFavorite() {
           <ReviewButtonLink
             image={0}
             name={"Reviews"}
-            bgcolor={"#C67C4E"}
             nav={"Reviews"}
             product_id={id}
           />
 
-          <View style={{marginBottom: 100}}/>
+          <View style={{marginBottom: 25}}/>
 
         </ScrollView>
       </SafeAreaView>
-     
     </>
   );
 }
@@ -248,8 +267,10 @@ const styles = StyleSheet.create({
   },
   img: {
     width: '100%',
-    height: 300, // Set the desired height for the image
-    resizeMode: 'cover', // Make the image cover the container
+    height: undefined,
+    aspectRatio: 1.25,
+    // height: 300, // Set the desired height for the image
+    // resizeMode: 'cover', // Make the image cover the container
   },
 
   arrowHeartCont: {
@@ -272,20 +293,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     width: '100%',
-    padding: 10,
+    padding: 15,
+    paddingHorizontal: 25,
     fontSize: 22,
     fontWeight: 'bold',
     backgroundColor: 'rgba(0,0,0,0.45)',
     borderRadius: 20,
-  },
-  title: {
-    width: '70%',
-    paddingLeft: 20,
-  },
-  priceCont: {
-    width: '40%',
   },
   titlepriceTxt: {
     color: COLORS.white,
@@ -318,9 +333,8 @@ const styles = StyleSheet.create({
   },
   size: {
     backgroundColor: "#FFFFFF",
-    padding: 15,
-    width:96,
-    height:43,
+    width: '30%',
+    padding: 10,
     borderRadius: 10,
     borderWidth:  0.7,
     borderColor:"#DEDEDE",
@@ -330,12 +344,10 @@ const styles = StyleSheet.create({
     borderColor: "#C67C4E",
   },
   sizeTxt: {
-    fontSize: 20,
-    height:25,
-    justifyContent:"center",
-    color: "#2F2D2C",textAlign: 'center',
-    textAlignVertical: 'center',
-    marginTop:-10
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: "#2F2D2C",
+    textAlign: 'center',
   },
   enableSizeTxt: {
     color: "#C67C4E",
@@ -353,10 +365,10 @@ const styles = StyleSheet.create({
   },
   cartCont: {
     flexDirection: 'row',
+    justifyContent: 'center',
     backgroundColor: "#C67C4E",
     borderRadius: 15,
-    padding:15
-    
+    padding: 10,
   },
   cartTxt: {
     fontSize: 17,
