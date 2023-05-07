@@ -1,18 +1,16 @@
-import react, { useState, useEffect } from "react";
+import React from "react";
 import {
   View,
   Text,
   StyleSheet,
   Image,
   TouchableOpacity,
-  Dimensions,
+  Dimensions,SafeAreaView,ScrollView
 } from "react-native";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import Iconiki from 'react-native-vector-icons/MaterialIcons'
-import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/core";
-import { BlurView } from "expo-blur";
+import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
+
 const FavCard = ({
   productName,
   price,
@@ -21,10 +19,17 @@ const FavCard = ({
   type,
   id,
   Rate,
+  cart,
+  setCart,
 }) => {
   const navigation = useNavigation();
   const { width } = Dimensions.get("window");
+
+ 
+
   return (
+    
+            
     <TouchableOpacity
       onPress={() => {
         navigation.navigate("Product", {
@@ -36,110 +41,98 @@ const FavCard = ({
           id,
           Rate,
         });
-        {
-          /**Login */
-        }
       }}
     >
-    <View style={styles.innercontainer}>
-                <Image
-                    source={{ uri: image }}
-                    style={styles.image}
-                />
-                <View style={styles.starcontainer}>
-                    <Icon name="star" size={15} color={"#D17742"} />
-                    <Text style={styles.ort}>{Rate}</Text>
-                </View>
-                <View>
-                    <View style={styles.titlecontainer}>
-                        <Text style={styles.title}>{productName}</Text>
-                        <Text style={styles.titletext}>{type}</Text>
-                    </View>
-                    <View style={styles.downcontainer}>
 
-                        <View style={styles.moneycontainer}>
-                            <Iconiki name="attach-money" size={22} color={"#D17742"} />
-                            <Text style={styles.money}>{price}</Text>
-                            
-                        </View>
-                        <TouchableOpacity style={styles.backcontainer}>
-                            <MaterialIcons name="delete-outline"  size={35} color={"#fff"}  />
-                        </TouchableOpacity>
-                    </View>
-                </View>
+        
+
+      <View style={styles.container}>
+        <LinearGradient
+          colors={["#C67C4E", "black"]}
+          style={styles.gradient}
+        >
+          <View style={styles.card}>
+            <Image source={{ uri: image }} style={styles.image} />
+            <View style={styles.details}>
+              <View style={styles.titleContainer}>
+                <Text style={styles.title}>{productName}</Text>
+                <Text style={styles.type}>{type}</Text>
+              </View>
+              <View style={styles.priceContainer}>
+                <Text style={styles.price}>{price} $</Text>
+
+                <TouchableOpacity onPress={() => {}}>
+                <View style={styles.menuItem}>
+                  <Ionicons name="trash-outline" size={25} color="#fff" />
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
+          </View>
+        </LinearGradient>
+      </View>
     </TouchableOpacity>
+   
+
   );
 };
 
 export default FavCard;
+
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#1E221E',
-        flex: 1
-    },
-    innercontainer: {
-        flexDirection: "row",
-        backgroundColor: '#0D181A',
-        marginHorizontal: 15,
-        marginVertical: 6,
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-        borderRadius: 15
-    },
-    image: {
-        width: 150,
-        height: 100,
-        resizeMode: "contain",
-        borderRadius: 15
-    },
-    starcontainer: {
-        backgroundColor: 'rgba(52, 52, 52, 0.8)',
-        flexDirection: "row",
-        zIndex: 1,
-        position: "absolute",
-        left: 120,
-        top: 14,
-        paddingHorizontal: 5,
-        paddingVertical: 2,
-        borderTopRightRadius: 10,
-        borderBottomRightRadius: 5,
-        borderTopLeftRadius: 5,
-        borderBottomLeftRadius: 10
-    },
-    ort: {
-        color: '#fff'
-    },
-    titlecontainer: {
-        marginLeft:10
-    },
-    title: {
-        color: '#fff',
-        fontWeight:"bold",
-        fontSize:20
-    },
-    titletext: {
-        color: 'white',
-        fontWeight:"bold"
-    },
-    downcontainer:{
-        flexDirection:"row",
-        justifyContent:"space-between"
-    },
-    moneycontainer:{
-        flexDirection:"row",
-        alignItems:"center",
-        marginTop:15,
-        marginLeft:10
-    },
-    money:{
-        color: '#fff',
-        fontSize:17
-    },
-    backcontainer:{
-        alignItems:"center",
-        marginTop:15,
-         marginLeft:90,
-        borderRadius:10
-    },
-})
+  container: {
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    margin: 10,
+    overflow: "hidden",
+  },
+  gradient: {
+    padding: 10,
+  },
+  card: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  image: {
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  details: {
+    flex: 1,
+    justifyContent: "space-between",
+    height: 80,
+  },
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  title: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginRight: 5,
+  },
+  type: {
+    color: "#fff",
+    fontSize: 16,
+  },
+  priceContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  price: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+    marginRight: 5,
+  },
+  menuItem: {
+    flexDirection: "row",
+    paddingVertical: 15,
+    paddingHorizontal: 19,
+    marginLeft: 120,
+  },
+  
+});
