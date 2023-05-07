@@ -5,6 +5,7 @@ import ReviewButtonLink from "../Components/ReviewButtonLink";
 import ReviewCard from "../Components/ReviewCard";
 import Loader from '../Components/Loader';
 import { getReviews } from "../firebase/reviews";
+import { COLORS } from "../Conts/Color";
 
 export default function ReviewsScreen({ route }) {
 
@@ -31,7 +32,7 @@ export default function ReviewsScreen({ route }) {
           product_id={product_id}
         />
 
-        <View style={{ justifyContent: 'center', alignItems: 'center', paddingBottom: 200 }}>
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           {
             reviews.map((reviewData, index) => {
               return (
@@ -45,6 +46,9 @@ export default function ReviewsScreen({ route }) {
             })
           }
         </View>
+
+        <View style={{marginBottom: 25}}/>
+        
       </ScrollView>
     </SafeAreaView>
     ) :
