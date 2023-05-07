@@ -26,10 +26,14 @@ import Input from "../Components/Input";
 const DeleteProductScreen = ({navigation}) => {
     const [productName, setProductName] = useState("");
     const handleDeleteProduct = async () => {
-        const object = await getProductByName(productName);
+      const object = await getProductByName(productName);
+      if (!object) {
+        alert("Product Does Not Exist");
+      } else {
         deleteProduct(object);
-        alert("Product Deleted With Product Name : " + productName);
-      };
+        alert("Product Deleted With Product Name: " + productName);
+      }
+    }
   return (
     <View style={styles.container} behavior={"padding"}>
     <View
