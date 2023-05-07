@@ -117,9 +117,9 @@ export default function ProfileScreen({ navigation }) {
             style={{
               position: "absolute",
               color: "#DDDDDD",
-              left: 15,
+              left: 20,
               fontSize: 25,
-
+             
               top: 60,
               fontFamily: "Sora-SemiBold",
             }}
@@ -148,12 +148,14 @@ export default function ProfileScreen({ navigation }) {
                 borderRadius: 10,
                 top: 50,
                 right: 10,
+                marginRight:15
               }}
             >
               <BlurView
                 style={{
                   height: "100%",
                   padding: 10 / 2,
+                
                 }}
               >
                 <TouchableOpacity
@@ -164,6 +166,7 @@ export default function ProfileScreen({ navigation }) {
                       height: "100%",
                       width: "100%",
                       borderRadius: 10,
+                    
                     }}
                     source={{ uri: image }}
                   />
@@ -193,15 +196,37 @@ export default function ProfileScreen({ navigation }) {
               }}
             />
           </View>
+
         </ImageBackground>
       </View>
+      <View style={{
+  position: "absolute",
+  width: 315,
+  height: 140,
+  left: 45,
+  top: 204,
+  backgroundColor: "#EAE7E7",
+  borderRadius: 16,
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 4,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 4,
+  elevation: 4,
+
+}}>
+  <Image  style={{width: 315,
+  height: 140,borderRadius: 16,}} source={require("../assets/beansBackground1.png")} ></Image>
+</View>
 
       <FlatList
-        style={{ padding: 10, marginTop: -70 }}
+        style={{ padding: 10,marginTop:5}}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <>
-            <View style={{ width: "80%", marginVertical: 10 * 3 }}></View>
+            <View style={{ width: "80%", marginVertical: 10 * 3 , }}></View>
           </>
         }
         data={filteredProducts}
