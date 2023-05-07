@@ -6,7 +6,7 @@ import Input from '../Components/Input';
 import {COLORS} from "../Conts/Color";
 import { getCreditCardByNumber, addCreditCard } from '../firebase/creditcard';
 
-const RegistrationScreen = ({ navigation }) => {
+export default CreateCreditCardScreen = ({ navigation }) => {
 
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
@@ -183,7 +183,6 @@ const RegistrationScreen = ({ navigation }) => {
         </SafeAreaView>
     );
 }
-export default RegistrationScreen
 const styles = StyleSheet.create({
     cont: {
         flexDirection: 'row',
