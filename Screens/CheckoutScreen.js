@@ -582,8 +582,8 @@ const CheckoutScreen = ({ navigation }) => {
           <Text
             style={{
               color: "white",
-              fontWeight: "700",
               fontSize: 16,
+              fontFamily:"sora-regular"
             }}
           >
             Order
