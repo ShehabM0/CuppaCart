@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView, TouchableOpacity,StyleSheet } from 'react-native';
+import { View, Image, ScrollView, TouchableOpacity,StyleSheet } from 'react-native';
 import {auth} from "../firebase/config";
 import {
   getUserUId,
@@ -10,6 +10,13 @@ import {
   getUsers,
   subscribeUser,
 } from "../firebase/user";
+import {
+  Avatar,
+  Title,
+  Caption,
+  Text,
+  TouchableRipple,
+} from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import React, { useState, useEffect } from "react";
@@ -92,18 +99,49 @@ const ProfileView = ({navigation}) => {
 
     
   
-              <View style={styles.infoContainer}>
-          <Text style={styles.infoLabel}>Email:</Text>
-          <Text style={styles.infoValue}>{email}</Text>
+      <View style={styles.menuWrapper}>
+          <TouchableRipple
+            onPress={() => {
+              navigation.navigate("Fav");
+            }}
+          >
+            <View style={styles.menuItem}>
+              <Icon name="heart-outline" color="#C67C4E" size={25} />
+              <Text style={styles.menuItemText}>Favourites</Text>
+            </View>
+          </TouchableRipple>
+          <TouchableRipple onPress={() => {navigation.navigate("CreateCreditCard");}}>
+            <View style={styles.menuItem}>
+              <Icon name="credit-card" color="#C67C4E" size={25} />
+              <Text style={styles.menuItemText}>Payment</Text>
+            </View>
+          </TouchableRipple>
+
+          <TouchableRipple onPress={() => {}}>
+            <View style={styles.menuItem}>
+              <Icon name="account-check-outline" color="#C67C4E" size={25} />
+              <Text style={styles.menuItemText}>Support</Text>
+            </View>
+          </TouchableRipple>
+
+          <TouchableRipple
+            onPress={() => {
+              navigation.navigate("SettingsTab");
+            }}
+          >
+            <View style={styles.menuItem}>
+              <Ionicons name="settings-outline" size={25} color="#C67C4E"  />
+              <Text style={styles.menuItemText}>Settings</Text>
+            </View>
+          </TouchableRipple>
         </View>
 
 
 
 
 
-
       <TouchableOpacity style={styles.button} onPress={ss}>
-        <Text style={styles.buttonText}>Edit Profile</Text>
+        <Text style={styles.buttonText}>Log out</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -160,10 +198,13 @@ const styles = StyleSheet.create({
     color: '#999',
   },
   button: {
-    backgroundColor: '#0066cc',
+    backgroundColor: '#C67C4E',
     borderRadius: 5,
-    padding: 10,
     marginHorizontal: 20,
+    padding: 21,
+    marginTop:50
+
+    
   },
   buttonText: {
     fontSize: 16,
@@ -222,6 +263,32 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     marginTop: 5,
+  },
+  menuItemTextt: {
+    color: "#fff",
+    marginLeft: 5,
+    fontWeight: "700",
+    fontSize: 16,
+    lineHeight: 26,
+   
+    
+  },
+  menuItemText: {
+    color: "black",
+    marginLeft: 20,
+    fontWeight: "600",
+    fontSize: 16,
+    lineHeight: 26,
+    
+  },
+  menuWrapper: {
+    marginTop: 10,
+    marginLeft:20
+  },
+  menuItem: {
+    flexDirection: "row",
+    paddingVertical: 15,
+    paddingHorizontal: 15,
   },
 
 });
