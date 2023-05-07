@@ -10,13 +10,53 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import * as Font from "expo-font";
-
 import * as Haptics from "expo-haptics";
+import * as LocalAuthentication from "expo-local-authentication";
 
 const CheckoutScreen = ({ navigation }) => {
   const [fontLoaded, setFontLoaded] = useState(false);
   const [index, setIndex] = useState("Deliver");
-  
+  async function handleAuthentication() {
+    let hasHardware = await LocalAuthentication.hasHardwareAsync();
+    if (hasHardware) {
+      let supportedTypes =
+        await LocalAuthentication.supportedAuthenticationTypesAsync();
+      if (
+        supportedTypes.includes(
+          LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
+        )
+      ) {
+        let result = await LocalAuthentication.authenticateAsync({
+          promptMessage: "Authenticate using Face ID",
+          fallbackLabel: "Use passcode instead",
+          disableDeviceFallback: false,
+          cancelLabel: "Cancel",
+        });
+        if (result.success) {
+          navigation.navigate("TabsNav");
+          return;
+        }
+      }
+      if (
+        supportedTypes.includes(
+          LocalAuthentication.AuthenticationType.FINGERPRINT
+        )
+      ) {
+        let result = await LocalAuthentication.authenticateAsync({
+          promptMessage: "Authenticate using Fingerprint",
+          fallbackLabel: "Use passcode instead",
+          disableDeviceFallback: false,
+          cancelLabel: "Cancel",
+        });
+        if (result.success) {
+          navigation.navigate("Home");
+          return;
+        }
+      }
+    }
+    navigation.navigate("Cart");
+  }
+
   useEffect(() => {
     const loadFonts = async () => {
       await Font.loadAsync({
@@ -41,10 +81,10 @@ const CheckoutScreen = ({ navigation }) => {
         <View style={styles.mainContainer}>
           <View
             style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
               paddingVertical: 10,
               paddingHorizontal: 14,
               width: 153.5,
@@ -53,8 +93,7 @@ const CheckoutScreen = ({ navigation }) => {
               gap: 10,
               flex: 0,
               flexGrow: 1,
-              backgroundColor: index==="Deliver" ? '#C67C4E' : '#F2F2F2',
-              
+              backgroundColor: index === "Deliver" ? "#C67C4E" : "#F2F2F2",
             }}
           >
             <TouchableOpacity>
@@ -67,7 +106,7 @@ const CheckoutScreen = ({ navigation }) => {
                   fontWeight: "600",
                   fontSize: 16,
                   lineHeight: 20,
-                  color: index==="Deliver" ? 'white' : 'black',
+                  color: index === "Deliver" ? "white" : "black",
                   flex: 0,
 
                   flexGrow: 0,
@@ -80,21 +119,19 @@ const CheckoutScreen = ({ navigation }) => {
           </View>
           <View
             style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
               paddingVertical: 10,
               paddingHorizontal: 14,
               gap: 10,
               width: 153.5,
               height: 40,
-              backgroundColor: index==="PickUp" ? '#C67C4E':  '#F2F2F2',
+              backgroundColor: index === "PickUp" ? "#C67C4E" : "#F2F2F2",
               borderRadius: 10,
               flex: 0,
               flexGrow: 1,
-              
-              
             }}
           >
             <TouchableOpacity>
@@ -107,9 +144,9 @@ const CheckoutScreen = ({ navigation }) => {
                   fontWeight: "400",
                   fontSize: 16,
                   lineHeight: 20,
-                  color: index==="PickUp" ? 'white':  'black',
+                  color: index === "PickUp" ? "white" : "black",
                   flex: 0,
-                  marginLeft:25,
+                  marginLeft: 25,
 
                   flexGrow: 0,
                 }}
@@ -133,7 +170,6 @@ const CheckoutScreen = ({ navigation }) => {
               height: 120,
               left: 30,
               top: 180,
-              
             }}
           >
             <Text style={styles.addressTitle}>Delivery Address</Text>
@@ -159,36 +195,33 @@ const CheckoutScreen = ({ navigation }) => {
           </View>
         )}
         {index === "PickUp" && (
-           <TouchableOpacity
-           style={{
-             position: "absolute",
-             width: "26%",
-               height: "6%",
-              backgroundColor:"#C67C4E",
-             left: 140,
-             top: 190,
-             borderRadius:10
-
-           }}
-         >
-           <Text
-             style={{
-               fontFamily: "sora-regular",
-               fontStyle: "normal",
-               fontWeight: "600",
-               fontSize: 20,
-                width:120,
-                height:90
-                ,
-                top:5,
-                left:2,
-               color: "white",
-             }}
-           >
-             Add Time
-           </Text>
-         </TouchableOpacity>
-         
+          <TouchableOpacity
+            style={{
+              position: "absolute",
+              width: "26%",
+              height: "6%",
+              backgroundColor: "#C67C4E",
+              left: 140,
+              top: 190,
+              borderRadius: 10,
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "sora-regular",
+                fontStyle: "normal",
+                fontWeight: "600",
+                fontSize: 20,
+                width: 120,
+                height: 90,
+                top: 5,
+                left: 2,
+                color: "white",
+              }}
+            >
+              Add Time
+            </Text>
+          </TouchableOpacity>
         )}
         <View
           style={{
@@ -418,7 +451,7 @@ const CheckoutScreen = ({ navigation }) => {
             width: 38,
             height: 18,
             left: 30,
-            top: 490+30,
+            top: 490 + 30,
             fontFamily: "sora-regular",
             fontStyle: "normal",
             fontWeight: "400",
@@ -435,7 +468,7 @@ const CheckoutScreen = ({ navigation }) => {
             width: 43,
             height: 18,
             left: 302,
-            top: 490+30,
+            top: 490 + 30,
             fontStyle: "normal",
             fontFamily: "sora-regular",
             fontWeight: "600",
@@ -547,7 +580,7 @@ const CheckoutScreen = ({ navigation }) => {
             backgroundColor: "#C67C4E",
             borderRadius: 16,
           }}
-        >
+          onPress={() => handleAuthentication()}>
           <Text
             style={{
               width: 49,
@@ -562,7 +595,7 @@ const CheckoutScreen = ({ navigation }) => {
               flexGrow: 0,
               alignSelf: "flex-start",
             }}
-          >
+           >
             Order
           </Text>
         </TouchableOpacity>
