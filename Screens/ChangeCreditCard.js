@@ -8,7 +8,7 @@ import Input from '../Components/Input';
 import { getCurrUserId, getUserById, updateUser } from "../firebase/user"
 import { getCreditCard } from '../firebase/creditcard';
 
-export default RegistrationScreen = ({ navigation }) => {
+export default ChangeCreditCardScreen = ({ navigation }) => {
     
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
