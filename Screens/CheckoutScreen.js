@@ -15,7 +15,8 @@ import * as Haptics from "expo-haptics";
 
 const CheckoutScreen = ({ navigation }) => {
   const [fontLoaded, setFontLoaded] = useState(false);
-
+  const [index, setIndex] = useState("Deliver");
+  
   useEffect(() => {
     const loadFonts = async () => {
       await Font.loadAsync({
@@ -40,20 +41,20 @@ const CheckoutScreen = ({ navigation }) => {
         <View style={styles.mainContainer}>
           <View
             style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
               paddingVertical: 10,
               paddingHorizontal: 14,
-              gap: 10,
               width: 153.5,
               height: 40,
-              backgroundColor: "#C67C4E",
               borderRadius: 10,
+              gap: 10,
               flex: 0,
-
               flexGrow: 1,
+              backgroundColor: index==="Deliver" ? '#C67C4E' : '#F2F2F2',
+              
             }}
           >
             <TouchableOpacity>
@@ -66,11 +67,12 @@ const CheckoutScreen = ({ navigation }) => {
                   fontWeight: "600",
                   fontSize: 16,
                   lineHeight: 20,
-                  color: "#FFFFFF",
+                  color: index==="Deliver" ? 'white' : 'black',
                   flex: 0,
 
                   flexGrow: 0,
                 }}
+                onPress={() => setIndex("Deliver")}
               >
                 Deliver
               </Text>
@@ -78,21 +80,21 @@ const CheckoutScreen = ({ navigation }) => {
           </View>
           <View
             style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
               paddingVertical: 10,
               paddingHorizontal: 14,
-
               gap: 10,
               width: 153.5,
               height: 40,
-              backgroundColor: "#F2F2F2",
-              borderRadius: 20,
+              backgroundColor: index==="PickUp" ? '#C67C4E':  '#F2F2F2',
+              borderRadius: 10,
               flex: 0,
-
               flexGrow: 1,
+              
+              
             }}
           >
             <TouchableOpacity>
@@ -105,54 +107,89 @@ const CheckoutScreen = ({ navigation }) => {
                   fontWeight: "400",
                   fontSize: 16,
                   lineHeight: 20,
-                  color: "#2F2D2C",
+                  color: index==="PickUp" ? 'white':  'black',
                   flex: 0,
+                  marginLeft:25,
 
                   flexGrow: 0,
                 }}
+                onPress={() => setIndex("PickUp")}
               >
                 Pick Up
               </Text>
             </TouchableOpacity>
           </View>
         </View>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            padding: 0,
-            gap: 16,
-            position: "absolute",
-            width: 315,
-            height: 120,
-            left: 30,
-            top: 180,
-          }}
-        >
-          {/* Your content here */}
-
-          <Text style={styles.addressTitle}>Delivery Address</Text>
+        {index === "Deliver" && (
           <View
             style={{
               display: "flex",
               flexDirection: "column",
               alignItems: "flex-start",
               padding: 0,
-              gap: 8,
+              gap: 16,
+              position: "absolute",
               width: 315,
-              height: 41,
-              flex: 0,
-
-              flexGrow: 0,
+              height: 120,
+              left: 30,
+              top: 180,
+              
             }}
           >
-            <Text style={styles.address}>Cairo University</Text>
-            <Text style={styles.detailedAddress}>
-              Faculty of Science, Math department
-            </Text>
+            <Text style={styles.addressTitle}>Delivery Address</Text>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                padding: 0,
+                gap: 8,
+                width: 315,
+                height: 41,
+                flex: 0,
+
+                flexGrow: 0,
+              }}
+            >
+              <Text style={styles.address}>Cairo University</Text>
+              <Text style={styles.detailedAddress}>
+                Faculty of Science, Math department
+              </Text>
+            </View>
           </View>
-        </View>
+        )}
+        {index === "PickUp" && (
+           <TouchableOpacity
+           style={{
+             position: "absolute",
+             width: "26%",
+               height: "6%",
+              backgroundColor:"#C67C4E",
+             left: 140,
+             top: 190,
+             borderRadius:10
+
+           }}
+         >
+           <Text
+             style={{
+               fontFamily: "sora-regular",
+               fontStyle: "normal",
+               fontWeight: "600",
+               fontSize: 20,
+                width:120,
+                height:90
+                ,
+                top:5,
+                left:2,
+               color: "white",
+             }}
+           >
+             Add Time
+           </Text>
+         </TouchableOpacity>
+         
+        )}
         <View
           style={{
             position: "absolute",
@@ -208,7 +245,6 @@ const CheckoutScreen = ({ navigation }) => {
                 gap: 4,
                 width: 93,
                 height: 39,
-              
               }}
             >
               <Text
@@ -259,7 +295,6 @@ const CheckoutScreen = ({ navigation }) => {
                 marginHorizontal: 55,
 
                 height: 28,
-         
               }}
             ></View>
           </View>
@@ -272,7 +307,7 @@ const CheckoutScreen = ({ navigation }) => {
             padding: 4,
             position: "absolute",
             width: 315,
-            top: 400,
+            top: 430,
             height: 48,
             left: 30,
 
@@ -365,7 +400,7 @@ const CheckoutScreen = ({ navigation }) => {
             width: 250,
             height: 20,
             left: 30,
-            top: 460,
+            top: 490,
             fontFamily: "Sora-SemiBold",
             fontStyle: "normal",
             fontWeight: "600",
@@ -383,8 +418,8 @@ const CheckoutScreen = ({ navigation }) => {
             width: 38,
             height: 18,
             left: 30,
-            top: 490,
-            fontFamily:"sora-regular",
+            top: 490+30,
+            fontFamily: "sora-regular",
             fontStyle: "normal",
             fontWeight: "400",
             fontSize: 14,
@@ -400,9 +435,9 @@ const CheckoutScreen = ({ navigation }) => {
             width: 43,
             height: 18,
             left: 302,
-            top: 490,
+            top: 490+30,
             fontStyle: "normal",
-            fontFamily:"sora-regular",
+            fontFamily: "sora-regular",
             fontWeight: "600",
             fontSize: 14,
             lineHeight: 18,
@@ -419,9 +454,9 @@ const CheckoutScreen = ({ navigation }) => {
             width: 88,
             height: 18,
             left: 30,
-            top: 485 + 30,
+            top: 485 + 60,
             fontWeight: "400",
-            fontFamily:"sora-regular",
+            fontFamily: "sora-regular",
             fontSize: 14,
             lineHeight: 18,
             color: "#2F2D2C",
@@ -442,7 +477,7 @@ const CheckoutScreen = ({ navigation }) => {
             width: 77,
             height: 18,
             right: 30,
-            top: 485 + 30,
+            top: 485 + 60,
           }}
         >
           {/* Add your child elements here */}
@@ -451,7 +486,7 @@ const CheckoutScreen = ({ navigation }) => {
               width: 55,
               height: 18,
               fontWeight: "600",
-              fontFamily:"sora-regular",
+              fontFamily: "sora-regular",
               fontSize: 14,
               lineHeight: 18,
               textAlign: "right",
@@ -470,7 +505,7 @@ const CheckoutScreen = ({ navigation }) => {
             width: 320,
             height: 2,
             left: 30,
-            top: 510 + 33,
+            top: 510 + 63,
             borderBottomWidth: 1,
             borderBottomColor: "#EAEAEA",
             backgroundColor: "black",
@@ -478,13 +513,13 @@ const CheckoutScreen = ({ navigation }) => {
         />
 
         <Text style={styles.totalPayment}>Total Payment</Text>
-   <Text
+        <Text
           style={{
             position: "absolute",
             width: 43,
             height: 18,
             left: 302,
-            top: 520 + 30,
+            top: 520 + 60,
             fontFamily: "sora-regular",
             fontStyle: "normal",
             fontWeight: "600",
@@ -496,7 +531,8 @@ const CheckoutScreen = ({ navigation }) => {
         >
           $ 5.53
         </Text>
-        <TouchableOpacity style={{
+        <TouchableOpacity
+          style={{
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
@@ -507,24 +543,28 @@ const CheckoutScreen = ({ navigation }) => {
             marginTop: 707,
             width: 315,
             height: 62,
-            top:-20,
+            top: -20,
             backgroundColor: "#C67C4E",
             borderRadius: 16,
-          }}>
-        
-          <Text style={{ width: 49,
-    height: 20,
-    fontStyle: 'normal',
-    fontFamily:"sora-regular",
-    fontWeight: '600',
-    fontSize: 16,
-    lineHeight: 20,
-    color: '#FFFFFF',
-    flex: 0,
-    flexGrow: 0,
-    alignSelf: 'flex-start',}}>Order</Text>
-       
-     
+          }}
+        >
+          <Text
+            style={{
+              width: 49,
+              height: 20,
+              fontStyle: "normal",
+              fontFamily: "sora-regular",
+              fontWeight: "600",
+              fontSize: 16,
+              lineHeight: 20,
+              color: "#FFFFFF",
+              flex: 0,
+              flexGrow: 0,
+              alignSelf: "flex-start",
+            }}
+          >
+            Order
+          </Text>
         </TouchableOpacity>
         {/*  */}
         {/* <Text style={styles.price}>Price</Text>
@@ -707,7 +747,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     width: 320,
     height: 41,
-    top: 520 + 30,
+    top: 520 + 60,
     left: 30,
   },
 });
