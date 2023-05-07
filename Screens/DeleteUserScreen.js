@@ -31,11 +31,20 @@ const DeleteUserScreen = ({navigation}) => {
     const [email, setemail] = useState("");
    
     const handleDeleteUser = async () => {
-     
-        const object = await getUserByEmail(email);
+      const object = await getUserByEmail(email);
+      if (!object) {
+        alert("User Does Not Exist");
+      } else {
         deleteUser(object);
-        alert("User Deleted With Name : " + email);
-      };
+        alert("User Deleted With Email: " + email);
+      }
+    }
+       
+         
+        
+
+      
+    
   return (
     <View style={styles.container} behavior={"padding"}>
     <View
