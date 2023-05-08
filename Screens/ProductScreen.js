@@ -8,13 +8,13 @@ import { COLORS } from '../Conts/Color';
 import ReadMore from 'react-native-read-more-text';
 
 import SuccessMessage from "../Components/SuccessMessage"
+import { getProductByID } from "../firebase/products";
 
 export default function ProductScreen({ navigation, route }) {
 
-  const { productName, image, details, id } = route.params;
+  const { productName, image, price, details, id } = route.params;
 
   const user_id = getCurrUserId();
-  const prices = [20, 25, 30];
   const coins = [30, 40, 50];
 
   const [userFavorite, setUserFavorite] = useState([]);
@@ -22,9 +22,8 @@ export default function ProductScreen({ navigation, route }) {
   const [favorite, setFavorite] = useState('white');
   const [starsCount, setStarsCount] = useState(0);
   const [success, setSuccess] = useState(false);
-  const [userCart, setUserCart] = useState([]);
   const [starsAvg, setStarsAvg] = useState(0);
-  const [price, setPrice] = useState(25);
+  const [pricee, setPrice] = useState(price[1]);
   const [coin, setCoin] = useState(40);
   const [qnt, setQnt] = useState(1);
 
@@ -45,7 +44,6 @@ export default function ProductScreen({ navigation, route }) {
     getUserById(user_id)
     .then(user => {
       setUserFavorite(user[0].favorite);
-      setUserCart(user[0].cart);
     })
     .catch(err => alert(err.message));
 
@@ -56,11 +54,12 @@ export default function ProductScreen({ navigation, route }) {
     })
     .catch(err => alert(err.message));
   }, []);
+
  useEffect(() => {
     (userFavorite.includes(id)) ? setFavorite('orange') : setFavorite('white');
   }, [userFavorite]);
 
-function addToFavorite() {
+  function addToFavorite() {
     if(favorite == 'white') {
       setFavorite('orange');
       getUserById(user_id)
@@ -77,29 +76,32 @@ function addToFavorite() {
   }
   
   function addToCart() {
-    updateUser(user_id, { cart: [ ...userCart, { product_id: id, qnt: qnt, size: selectedSize} ] })
-    .then(() => {
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 2000);
-    });
+    getUserById(user_id)
+    .then(user => {
+      updateUser(user_id, { cart: [ ...user[0].cart, { product_id: id, qnt: qnt, size: selectedSize} ] })
+      .then(() => {
+        setSuccess(true);
+        setTimeout(() => setSuccess(false), 2000);
+      });
+    })
+    .catch(err => alert(err.message));
   }
-
 
   function setSmall() {
     setSelectedSize(0);
-    setPrice(qnt * prices[0]);
+    setPrice(qnt * price[0]);
     setCoin(qnt * coins[0]);
   }
 
   function setMedium() {
     setSelectedSize(1);
-    setPrice(qnt * prices[1]);
+    setPrice(qnt * price[1]);
     setCoin(qnt * coins[1]);
   }
 
   function setLarge() {
     setSelectedSize(2);
-    setPrice(qnt * prices[2]);
+    setPrice(qnt * price[2]);
     setCoin(qnt * coins[2]);
   }
 
@@ -169,7 +171,7 @@ function addToFavorite() {
 
               <View style={{ paddingRight: 10 }}>
                 <Text style={styles.titlepriceTxt}>
-                  <Feather name="dollar-sign" size={15} color="#C67C4E"/> {price}
+                  <Feather name="dollar-sign" size={15} color="#C67C4E"/> {pricee}
                 </Text>
 
                 <Text style={styles.titlepriceTxt}>
