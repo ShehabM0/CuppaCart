@@ -24,7 +24,7 @@ async function getProductByName(name) {
   return productObject[0];
 }
 async function getProductByID(id) {
-  console.log("get id", id);
+  // console.log("get id", id);
   const collec = collection(db, "products");
   const mdoc = doc(db, "products", id);
   const doc_ref = await getDoc(mdoc);
