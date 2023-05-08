@@ -111,11 +111,11 @@ const SettingsScreen = ({ navigation }) => {
         </TouchableRipple>
 
         <TouchableRipple onPress={() => {
-            navigation.navigate("CreateCreditCard");
+            navigation.navigate("ChangeCreditCard");
           }}>
           <View style={styles.menuItem}>
             <Icon name="credit-card" color="#00ff00" size={25} />
-            <Text style={styles.menuItemText}>Add credit card</Text>
+            <Text style={styles.menuItemText}>Add/Change credit card</Text>
           </View>
         </TouchableRipple>
 
