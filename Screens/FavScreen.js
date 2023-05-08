@@ -6,20 +6,20 @@ import {
   ScrollView,
   TouchableOpacity,
   RefreshControl,
-  FlatList
+  FlatList,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import FavCard from "../Components/FavCard";
 import { getProductByID, getProducts } from "../firebase/products";
 import {
-getUserUId,
-addUser,
-deleteUser,
-editUser,
-getUserById,
-getUserByName,
-getUsers,
-subscribeUser,
+  getUserUId,
+  addUser,
+  deleteUser,
+  editUser,
+  getUserById,
+  getUserByName,
+  getUsers,
+  subscribeUser,
 } from "../firebase/user";
 import Loader from "../Components/Loader";
 import { Ionicons } from "@expo/vector-icons";
@@ -27,17 +27,10 @@ import WishList from "../Components/WishlistCard";
 let ar = [];
 let prod;
 const MyWishlistScreen = ({ navigation, route }) => {
-
-
-
-
-
   const [userFav, setUserFav] = useState([]);
   const [user, setUser] = useState();
   const [ProductInFav, setProductInFav] = useState();
   const [loading, setLoading] = useState(false);
-  
-
 
   useEffect(() => {
     (async () => {
@@ -46,21 +39,17 @@ const MyWishlistScreen = ({ navigation, route }) => {
       for (let i = 0; i < userFav.length && i < userFav.length; i++) {
         prod = await getProductByID(userFav[i]);
         ar.push(prod);
-    }
+      }
       //console.log(prod);
       // console.log(ar);
       setProductInFav(ar);
     })();
   }, [userFav]);
 
-
-
-
-  
   useEffect(() => {
     const a = navigation.addListener("focus", () => {
       setLoading(true); // Show the loader when the event occurs
-  
+
       getUserUId().then((id) => {
         getUserById(id).then((user) => {
           user.forEach((user) => {
@@ -72,7 +61,7 @@ const MyWishlistScreen = ({ navigation, route }) => {
         });
       });
     });
-  
+
     return () => {
       a.remove(); // Clean up the listener when the component unmounts
     };
@@ -80,59 +69,53 @@ const MyWishlistScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar></StatusBar>
-      <View style={styles.topBarContainer}>
-      
-        <TouchableOpacity
-          onPress={() => {
-            navigation.goBack();
+      <View style={styles.topBarContainer}></View>
+      <View style={styles.screenNameContainer}>
+        <Text
+          style={{
+            color: "#1C0A00",
+            fontSize: 40,
+            fontFamily: "Sora-SemiBold",
+            marginBottom: 11,
+            marginTop: -10,
           }}
         >
-          <Ionicons
-            name="arrow-back-circle-outline"
-            size={30}
-            color={ "#707981"}
-          />
-        </TouchableOpacity>
-        
+          Favourites
+        </Text>
+        <Text
+          style={{
+            fontFamily: "Sora-SemiBold",
+            color: "#BABBC3",
+            fontSize: 18,
+            marginBottom: 11,
+          }}
+        >
+          View, add or remove products from favourites for later purchase
+        </Text>
       </View>
-      <View style={styles.screenNameContainer}>
-        <View>
-          <Text style={styles.screenNameText}>My Wishlist</Text>
-        </View>
-        <View>
-          <Text style={styles.screenNameParagraph}>
-            View , add or remove products from wishlist for later purchase
-          </Text>
-        </View>
-      </View>
+
      
-      <Loader visible={loading}/>
-       
       {/* style={{flex: 1, width: "100%", padding: 20}} */}
       <FlatList
-      style={{flex: 1, width: "105%", padding: 20}}
-            data={ProductInFav}
-            numColumns={1}
-            showsHorizontalScrollIndicator={true}
-            renderItem={(itemData) => {
-              return (
-                <FavCard
-                  productName={itemData.item.productName}
-                  price={itemData.item.price}
-                  details={itemData.item.details}
-                  image={itemData.item.image}
-                  Rate={itemData.item.Rate}
-                  id={itemData.item.id}
-                  type={itemData.item.type}
-                />
-              );
-            }}
-          />
-          <View style={styles.emptyView}></View>
-        
-     
-      
+        style={{ flex: 1, width: "105%", padding: 20 }}
+        data={ProductInFav}
+        numColumns={1}
+        showsHorizontalScrollIndicator={true}
+        renderItem={(itemData) => {
+          return (
+            <FavCard
+              productName={itemData.item.productName}
+              price={itemData.item.price}
+              details={itemData.item.details}
+              image={itemData.item.image}
+              Rate={itemData.item.Rate}
+              id={itemData.item.id}
+              type={itemData.item.type}
+            />
+          );
+        }}
+      />
+      <View style={styles.emptyView}></View>
     </View>
   );
 };
@@ -143,7 +126,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     flexDirecion: "row",
-    backgroundColor:  "#F5F5F5",
+    backgroundColor: "#F5F5F5",
     alignItems: "center",
     justifyContent: "flex-start",
     flex: 1,
@@ -173,7 +156,7 @@ const styles = StyleSheet.create({
   screenNameText: {
     fontSize: 30,
     fontWeight: "800",
-    color:  "#707981",
+    color: "#707981",
   },
   screenNameParagraph: {
     marginTop: 5,
@@ -182,7 +165,7 @@ const styles = StyleSheet.create({
   bodyContainer: {
     width: "100%",
     flexDirecion: "row",
-    backgroundColor:  "#F5F5F5",
+    backgroundColor: "#F5F5F5",
     alignItems: "center",
     justifyContent: "flex-start",
     flex: 1,
@@ -200,6 +183,6 @@ const styles = StyleSheet.create({
   secondaryTextSmItalic: {
     fontStyle: "italic",
     fontSize: 15,
-    color:  "#707981",
+    color: "#707981",
   },
 });
