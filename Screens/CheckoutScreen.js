@@ -90,7 +90,7 @@ const CheckoutScreen = ({ navigation }) => {
    
 
     <View style={styles.container}>
-      <StatusBar></StatusBar>
+     
       
       <View style={styles.topBarContainer}>
         <TouchableOpacity
@@ -98,16 +98,18 @@ const CheckoutScreen = ({ navigation }) => {
             navigation.goBack();
           }}
         >
-          <Text style={{ color: "#1C0A00", fontSize: 40,fontFamily:"Sora-SemiBold" }}>
-          Cart
-        </Text>
+
           <Ionicons
             name="arrow-back-circle-outline"
             size={30}
             color={ "#707981"}
           />
         </TouchableOpacity>
-        <View></View>
+        <View>         
+       <Text style={{ color: "#1C0A00", fontSize: 24,fontFamily:"Sora-SemiBold" }}>
+          Order
+        </Text>
+        </View>
         <View></View>
       </View>
       <ScrollView style={styles.bodyContainer} nestedScrollEnabled={true}>
