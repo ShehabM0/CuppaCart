@@ -90,55 +90,55 @@ export default function ProfileScreen({ navigation }) {
   if (!fontLoaded) {
     return null; // Render nothing until the font is loaded
   }
-  const categories = [
-    {id: '1', name: 'Coffee'},
-    {id: '2', name: 'Tea'},
-    {id: '3', name: 'Milk',},
-    {id: '4', name: 'Soda', },
-  ];
-  const ListCategories = () => {
-    return (
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={style.categoriesListContainer}>
-        {categories.map((category, index) => (
-          <TouchableOpacity
-            key={index}
-            activeOpacity={0.8}
-            onPress={() => setSelectedCategoryIndex(index)}>
-            <View
-              style={{
-                backgroundColor:
-                  selectedCategoryIndex == index
-                    ? '#F9813A'
-                    : '#fedac5',
-                ...style.categoryBtn,
-              }}>
-              <View style={style.categoryBtnImgCon}>
-                {/* <Image
-                  source={category.image}
-                  style={{height: 35, width: 35, resizeMode: 'cover'}}
-                /> */}
-              </View>
-              <Text
-                style={{
-                  fontSize: 15,
-                  fontFamily:"Sora-SemiBold",
-                  marginLeft: 10,
-                  color:
-                    selectedCategoryIndex == index
-                      ? "white"
-                      : '#F9813A',
-                }}>
-                {category.name}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    );
-  };
+  // const categories = [
+  //   {id: '1', name: 'Coffee'},
+  //   {id: '2', name: 'Tea'},
+  //   {id: '3', name: 'Milk',},
+  //   {id: '4', name: 'Soda', },
+  // ];
+  // const ListCategories = () => {
+  //   return (
+  //     <ScrollView
+  //       horizontal
+  //       showsHorizontalScrollIndicator={false}
+  //       contentContainerStyle={style.categoriesListContainer}>
+  //       {categories.map((category, index) => (
+  //         <TouchableOpacity
+  //           key={index}
+  //           activeOpacity={0.8}
+  //           onPress={() => setSelectedCategoryIndex(index)}>
+  //           <View
+  //             style={{
+  //               backgroundColor:
+  //                 selectedCategoryIndex == index
+  //                   ? '#F9813A'
+  //                   : '#fedac5',
+  //               ...style.categoryBtn,
+  //             }}>
+  //             <View style={style.categoryBtnImgCon}>
+  //               {/* <Image
+  //                 source={category.image}
+  //                 style={{height: 35, width: 35, resizeMode: 'cover'}}
+  //               /> */}
+  //             </View>
+  //             <Text
+  //               style={{
+  //                 fontSize: 15,
+  //                 fontFamily:"Sora-SemiBold",
+  //                 marginLeft: 10,
+  //                 color:
+  //                   selectedCategoryIndex == index
+  //                     ? "white"
+  //                     : '#F9813A',
+  //               }}>
+  //               {category.name}
+  //             </Text>
+  //           </View>
+  //         </TouchableOpacity>
+  //       ))}
+  //     </ScrollView>
+  //   );
+  // };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor:"#ffff",}}>
       <View style={style.header}>
@@ -184,7 +184,7 @@ export default function ProfileScreen({ navigation }) {
       </View>
       <View
         style={{
-          marginTop: 30,
+          marginTop: 23,
           flexDirection: 'row',
           paddingHorizontal: 20,
         }}>
@@ -201,8 +201,11 @@ export default function ProfileScreen({ navigation }) {
        
       </View>
       <View>
-        <ListCategories />
-        
+        {/* <ListCategories /> */}
+        <Image style={{width:300,height:140 ,borderRadius:10,marginLeft:30,marginTop:25}} 
+        source={require("../assets/poster.png")}>
+
+        </Image>
       </View>
       <FlatList
         style={{ padding: 10,marginTop:5}}
