@@ -10,16 +10,57 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
 import BasicProductList from "../Components/BasicProductList";
-import SegmentedControlTab from 'react-native-segmented-control-tab'
-
+import * as Font from "expo-font";
+import * as LocalAuthentication from "expo-local-authentication";
 import { getProducts } from "../firebase/products";
-const CheckoutScreen = ({ navigation, route }) => {
+const CheckoutScreen = ({ navigation }) => {
   const [Products, setProducts] = useState([]);
   const [index, setIndex] = useState("Cash");
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  async function handleAuthentication() {
+    let hasHardware = await LocalAuthentication.hasHardwareAsync();
+    if (hasHardware) {
+      let supportedTypes =
+        await LocalAuthentication.supportedAuthenticationTypesAsync();
+      if (
+        supportedTypes.includes(
+          LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION
+        )
+      ) {
+        let result = await LocalAuthentication.authenticateAsync({
+          promptMessage: "Authenticate Using Face ID",
+          fallbackLabel: "Use passcode instead",
+          disableDeviceFallback: false,
+          cancelLabel: "Cancel",
+        });
+        if (result.success) {
+          navigation.navigate("Home");
+          return;
+        }
+      }
+      if (
+        supportedTypes.includes(
+          LocalAuthentication.AuthenticationType.FINGERPRINT
+        )
+      ) {
+        let result = await LocalAuthentication.authenticateAsync({
+          promptMessage: "Authenticate Using Fingerprint",
+          fallbackLabel: "Use passcode instead",
+          disableDeviceFallback: false,
+          cancelLabel: "Cancel",
+        });
+        if (result.success) {
+          navigation.navigate("Home");
+          return;
+        }
+      }
+    }
+    navigation.navigate("Cart");
+  }
 
 
- 
-
+  
   const getProductsHandle = async () => {
     const arr = await getProducts();
     setProducts(arr);
@@ -27,7 +68,23 @@ const CheckoutScreen = ({ navigation, route }) => {
   useEffect(() => {
     getProductsHandle();
   }, []);
-  
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "Sora-SemiBold": require("../assets/Fonts/static/Sora-SemiBold.ttf"),
+        "sora-regular": require("../assets/Fonts/static/Sora-Regular.ttf"),
+        "sora-light": require("../assets/Fonts/static/Sora-Light.ttf"),
+      });
+      setFontLoaded(true);
+    };
+
+    loadFonts();
+  }, []);
+
+  if (!fontLoaded) {
+    return null; // Render nothing until the font is loaded
+  }
   
   return (
    
@@ -41,6 +98,9 @@ const CheckoutScreen = ({ navigation, route }) => {
             navigation.goBack();
           }}
         >
+          <Text style={{ color: "#1C0A00", fontSize: 40,fontFamily:"Sora-SemiBold" }}>
+          Cart
+        </Text>
           <Ionicons
             name="arrow-back-circle-outline"
             size={30}
@@ -155,11 +215,11 @@ const CheckoutScreen = ({ navigation, route }) => {
     <Text style={styles.primaryText}>Total</Text>
     <View style={styles.totalOrderInfoContainer}>
       <View style={styles.list}>
-        <Text>Order</Text>
-        <Text>10000000000$</Text>
+        <Text style={styles.primaryTextSm}>Order</Text>
+        <Text style={styles.secondaryTextSm}>10000000000$</Text>
       </View>
       <View style={styles.list}>
-        <Text>Delivery</Text>
+        <Text style={styles.primaryTextSm}>Delivery</Text>
         <Text>1000000000 $</Text>
       </View>
       <View style={styles.list}>
@@ -174,19 +234,20 @@ const CheckoutScreen = ({ navigation, route }) => {
   <Text style={styles.primaryText}>Total</Text>
   <View style={styles.totalOrderInfoContainer}>
     <View style={styles.list}>
-      <Text>Order</Text>
-      <Text>10000000000$</Text>
+      <Text style={styles.primaryTextSm}>Order</Text>
+      <Text style={styles.secondaryTextSm}>10000000000$</Text>
     </View>
     <View style={styles.list}>
-      <Text>Delivery</Text>
-      <Text>1000000000 $</Text>
+      <Text style={styles.primaryTextSm}>Delivery</Text>
+      <Text style={styles.secondaryTextSm}>1000000000 $</Text>
     </View>
     <View style={styles.list}>
-      <Text style={styles.primaryTextSm}>Total In "Coins"</Text>
+      <Text style={styles.primaryTextSm}>Total In Coins</Text>
       <Text style={styles.secondaryTextSm}>10000000000000 $</Text>
     </View>
   </View>
-</View>)
+</View>
+)
 }
 
 
@@ -212,12 +273,8 @@ const CheckoutScreen = ({ navigation, route }) => {
             alignItems: "center",
             marginTop: 50,
             marginLeft: "10%",
-           
-            
-           
           }}
-
-          onPress={{}}>
+          onPress={handleAuthentication}>
           <Text
             style={{
               color: "white",
@@ -271,7 +328,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     maxHeight: 220,
-    
+    fontFamily: "sora-regular"
   },
   totalOrderInfoContainer: {
     borderRadius: 10,
@@ -282,7 +339,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: 5,
     fontSize: 20,
-    fontWeight: "bold",
+  fontFamily:"Sora-SemiBold"
   },
   list: {
     display: "flex",
@@ -298,12 +355,12 @@ const styles = StyleSheet.create({
   },
   primaryTextSm: {
     fontSize: 15,
-    fontWeight: "bold",
+    fontFamily: "sora-regular",
     color: "black",
   },
   secondaryTextSm: {
     fontSize: 15,
-    fontWeight: "bold",
+    fontFamily: "sora-regular",
   },
   listContainer: {
     backgroundColor:  "white",
