@@ -110,12 +110,6 @@ const ProfileView = ({navigation}) => {
               <Text style={styles.menuItemText}>Favourites</Text>
             </View>
           </TouchableRipple>
-          <TouchableRipple onPress={() => {navigation.navigate("CreateCreditCard");}}>
-            <View style={styles.menuItem}>
-              <Icon name="credit-card" color="#C67C4E" size={25} />
-              <Text style={styles.menuItemText}>Payment</Text>
-            </View>
-          </TouchableRipple>
 
           <TouchableRipple onPress={() => {}}>
             <View style={styles.menuItem}>
