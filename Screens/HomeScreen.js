@@ -202,7 +202,7 @@ export default function ProfileScreen({ navigation }) {
       </View>
       <View>
         {/* <ListCategories /> */}
-        <Image style={{width:300,height:140 ,borderRadius:10,marginLeft:30,marginTop:25}} 
+        <Image style={{width:300,height:140 ,borderRadius:10,marginLeft:30,marginTop:25,left:18}} 
         source={require("../assets/poster.png")}>
 
         </Image>
