@@ -140,7 +140,7 @@ export default function ProfileScreen({ navigation }) {
     );
   };
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor:"#ffff", paddingTop: isIOS ? 0 +2 : StatusBar.currentHeight,}}>
+    <SafeAreaView style={{flex: 1, backgroundColor:"#ffff",}}>
       <View style={style.header}>
         <View style={{}}>
           <View style={{flexDirection: 'row'}}>
@@ -202,6 +202,7 @@ export default function ProfileScreen({ navigation }) {
       </View>
       <View>
         <ListCategories />
+        
       </View>
       <FlatList
         style={{ padding: 10,marginTop:5}}
