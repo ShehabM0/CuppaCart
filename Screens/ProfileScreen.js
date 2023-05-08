@@ -69,7 +69,7 @@ const ProfileScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <LinearGradient colors={["#472D2D", "#553939"]} style={styles.linearGradient}>
+    <LinearGradient colors={["white", "white"]} style={styles.linearGradient}>
       <ScrollView style={styles.scrollView}>
         <SafeAreaView style={styles.container}>
           <View style={styles.userInfoSection}>
@@ -83,7 +83,7 @@ const ProfileScreen = ({ navigation }) => {
                     {
                       marginTop: 20,
                       marginBottom: 5,
-                      color: "white",
+                      color: "black",
                       fontSize: 25,
                     },
                   ]}
@@ -97,17 +97,17 @@ const ProfileScreen = ({ navigation }) => {
           <View style={styles.userInfoSection}>
             <View style={styles.row}>
               <Icon name="map-marker-radius" color="#777777" size={20} />
-              <Text style={{ color: "#fff", marginLeft: 20 }}>
+              <Text style={{ color: "black", marginLeft: 20 }}>
                 Cairo,Egypt
               </Text>
             </View>
             <View style={styles.row}>
               <Icon name="phone" color="#777777" size={20} />
-              <Text style={{ color: "#fff", marginLeft: 20 }}>{phone}</Text>
+              <Text style={{ color: "black", marginLeft: 20 }}>{phone}</Text>
             </View>
             <View style={styles.row}>
               <Icon name="email" color="#777777" size={20} />
-              <Text style={{ color: "#fff", marginLeft: 20 }}>{email}</Text>
+              <Text style={{ color: "black", marginLeft: 20 }}>{email}</Text>
             </View>
           </View>
 
@@ -121,8 +121,8 @@ const ProfileScreen = ({ navigation }) => {
                 },
               ]}
             >
-              <Title style={{ color: "white" }}>-</Title>
-              <Caption style={{ color: "white", fontSize: 15 }}>Bonus</Caption>
+              <Title style={{ color: "black" }}>-</Title>
+              <Caption style={{ color: "black", fontSize: 15 }}>Bonus</Caption>
             </View>
             <View
               style={[
@@ -133,15 +133,15 @@ const ProfileScreen = ({ navigation }) => {
                 },
               ]}
             >
-              <Title style={{ color: "white" }}>-</Title>
-              <Caption style={{ color: "white", fontSize: 15 }}>
+              <Title style={{ color: "black" }}>-</Title>
+              <Caption style={{ color: "black", fontSize: 15 }}>
                 Orders
               </Caption>
             </View>
 
             <View style={styles.infoBox}>
-              <Title style={{ color: "white" }}>{balance}</Title>
-              <Caption style={{ color: "white", fontSize: 15 }}>
+              <Title style={{ color: "black" }}>{balance}</Title>
+              <Caption style={{ color: "black ", fontSize: 15 }}>
                 Balance
               </Caption>
             </View>
