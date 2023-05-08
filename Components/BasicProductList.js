@@ -62,9 +62,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "600",
     color: "#FB6831",
+    fontFamily: "sora-regular"
   },
   secondaryText: {
     fontSize: 15,
     fontWeight: "600",
+    fontFamily: "sora-regular"
   },
 });
