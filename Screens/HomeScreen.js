@@ -124,7 +124,7 @@ export default function ProfileScreen({ navigation }) {
               <Text
                 style={{
                   fontSize: 15,
-                  fontWeight: 'bold',
+                  fontFamily:"Sora-SemiBold",
                   marginLeft: 10,
                   color:
                     selectedCategoryIndex == index
@@ -140,7 +140,7 @@ export default function ProfileScreen({ navigation }) {
     );
   };
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor:"#E4EDFA", paddingTop: isIOS ? 0 +2 : StatusBar.currentHeight,}}>
+    <SafeAreaView style={{flex: 1, backgroundColor:"#ffff", paddingTop: isIOS ? 0 +2 : StatusBar.currentHeight,}}>
       <View style={style.header}>
         <View style={{}}>
           <View style={{flexDirection: 'row'}}>
