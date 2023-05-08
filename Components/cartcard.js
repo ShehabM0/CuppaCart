@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useEffect,useState} from "react";
 import {
   View,
   Text,
@@ -10,19 +10,70 @@ import {
 import { useNavigation } from "@react-navigation/core";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
+import {
+  getUserUId,
+  addUser,
+  deleteUser,
+  editUser,
+  getUserById,
+  getUserByName,
+  getUsers,
+  subscribeUser,
+  getCurrUserId,
+  updateUser,
+  } from "../firebase/user";
 
-const cartcard = ({productName,
+  const cartcard = ({
+    productName,
     price,
     image,
     details,
     type,
     id,
     Rate,
-}) => {
+    cart,
+    setCart,
+  }) => {
     const navigation = useNavigation();
+    const { width } = Dimensions.get("window");
 
-  
-  
+    const [userCart, setUserCart] = useState([]);
+  const [user, setUser] = useState();
+  const [ProductInCart, setProductInCart] = useState();
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setname] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [role, setRole] = useState("");
+ 
+  const user_id = getCurrUserId();
+
+  const handleDelete = async () => {
+    const id_idx = userCart.indexOf(id);
+    console.log("wdcfs",userCart);
+    userCart.splice(id_idx, 1);
+    updateUser(user_id, { cart: [...userCart] });
+    alert("Product Deleted From Cart");
+  };  
+
+
+  useEffect(() => {
+    getUserUId().then((id) => {
+      getUserById(id).then((user) => {
+        user.forEach((user) => {
+          // console.log("cartooo is ", user.cart);
+          setUserCart(user.cart);
+          setUser(user);
+        });
+        setLoading(false); // Hide the loader when the data fetching is complete
+      });
+    });
+  }, []);
+
+
+
+
     return (
                 
       <TouchableOpacity
@@ -56,7 +107,7 @@ const cartcard = ({productName,
                 <View style={styles.priceContainer}>
                   <Text style={styles.price}>{price} $</Text>
   
-                  <TouchableOpacity onPress={() => {}}>
+                  <TouchableOpacity onPress={() => {handleDelete()}}>
                   <View style={styles.menuItem}>
                     <Ionicons name="trash-outline" size={25} color="#fff" />
                     </View>
