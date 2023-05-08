@@ -110,7 +110,7 @@ useEffect(() => {
 
   return (
     <View style={styles.container}>
-      <StatusBar></StatusBar>
+    
       <View style={styles.topBarContainer}>
       
         <TouchableOpacity
