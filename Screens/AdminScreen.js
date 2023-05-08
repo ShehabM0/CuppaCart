@@ -90,9 +90,9 @@ const ProfileScreen = ({ navigation }) => {
       }
     });
 
-    return () => {
-      unsubscribeUser();
-    };
+    // return () => {
+    //   unsubscribeUser();
+    // };
   }, []);
   useEffect(() => {
     const unsubscribe = subscribeProduct(({ change, snapshot }) => {
@@ -114,9 +114,9 @@ const ProfileScreen = ({ navigation }) => {
       }
     });
 
-    return () => {
-      unsubscribe();
-    };
+    // return () => {
+    //   unsubscribe();
+    // };
   }, []);
   useEffect(() => {
     getUserUId().then((id) => {
@@ -216,6 +216,18 @@ const ProfileScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.menuWrapper}>
+ 
+          <TouchableRipple
+            onPress={() => {
+              navigation.navigate("CreateCreditCard");
+            }} 
+          >
+            <View style={styles.menuItem}>
+              <Ionicons name="add-circle-outline" size={27} color="#964B00" />
+              <Text style={styles.menuItemText}>Create Credit Card</Text>
+            </View>
+          </TouchableRipple>
+
           <TouchableRipple
             onPress={() => {
               navigation.navigate("AddProduct");
@@ -240,7 +252,7 @@ const ProfileScreen = ({ navigation }) => {
           <TouchableRipple
             onPress={() => {
               navigation.navigate("EditProduct");
-            }}
+            }} 
           >
             <View style={styles.menuItem}>
               <FontAwesome5 name="edit" size={25} color="#964B00" />
