@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, SafeAreaView, ScrollView, TouchableOpacity } fr
 import SuccessMessage from '../Components/SuccessMessage';
 import Loader from '../Components/Loader';
 import Input from '../Components/Input';
-import {COLORS} from "../Conts/Color";
+import { COLORS } from "../Conts/Color";
 import { getCreditCardByNumber, addCreditCard } from '../firebase/creditcard';
 
 export default CreateCreditCardScreen = ({ navigation }) => {
@@ -83,7 +83,7 @@ export default CreateCreditCardScreen = ({ navigation }) => {
         return true;
     }
     function validateCvv() {
-        if(!cvv.match(/^\d+$/) || cvv.length in [3, 4]) {
+        if(!cvv.match(/^\d+$/) || !([3, 4].includes(cvv.length))) {
             handleError('Credit Card CVV must consist of only 3-4 digits', 'cvv');
             return false;
         }
