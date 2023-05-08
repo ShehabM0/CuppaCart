@@ -7,6 +7,7 @@ import Input from '../Components/Input';
 
 import { getCurrUserId, getUserById, updateUser } from "../firebase/user"
 import { getCreditCard } from '../firebase/creditcard';
+import { COLORS } from "../Conts/Color";
 
 export default ChangeCreditCardScreen = ({ navigation }) => {
     
