@@ -27,10 +27,18 @@ import WishList from "../Components/WishlistCard";
 let ar = [];
 let prod;
 const MyWishlistScreen = ({ navigation, route }) => {
+
+
+
+
+
   const [userFav, setUserFav] = useState([]);
   const [user, setUser] = useState();
   const [ProductInFav, setProductInFav] = useState();
   const [loading, setLoading] = useState(false);
+  
+
+
   useEffect(() => {
     (async () => {
       let ar = [];
@@ -44,6 +52,11 @@ const MyWishlistScreen = ({ navigation, route }) => {
       setProductInFav(ar);
     })();
   }, [userFav]);
+
+
+
+
+  
   useEffect(() => {
     const a = navigation.addListener("focus", () => {
       setLoading(true); // Show the loader when the event occurs
@@ -96,26 +109,26 @@ const MyWishlistScreen = ({ navigation, route }) => {
      
       <Loader visible={loading}/>
        
-        
-         <FlatList
-         style={{flex: 1, width: "100%", padding: 20}}
-          data={ProductInFav}
-          numColumns={1}
-          showsHorizontalScrollIndicator={true}
-          renderItem={(itemData) => {
-            return (
-              <WishList
-                productName={itemData.item.productName}
-                price={itemData.item.price}
-                details={itemData.item.details}
-                image={itemData.item.image}
-                Rate={itemData.item.Rate}
-                id={itemData.item.id}
-                type={itemData.item.type}
-              />
-            );
-          }}
-        />
+      {/* style={{flex: 1, width: "100%", padding: 20}} */}
+      <FlatList
+      style={{flex: 1, width: "105%", padding: 20}}
+            data={ProductInFav}
+            numColumns={1}
+            showsHorizontalScrollIndicator={true}
+            renderItem={(itemData) => {
+              return (
+                <FavCard
+                  productName={itemData.item.productName}
+                  price={itemData.item.price}
+                  details={itemData.item.details}
+                  image={itemData.item.image}
+                  Rate={itemData.item.Rate}
+                  id={itemData.item.id}
+                  type={itemData.item.type}
+                />
+              );
+            }}
+          />
           <View style={styles.emptyView}></View>
         
      

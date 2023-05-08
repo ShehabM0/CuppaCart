@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
 import {
+  Dimensions,
+  Image,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  Image,
-  Dimensions,
+} from 'react-native';
+import {
   FlatList,
-  ImageBackground,
-  Platform,
-} from "react-native";
+  ScrollView,
+  TextInput,
+  TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { doc, setDoc } from "firebase/firestore";
 import { StatusBar } from "expo-status-bar";
 import { SearchBar } from "react-native-elements";
-import { TextInput, Searchbar } from "react-native-paper";
 import { auth,db } from "../firebase/config";
 import { getUserUId, getUserById } from "../firebase/user";
 import { getProducts } from "../firebase/products";
@@ -25,8 +27,9 @@ import { BlurView } from "expo-blur";
 import { Ionicons } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import { AppLoading } from "expo";
-const { width } = Dimensions.get("window");
-const d = Dimensions.get("window");
+const {width} = Dimensions.get('screen');
+const cardWidth = width / 2 - 20;
+
 export default function ProfileScreen({ navigation }) {
   const [fullname, setfullname] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -38,6 +41,7 @@ export default function ProfileScreen({ navigation }) {
   const windowHeight = Dimensions.get("window").height;
   const [fontLoaded, setFontLoaded] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [selectedCategoryIndex, setSelectedCategoryIndex] = React.useState(0);
   const isIOS = Platform.OS === "ios";
 
   const getProductHandle = async () => {
@@ -86,149 +90,122 @@ export default function ProfileScreen({ navigation }) {
   if (!fontLoaded) {
     return null; // Render nothing until the font is loaded
   }
-
-  return (
-    <SafeAreaView
-      style={{
-        backgroundColor: "#E4EDFA",
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        paddingTop: isIOS ? 0 : StatusBar.currentHeight,
-      }}
-    >
-      <View
-        style={{
-          width: 400,
-          height: 280,
-          backgroundColor: "#FFFFFF",
-          elevation: 75,
-          shadowColor: "#000000",
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 5.25,
-          shadowRadius: 3.84,
-        }}
-      >
-        <ImageBackground
-          style={{ flex: 1 }}
-          source={require("../assets/Rectangle.png")}
-        >
-          <Text
-            style={{
-              position: "absolute",
-              color: "#DDDDDD",
-              left: 20,
-              fontSize: 25,
-             
-              top: 60,
-              fontFamily: "Sora-SemiBold",
-            }}
-          >
-            Hello, {firstname}
-          </Text>
-
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <TouchableOpacity
-              onPress={() => navigation.navigate("ProfileTab")}
-              style={{
-                borderRadius: 10,
-                overflow: "hidden",
-                width: 10 * 4,
-                height: 10 * 4,
-                paddingBottom: 12,
-              }}
-            ></TouchableOpacity>
+  const categories = [
+    {id: '1', name: 'Coffee'},
+    {id: '2', name: 'Tea'},
+    {id: '3', name: 'Milk',},
+    {id: '4', name: 'Soda', },
+  ];
+  const ListCategories = () => {
+    return (
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={style.categoriesListContainer}>
+        {categories.map((category, index) => (
+          <TouchableOpacity
+            key={index}
+            activeOpacity={0.8}
+            onPress={() => setSelectedCategoryIndex(index)}>
             <View
               style={{
-                width: 10 * 4,
-                height: 10 * 4,
-                overflow: "hidden",
-                borderRadius: 10,
-                top: 50,
-                right: 10,
-                marginRight:15
-              }}
-            >
-              <BlurView
+                backgroundColor:
+                  selectedCategoryIndex == index
+                    ? '#F9813A'
+                    : '#fedac5',
+                ...style.categoryBtn,
+              }}>
+              <View style={style.categoryBtnImgCon}>
+                {/* <Image
+                  source={category.image}
+                  style={{height: 35, width: 35, resizeMode: 'cover'}}
+                /> */}
+              </View>
+              <Text
                 style={{
-                  height: "100%",
-                  padding: 10 / 2,
-                
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("ProfileTab")}
-                >
-                  <Image
-                    style={{
-                      height: "100%",
-                      width: "100%",
-                      borderRadius: 10,
-                    
-                    }}
-                    source={{ uri: image }}
-                  />
-                </TouchableOpacity>
-              </BlurView>
+                  fontSize: 15,
+                  fontFamily:"Sora-SemiBold",
+                  marginLeft: 10,
+                  color:
+                    selectedCategoryIndex == index
+                      ? "white"
+                      : '#F9813A',
+                }}>
+                {category.name}
+              </Text>
             </View>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    );
+  };
+  return (
+    <SafeAreaView style={{flex: 1, backgroundColor:"#ffff", paddingTop: isIOS ? 0 +2 : StatusBar.currentHeight,}}>
+      <View style={style.header}>
+        <View style={{}}>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{fontSize: 25 ,fontFamily: "Sora-SemiBold"}}>Hello,</Text>
+            <Text style={{fontSize: 25, fontFamily: "Sora-SemiBold", marginLeft: 6}}>
+             {firstname}
+            </Text>
           </View>
-          <View
+          <Text style={{marginTop: 5, fontSize: 15, color: '#908e8c',fontFamily: "Sora-SemiBold"}}>
+            What do you want today
+          </Text>
+        </View>
+       
+        <TouchableOpacity
+        onPress={() => console.log("fuck")}
             style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-              paddingHorizontal: 20,
+              borderRadius: 10,
+              overflow: "hidden",
+              width: 10 * 5,
+              height: 10 *5,
             }}
           >
-            <Searchbar
-              placeholder="Search Coffee"
-              placeholderTextColor="#989898"
-              iconColor="white"
-              value={searchTerm}
-              onChangeText={(query) => setSearchTerm(query)}
-              onIconPress={getProductHandle}
+            <BlurView
               style={{
-                width: "90%",
-                backgroundColor: "#313131",
-                borderRadius: 20,
+                height: "100%",
+                justifyContent: "center",
+                alignItems: "center",
               }}
-            />
-          </View>
-
-        </ImageBackground>
+            >
+              <Image
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  borderRadius: 10,
+                }}
+                source={{uri:image}}
+              />
+            </BlurView>
+          </TouchableOpacity>
+       
       </View>
-      <View style={{
-  position: "absolute",
-  width: 315,
-  height: 140,
-  left: 45,
-  top: 204,
-  backgroundColor: "#EAE7E7",
-  borderRadius: 16,
-  shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 4,
-  },
-  shadowOpacity: 0.25,
-  shadowRadius: 4,
-  elevation: 4,
-
-}}>
-  <Image  style={{width: 315,
-  height: 140,borderRadius: 16,}} source={require("../assets/beansBackground1.png")} ></Image>
-</View>
-
+      <View
+        style={{
+          marginTop: 30,
+          flexDirection: 'row',
+          paddingHorizontal: 20,
+        }}>
+        <View style={style.inputContainer}>
+          <Icon name="search" size={28} />
+          <TextInput
+            style={{flex: 1, fontSize: 18}}
+            placeholder="Search for Coffee"
+            value={searchTerm}
+            onChangeText={(query) => setSearchTerm(query)}
+            onIconPress={getProductHandle}
+          />
+        </View>
+       
+      </View>
+      <View>
+        <ListCategories />
+      </View>
       <FlatList
         style={{ padding: 10,marginTop:5}}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={
-          <>
-            <View style={{ width: "80%", marginVertical: 10 * 3 , }}></View>
-          </>
-        }
         data={filteredProducts}
         numColumns={2}
         renderItem={(itemData) => {
@@ -247,3 +224,70 @@ export default function ProfileScreen({ navigation }) {
     </SafeAreaView>
   );
 }
+
+const style = StyleSheet.create({
+  header: {
+    marginTop: 35,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+  inputContainer: {
+    flex: 1,
+    height: 50,
+    borderRadius: 10,
+    flexDirection: 'row',
+    backgroundColor: '#E5E5E5',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  sortBtn: {
+    width: 50,
+    height: 50,
+    marginLeft: 10,
+    backgroundColor: '#F9813A',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  categoriesListContainer: {
+    paddingVertical: 20,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  categoryBtn: {
+    height: 45,
+    width: 120,
+    marginRight: 7,
+    borderRadius: 12,
+    alignItems: 'center',
+    paddingHorizontal: 5,
+    flexDirection: 'row',
+  },
+  categoryBtnImgCon: {
+    height: 35,
+    width: 35,
+    backgroundColor: "white",
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  card: {
+    height: 220,
+    width: cardWidth,
+    marginHorizontal: 10,
+    marginBottom: 20,
+    marginTop: 50,
+    borderRadius: 15,
+    elevation: 13,
+    backgroundColor: "white",
+  },
+  addToCartBtn: {
+    height: 30,
+    width: 30,
+    borderRadius: 20,
+    backgroundColor: '#F9813A',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

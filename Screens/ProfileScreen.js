@@ -20,7 +20,7 @@ import {
   ScrollView,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import {auth} from "../firebase/config";
+import { auth } from "../firebase/config";
 import {
   getUserUId,
   addUser,
@@ -31,11 +31,10 @@ import {
   getUsers,
   subscribeUser,
 } from "../firebase/user";
-// import 'firebase/firestore';
-// import {getUsers}from"../firebase/user";
+import { LinearGradient } from "expo-linear-gradient";
 
 const ProfileScreen = ({ navigation }) => {
-  const logout = () => {
+  const ss = () => {
     logout(auth).then(() => {
       console.log("sign out done");
       navigation.navigate("SignIn");
@@ -70,127 +69,136 @@ const ProfileScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <ScrollView
-      style={{
-        padding: 22,
-        backgroundColor: "#2E333E",
-      }}
-    >
-      <SafeAreaView style={styles.container}>
-        <View style={styles.userInfoSection}>
-          <View style={{ flexDirection: "row", marginTop: 36 }}>
-            <Avatar.Image source={{ uri: image }} size={60} />
+    <LinearGradient colors={["#472D2D", "#553939"]} style={styles.linearGradient}>
+      <ScrollView style={styles.scrollView}>
+        <SafeAreaView style={styles.container}>
+          <View style={styles.userInfoSection}>
+            <View style={{ flexDirection: "row", marginTop: 36 }}>
+              <Avatar.Image source={{ uri: image }} size={60} />
 
-            <View style={{ marginLeft: 5 }}>
-              <Title
-                style={[
-                  styles.title,
-                  {
-                    marginTop: 20,
-                    marginBottom: 5,
-                    color: "white",
-                    fontSize: 25,
-                  },
-                ]}
-              >
-                {firstname} {lastname}
-              </Title>
+              <View style={{ marginLeft: 5 }}>
+                <Title
+                  style={[
+                    styles.title,
+                    {
+                      marginTop: 20,
+                      marginBottom: 5,
+                      color: "white",
+                      fontSize: 25,
+                    },
+                  ]}
+                >
+                  {firstname} {lastname}
+                </Title>
+              </View>
             </View>
           </View>
-        </View>
 
-        <View style={styles.userInfoSection}>
-          <View style={styles.row}>
-            <Icon name="map-marker-radius" color="#777777" size={20} />
-            <Text style={{ color: "#fff", marginLeft: 20 }}>Cairo,Egypt</Text>
-          </View>
-          <View style={styles.row}>
-            <Icon name="phone" color="#777777" size={20} />
-            <Text style={{ color: "#fff", marginLeft: 20 }}>{phone}</Text>
-          </View>
-          <View style={styles.row}>
-            <Icon name="email" color="#777777" size={20} />
-            <Text style={{ color: "#fff", marginLeft: 20 }}>{email}</Text>
-          </View>
-        </View>
-
-        <View style={styles.infoBoxWrapper}>
-          <View
-            style={[
-              styles.infoBox,
-              {
-                borderRightColor: "#dddddd",
-                borderRightWidth: 1,
-              },
-            ]}
-          >
-            <Title style={{ color: "white" }}>-</Title>
-            <Caption style={{ color: "white", fontSize: 15 }}>Bonus</Caption>
-          </View>
-          <View
-            style={[
-              styles.infoBox,
-              {
-                borderRightColor: "#dddddd",
-                borderRightWidth: 1,
-              },
-            ]}
-          >
-            <Title style={{ color: "white" }}>-</Title>
-            <Caption style={{ color: "white", fontSize: 15 }}>Orders</Caption>
+          <View style={styles.userInfoSection}>
+            <View style={styles.row}>
+              <Icon name="map-marker-radius" color="#777777" size={20} />
+              <Text style={{ color: "#fff", marginLeft: 20 }}>
+                Cairo,Egypt
+              </Text>
+            </View>
+            <View style={styles.row}>
+              <Icon name="phone" color="#777777" size={20} />
+              <Text style={{ color: "#fff", marginLeft: 20 }}>{phone}</Text>
+            </View>
+            <View style={styles.row}>
+              <Icon name="email" color="#777777" size={20} />
+              <Text style={{ color: "#fff", marginLeft: 20 }}>{email}</Text>
+            </View>
           </View>
 
-          <View style={styles.infoBox}>
-            <Title style={{ color: "white" }}>{balance}</Title>
-            <Caption style={{ color: "white", fontSize: 15 }}>Balance</Caption>
-          </View>
-        </View>
+          <View style={styles.infoBoxWrapper}>
+            <View
+              style={[
+                styles.infoBox,
+                {
+                  borderRightColor: "#dddddd",
+                  borderRightWidth: 1,
+                },
+              ]}
+            >
+              <Title style={{ color: "white" }}>-</Title>
+              <Caption style={{ color: "white", fontSize: 15 }}>Bonus</Caption>
+            </View>
+            <View
+              style={[
+                styles.infoBox,
+                {
+                  borderRightColor: "#dddddd",
+                  borderRightWidth: 1,
+                },
+              ]}
+            >
+              <Title style={{ color: "white" }}>-</Title>
+              <Caption style={{ color: "white", fontSize: 15 }}>
+                Orders
+              </Caption>
+            </View>
 
-        <View style={styles.menuWrapper}>
-          <TouchableRipple
-            onPress={() => {
-              navigation.navigate("Fav");
-            }}
-          >
+            <View style={styles.infoBox}>
+              <Title style={{ color: "white" }}>{balance}</Title>
+              <Caption style={{ color: "white", fontSize: 15 }}>
+                Balance
+              </Caption>
+            </View>
+          </View>
+
+          <View style={styles.menuWrapper}>
+            <TouchableRipple
+              onPress={() => {
+                navigation.navigate("Fav");
+              }}
+            >
+              <View style={styles.menuItem}>
+                <Icon name="heart-outline" color="#C67C4E" size={25} />
+                <Text style={styles.menuItemText}>Favourites</Text>
+              </View>
+            </TouchableRipple>
+
+            <TouchableRipple onPress={() => {}}>
+              <View style={styles.menuItem}>
+                <Icon
+                  name="account-check-outline"
+                  color="#C67C4E"
+                  size={25}
+                />
+                <Text style={styles.menuItemText}>Support</Text>
+              </View>
+            </TouchableRipple>
+            <TouchableRipple onPress={() => {}}>
+              <View style={styles.menuItem}>
+                <Ionicons name="settings-outline" color="#C67C4E" size={25} />
+                <Text style={styles.menuItemText}>Settings</Text>
+              </View>
+            </TouchableRipple>
+          </View>
+
+          <TouchableOpacity onPress={ss}>
             <View style={styles.menuItem}>
-              <Icon name="heart-outline" color="#C67C4E" size={25} />
-              <Text style={styles.menuItemText}>Favourites</Text>
+              <Ionicons name="log-out-outline" color="#C67C4E" size={25} />
+              <Text style={styles.menuItemText}>Sign out</Text>
             </View>
-          </TouchableRipple>
-
-          <TouchableRipple onPress={() => {}}>
-            <View style={styles.menuItem}>
-              <Icon name="account-check-outline" color="#C67C4E" size={25} />
-              <Text style={styles.menuItemText}>Support</Text>
-            </View>
-          </TouchableRipple>
-
-          <TouchableRipple
-            onPress={() => {
-              navigation.navigate("SettingsTab");
-            }}
-          >
-            <View style={styles.menuItem}>
-              <Ionicons name="settings-outline" size={25} color="#C67C4E"  />
-              <Text style={styles.menuItemText}>Settings</Text>
-            </View>
-          </TouchableRipple>
-        </View>
-
-        <TouchableOpacity onPress={logout} style={styles.button}>
-        <View style={styles.menuItem}>
-              <Icon name="account-arrow-left-outline" size={25} color="#fff" />
-              <Text style={styles.menuItemTextt }>log out</Text>
-            </View>
-        </TouchableOpacity>
-
-      </SafeAreaView>
-    </ScrollView>
+          </TouchableOpacity>
+        </SafeAreaView>
+      </ScrollView>
+    </LinearGradient>
   );
 };
+
 const styles = StyleSheet.create({
+  linearGradient: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
   container: {
     flex: 1,
+    //backgroundColor: "#fff",
   },
   userInfoSection: {
     paddingHorizontal: 30,
@@ -215,14 +223,12 @@ const styles = StyleSheet.create({
     borderTopColor: "#dddddd",
     borderTopWidth: 1,
     flexDirection: "row",
-    height: 80,
+    height: 100,
   },
   infoBox: {
-    width: "33%",
+    width: "33.333333%",
     alignItems: "center",
     justifyContent: "center",
-    color: "#fff",
-    padding: 10,
   },
   menuWrapper: {
     marginTop: 10,
@@ -230,38 +236,14 @@ const styles = StyleSheet.create({
   menuItem: {
     flexDirection: "row",
     paddingVertical: 15,
-    paddingHorizontal: 15,
+    paddingHorizontal: 30,
   },
   menuItemText: {
-    color: "#fff",
+    color: "#777777",
     marginLeft: 20,
     fontWeight: "600",
     fontSize: 16,
     lineHeight: 26,
-    
-  },
-  menuItemTextt: {
-    color: "#fff",
-    marginLeft: 5,
-    fontWeight: "700",
-    fontSize: 16,
-    lineHeight: 26,
-   
-    
-  },
-  button: {
-    backgroundColor: "#C67C4E",
-    width: "60%",
-    padding: -1,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 50,
-    marginLeft: "20%",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
   },
 });
 
