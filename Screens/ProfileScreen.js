@@ -32,7 +32,6 @@ import {
   subscribeUser,
 } from "../firebase/user";
 import { LinearGradient } from "expo-linear-gradient";
-
 const ProfileScreen = ({ navigation }) => {
   const ss = () => {
     logout(auth).then(() => {
@@ -40,7 +39,6 @@ const ProfileScreen = ({ navigation }) => {
       navigation.navigate("SignIn");
     });
   };
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstname, setFirstname] = useState("");
