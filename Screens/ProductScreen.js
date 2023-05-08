@@ -63,11 +63,15 @@ export default function ProductScreen({ navigation, route }) {
 function addToFavorite() {
     if(favorite == 'white') {
       setFavorite('orange');
+      getUserById(user_id)
+      .then(user => setUserFavorite(user[0].favorite))
+      .catch(err => alert(err.message));
       updateUser(user_id, { favorite: [...userFavorite, id] })
     } else {
       setFavorite('white');
       const id_idx = userFavorite.indexOf(id);
       userFavorite.splice(id_idx, 1);
+      setUserFavorite(favorite);
       updateUser(user_id, { favorite: [...userFavorite] });
     }
   }
@@ -187,18 +191,21 @@ function addToFavorite() {
               <Text>{details}</Text>
             </ReadMore>
           </View>
+    
 
-
-          <View style={styles.sizesCont}>
-            <TouchableOpacity style={[styles.size, selectedSize == 0 && styles.enableSize]} onPress={setSmall}>
-              <Text style={[styles.sizeTxt, selectedSize == 0 && styles.enableSizeTxt]}>S</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.size, selectedSize == 1 && styles.enableSize]} onPress={setMedium}>
-              <Text style={[styles.sizeTxt, selectedSize == 1 && styles.enableSizeTxt]}>M</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.size, selectedSize == 2 && styles.enableSize]} onPress={setLarge}>
-              <Text style={[styles.sizeTxt, selectedSize == 2 && styles.enableSizeTxt]}>L</Text>
-            </TouchableOpacity>
+          <View style={styles.descCont}>
+            <Text style={styles.descTitle}>Size</Text>
+            <View style={styles.sizesCont}>
+              <TouchableOpacity style={[styles.size, selectedSize == 0 && styles.enableSize]} onPress={setSmall}>
+                <Text style={[styles.sizeTxt, selectedSize == 0 && styles.enableSizeTxt]}>S</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.size, selectedSize == 1 && styles.enableSize]} onPress={setMedium}>
+                <Text style={[styles.sizeTxt, selectedSize == 1 && styles.enableSizeTxt]}>M</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.size, selectedSize == 2 && styles.enableSize]} onPress={setLarge}>
+                <Text style={[styles.sizeTxt, selectedSize == 2 && styles.enableSizeTxt]}>L</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
           <View style={styles.qntcartCont}>
