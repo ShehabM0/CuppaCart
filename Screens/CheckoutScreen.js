@@ -33,7 +33,7 @@ const CheckoutScreen = ({ navigation }) => {
           cancelLabel: "Cancel",
         });
         if (result.success) {
-          navigation.navigate("TabsNav");
+          navigation.navigate("Home");
           return;
         }
       }
@@ -566,36 +566,26 @@ const CheckoutScreen = ({ navigation }) => {
         </Text>
         <TouchableOpacity
           style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: 21,
-            paddingHorizontal: 109,
-            marginHorizontal: 30,
-            marginTop: 707,
-            width: 315,
-            height: 62,
-            top: -20,
             backgroundColor: "#C67C4E",
-            borderRadius: 16,
+            width: "30%",
+            paddingVertical: 10,
+            borderRadius: 10,
+            alignItems: "center",
+            marginTop: 50,
+            marginLeft: "25%",
+            position: 'absolute',
+            bottom: 20,
+            zIndex: 2,
           }}
+
           onPress={() => handleAuthentication()}>
           <Text
             style={{
-              width: 49,
-              height: 20,
-              fontStyle: "normal",
-              fontFamily: "sora-regular",
-              fontWeight: "600",
+              color: "white",
               fontSize: 16,
-              lineHeight: 20,
-              color: "#FFFFFF",
-              flex: 0,
-              flexGrow: 0,
-              alignSelf: "flex-start",
+              fontFamily:"sora-regular"
             }}
-           >
+          >
             Order
           </Text>
         </TouchableOpacity>

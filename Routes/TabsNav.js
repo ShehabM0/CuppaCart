@@ -60,7 +60,7 @@ const TabsNav = () => {
       />
       <Tab.Screen
         name="ProfileTab"
-        component={ProfileScreen2}
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="user-o" size={size} color={color} />
