@@ -33,7 +33,7 @@ const CheckoutScreen = ({ navigation }) => {
           cancelLabel: "Cancel",
         });
         if (result.success) {
-          navigation.navigate("TabsNav");
+          navigation.navigate("Home");
           return;
         }
       }
