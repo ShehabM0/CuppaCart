@@ -167,7 +167,7 @@ function addToFavorite() {
                 </Text>
               </View>
 
-              <View style={styles.priceCont}>
+              <View style={{ paddingRight: 10 }}>
                 <Text style={styles.titlepriceTxt}>
                   <Feather name="dollar-sign" size={15} color="#C67C4E"/> {price}
                 </Text>
@@ -182,14 +182,16 @@ function addToFavorite() {
 
           <View style={styles.descCont}>
             <Text style={styles.descTitle}>Description</Text>
-              <ReadMore
-                textProps={{ allowFontScaling: false }}
-                numberOfLines={3}
-                renderTruncatedFooter={ShowMore}
-                renderRevealedFooter={ShowLess}
-              >
-              <Text>{details}</Text>
-            </ReadMore>
+              <View style={styles.descBody}>
+                <ReadMore
+                  textProps={{ allowFontScaling: false }}
+                  numberOfLines={3}
+                  renderTruncatedFooter={ShowMore}
+                  renderRevealedFooter={ShowLess}
+                >
+                <Text style={styles.descBody}>{details}</Text>
+              </ReadMore>
+            </View>
           </View>
     
 
@@ -303,7 +305,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     padding: 15,
-    paddingHorizontal: 25,
+    paddingHorizontal: 30,
     fontSize: 22,
     fontWeight: 'bold',
     backgroundColor: 'rgba(0,0,0,0.45)',
