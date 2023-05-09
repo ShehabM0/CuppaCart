@@ -6,8 +6,6 @@ import ReviewButtonLink from '../Components/ReviewButtonLink';
 import { getStarsAvg } from "../firebase/reviews";
 import { COLORS } from '../Conts/Color';
 import ReadMore from 'react-native-read-more-text';
-
-import { getProductByID } from "../firebase/products";
 import { getCreditCardById } from "../firebase/creditcard";
 import { getTotalSum, getTotalQnt, orderCart, minusUserCash, minusProductQnt, addUserBonus } from "../firebase/cart";
 
