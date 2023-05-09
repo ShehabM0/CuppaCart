@@ -32,6 +32,8 @@ import {
   subscribeUser,
 } from "../firebase/user";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Font from 'expo-font';
+
 const ProfileScreen = ({ navigation }) => {
   const ss = () => {
     logout(auth).then(() => {
@@ -48,6 +50,7 @@ const ProfileScreen = ({ navigation }) => {
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState("");
   const [balance, setBalance] = useState();
+  const [fontLoaded, setFontLoaded] = useState(false);
 
   useEffect(() => {
     getUserUId().then((id) => {
@@ -65,7 +68,22 @@ const ProfileScreen = ({ navigation }) => {
       });
     });
   }, []);
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "Sora-SemiBold": require("../assets/Fonts/static/Sora-SemiBold.ttf"),
+        "sora-regular": require("../assets/Fonts/static/Sora-Regular.ttf"),
+        "sora-light": require("../assets/Fonts/static/Sora-Light.ttf"),
+      });
+      setFontLoaded(true);
+    };
 
+    loadFonts();
+  }, []);
+
+  if (!fontLoaded) {
+    return null; // Render nothing until the font is loaded
+  }
   return (
     <LinearGradient colors={["white", "white"]} style={styles.linearGradient}>
       <ScrollView style={styles.scrollView}>
@@ -83,6 +101,7 @@ const ProfileScreen = ({ navigation }) => {
                       marginBottom: 5,
                       color: "black",
                       fontSize: 25,
+                      fontFamily:"Sora-SemiBold"
                     },
                   ]}
                 >
@@ -95,17 +114,17 @@ const ProfileScreen = ({ navigation }) => {
           <View style={styles.userInfoSection}>
             <View style={styles.row}>
               <Icon name="map-marker-radius" color="#777777" size={20} />
-              <Text style={{ color: "black", marginLeft: 20 }}>
+              <Text style={{ color: "black", marginLeft: 20,fontFamily:"sora-regular" }}>
                 Cairo,Egypt
               </Text>
             </View>
             <View style={styles.row}>
               <Icon name="phone" color="#777777" size={20} />
-              <Text style={{ color: "black", marginLeft: 20 }}>{phone}</Text>
+              <Text style={{ color: "black", marginLeft: 20,fontFamily:"sora-regular" }}>{phone}</Text>
             </View>
             <View style={styles.row}>
               <Icon name="email" color="#777777" size={20} />
-              <Text style={{ color: "black", marginLeft: 20 }}>{email}</Text>
+              <Text style={{ color: "black", marginLeft: 20 ,fontFamily:"sora-regular" }}>{email}</Text>
             </View>
           </View>
 
@@ -119,8 +138,8 @@ const ProfileScreen = ({ navigation }) => {
                 },
               ]}
             >
-              <Title style={{ color: "black" }}>-</Title>
-              <Caption style={{ color: "black", fontSize: 15 }}>Bonus</Caption>
+              <Title style={{ color: "black",fontFamily:"sora-regular"  }}>-</Title>
+              <Caption style={{ color: "black", fontSize: 15,fontFamily:"sora-regular"  }}>Bonus</Caption>
             </View>
             <View
               style={[
@@ -131,15 +150,15 @@ const ProfileScreen = ({ navigation }) => {
                 },
               ]}
             >
-              <Title style={{ color: "black" }}>-</Title>
-              <Caption style={{ color: "black", fontSize: 15 }}>
+              <Title style={{ color: "black",fontFamily:"sora-regular"  }}>-</Title>
+              <Caption style={{ color: "black", fontSize: 15,fontFamily:"sora-regular"  }}>
                 Orders
               </Caption>
             </View>
 
             <View style={styles.infoBox}>
-              <Title style={{ color: "black" }}>{balance}</Title>
-              <Caption style={{ color: "black ", fontSize: 15 }}>
+              <Title style={{ color: "black",fontFamily:"sora-regular"  }}>{balance}</Title>
+              <Caption style={{ color: "black ", fontSize: 15,fontFamily:"sora-regular"  }}>
                 Balance
               </Caption>
             </View>
@@ -204,8 +223,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
-  },
+    fontFamily:"Sora-SemiBold"   },
   caption: {
     fontSize: 14,
     lineHeight: 14,
@@ -241,7 +259,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     fontWeight: "600",
     fontSize: 16,
-    lineHeight: 26,
+    lineHeight: 26,fontFamily:"sora-regular" 
   },
 });
 
