@@ -18,7 +18,7 @@ const ProductCard = ({
   details,
   type,
   id,
-  Rate,
+  quantity,
 }) => {
   const navigation = useNavigation();
   const { width } = Dimensions.get("window");
@@ -51,7 +51,7 @@ const ProductCard = ({
           details,
           type,
           id,
-          Rate,
+          quantity,
         });
         {
           /**Login */
@@ -66,6 +66,7 @@ const ProductCard = ({
     marginLeft: 3,
     borderRadius: 10 * 2,
     overflow: "hidden",
+    
   }}
 >
         <BlurView
@@ -122,7 +123,7 @@ const ProductCard = ({
                     fontFamily:"Sora-SemiBold"
                   }}
                 >
-                  {Rate}
+                  1.5
                 </Text>
               </BlurView>
             </View>
