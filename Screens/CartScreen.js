@@ -108,28 +108,18 @@ const CartScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.topBarContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.goBack();
-          }}
-        >
-          <Ionicons
-            name="arrow-back-circle-outline"
-            size={30}
-            color={"#707981"}
-          />
-        </TouchableOpacity>
+        
       </View>
       <View style={styles.screenNameContainer}>
         <View>
           <Text style={styles.screenNameText}>My Cart</Text>
         </View>
-        <View>
+        
           <Text style={styles.screenNameParagraph}>
             View , add or remove products from cart for later purchase
           </Text>
         </View>
-      </View>
+      
 
       <Loader visible={loading} />
 
@@ -186,7 +176,7 @@ const styles = StyleSheet.create({
   screenNameContainer: {
     padding: 20,
     paddingTop: 0,
-    paddingBottom: -10,
+    paddingBottom: 0,
     width: "100%",
     display: "flex",
     flexDirection: "column",
@@ -194,14 +184,17 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   screenNameText: {
-    fontSize: 30,
-    fontFamily: "Sora-SemiBold",
-    color: "#707981",
+    color: "#1C0A00",
+            fontSize: 40,
+            fontFamily: "Sora-SemiBold",
+            marginBottom: 11,
+            marginTop: -10,
   },
   screenNameParagraph: {
-    marginTop: 5,
-    fontSize: 15,
-    fontFamily:"sora-regular"
+    fontFamily: "sora-regular",
+    color: "#BABBC3",
+    fontSize: 18,
+    marginBottom: 10,
   },
   bodyContainer: {
     width: "100%",
@@ -212,7 +205,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   emptyView: {
-    height: 20,
+    height: 15,
   },
   ListContiainerEmpty: {
     width: "100%",
