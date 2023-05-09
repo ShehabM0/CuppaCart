@@ -54,6 +54,9 @@ const styles = StyleSheet.create({
     borderColor: "balck",
     borderWidth: 0.5,
     borderRadius: 15,
+    width:340,
+    marginLeft:10
+
   },
   boxContent: {
     flex: 1,
