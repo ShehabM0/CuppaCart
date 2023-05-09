@@ -12,11 +12,57 @@ import React, { useState, useEffect } from "react";
 import BasicProductList from "../Components/BasicProductList";
 import * as Font from "expo-font";
 import * as LocalAuthentication from "expo-local-authentication";
+import SuccessMessage from '../Components/SuccessMessage';
+import Loader from '../Components/Loader';
+
+
+import { getProductByID } from "../firebase/products";
+import { getCreditCardById } from "../firebase/creditcard";
+import { 
+  getTotalCash, 
+  getTotalSum, getTotalQnt, 
+  orderCart, minusUserCash, minusProductQnt, 
+  addUserBonus 
+} from "../firebase/cart";
+
+
 import { getProducts } from "../firebase/products";
 const CheckoutScreen = ({ navigation }) => {
+
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [Products, setProducts] = useState([]);
   const [index, setIndex] = useState("Cash");
   const [fontLoaded, setFontLoaded] = useState(false);
+
+  const [totalInCash, setTotalInCash] = useState(0);
+
+  useEffect(() => {
+    let b = 0;
+    const getTotal = async () => {
+      let a = 0;
+      await getTotalCash()
+      .then(total => a = total);
+      b = a;
+    }
+    getTotal()
+    .then(() => setTotalInCash(b));    
+  }, []);
+
+
+  function test() {
+    setLoading(true);
+    setTimeout(() => setLoading(false), 3500);
+    orderCart()
+    .then(result => {
+      if(result) {
+        setTimeout(() => {
+            setSuccess(true);
+            setTimeout(() => setSuccess(false), 4000);
+        }, 3500);
+      }
+    });
+  }
 
   async function handleAuthentication() {
     let hasHardware = await LocalAuthentication.hasHardwareAsync();
@@ -85,6 +131,13 @@ const CheckoutScreen = ({ navigation }) => {
   }
 
   return (
+    <>
+    <Loader visible={loading} />
+    {
+      success && 
+      <SuccessMessage message={"You payment has been done"}/>
+    }
+
     <View style={styles.container}>
       <View style={styles.topBarContainer}>
         <TouchableOpacity
@@ -100,16 +153,16 @@ const CheckoutScreen = ({ navigation }) => {
           />
         </TouchableOpacity>
         <View style={{ flex: 2, alignItems: "center", right: 23 }}>
-          <Text
-            style={{
-              color: "#1C0A00",
-              fontSize: 24,
-              fontFamily: "Sora-SemiBold",
-              textAlign: "center",
-            }}
-          >
-            Order
-          </Text>
+            <Text
+              style={{
+                color: "#1C0A00",
+                fontSize: 24,
+                fontFamily: "Sora-SemiBold",
+                textAlign: "center",
+              }}
+              >
+              Order
+            </Text>
         </View>
         <View></View>
       </View>
@@ -219,15 +272,15 @@ const CheckoutScreen = ({ navigation }) => {
             <View style={styles.totalOrderInfoContainer}>
               <View style={styles.list}>
                 <Text style={styles.primaryTextSm}>Order</Text>
-                <Text style={styles.secondaryTextSm}>10000000000$</Text>
+                <Text style={styles.secondaryTextSm}>{totalInCash}$</Text>
               </View>
               <View style={styles.list}>
                 <Text style={styles.primaryTextSm}>Delivery</Text>
-                <Text style={styles.secondaryTextSm}>1000000000 $</Text>
+                <Text style={styles.secondaryTextSm}>{totalInCash * 0.05} $</Text>
               </View>
               <View style={styles.list}>
                 <Text style={styles.primaryTextSm}>Total In Cash</Text>
-                <Text style={styles.secondaryTextSm}>10000000000000 $</Text>
+                <Text style={styles.secondaryTextSm}>{totalInCash + (totalInCash * 0.05)} $</Text>
               </View>
             </View>
           </View>
@@ -271,7 +324,7 @@ const CheckoutScreen = ({ navigation }) => {
               marginTop: 50,
               marginLeft: "10%",
             }}
-            onPress={handleAuthentication}
+            onPress={test}
           >
             <Text
               style={{
@@ -287,6 +340,7 @@ const CheckoutScreen = ({ navigation }) => {
         <View style={styles.emptyView}></View>
       </ScrollView>
     </View>
+    </>
   );
 };
 export default CheckoutScreen;
