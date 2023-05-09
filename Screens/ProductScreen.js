@@ -7,8 +7,11 @@ import { getStarsAvg } from "../firebase/reviews";
 import { COLORS } from '../Conts/Color';
 import ReadMore from 'react-native-read-more-text';
 
-import SuccessMessage from "../Components/SuccessMessage"
 import { getProductByID } from "../firebase/products";
+import { getCreditCardById } from "../firebase/creditcard";
+import { getTotalSum, getTotalQnt, orderCart, minusUserCash, minusProductQnt, addUserBonus } from "../firebase/cart";
+
+import SuccessMessage from "../Components/SuccessMessage"
 
 export default function ProductScreen({ navigation, route }) {
 
@@ -26,6 +29,7 @@ export default function ProductScreen({ navigation, route }) {
   const [pricee, setPrice] = useState(price[1]);
   const [coin, setCoin] = useState(40);
   const [qnt, setQnt] = useState(1);
+
 
   useEffect(() => {
     switch(selectedSize) {
