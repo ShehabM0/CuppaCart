@@ -186,7 +186,7 @@ const ProfileScreen = ({ navigation }) => {
                 <Text style={styles.menuItemText}>Support</Text>
               </View>
             </TouchableRipple>
-            <TouchableRipple onPress={() => {}}>
+            <TouchableRipple onPress={() => {   navigation.navigate("SettingsTab");}}>
               <View style={styles.menuItem}>
                 <Ionicons name="settings-outline" color="#C67C4E" size={25} />
                 <Text style={styles.menuItemText}>Settings</Text>
