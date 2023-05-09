@@ -25,6 +25,8 @@ import {
     subscribeUser,
     getUserByEmail,
 } from "../firebase/user";
+import { Ionicons } from "@expo/vector-icons";
+
 import Button from "../Components/Button";
 import Input from "../Components/Input";
 const DeleteUserScreen = ({navigation}) => {
@@ -39,41 +41,42 @@ const DeleteUserScreen = ({navigation}) => {
         alert("User Deleted With Email: " + email);
       }
     }
-       
-         
-        
-
-      
     
   return (
     <View style={styles.container} behavior={"padding"}>
-    <View
-      style={{
-        width: "15%",
-        fontSize: 18,
-        color: "#B9B9B9",
-        padding: 0,
-        borderRadius: 10,
-        marginRight:400,
-      
-        
-      }}
-    >
-      <TouchableOpacity>
-        <Entypo
-         name="chevron-thin-left"
-         style={{
-           fontSize: 18,
-           color: "black",
-           padding: 12,
-           borderRadius: 10,
-           backgroundColor: "#F0F0F3",
-           
-         }}
-         onPress={() => navigation.goBack()}
-        />
-      </TouchableOpacity>
-    </View>
+     <View style={{width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 20,marginTop:30
+    }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+         
+        >
+          <Ionicons
+            name="arrow-back-circle-outline"
+            size={30}
+            color={"#707981"}
+          />
+        </TouchableOpacity>
+        <View style={{ flex: 2, alignItems: "center", right: 12 }}>
+          <Text
+            style={{
+              color: "#1C0A00",
+              fontSize: 22,
+              fontFamily: "Sora-SemiBold",
+              textAlign: "center",
+            }}
+          >
+           Delete Product
+          </Text>
+        </View>
+        <View></View>
+      </View>
     <View style={styles.inputContainer}>
     <Input
            placeholder="User Name"
@@ -95,23 +98,26 @@ const DeleteUserScreen = ({navigation}) => {
   </View>
   )
 }
-
 export default DeleteUserScreen
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      justifyContent: "center",
+      width: "100%",
+      flexDirecion: "row",
+      backgroundColor: "#F5F5F5",
       alignItems: "center",
+      justifyContent: "flex-start",
+      paddingBottom: 0,
+      flex: 1,
     },
     inputContainer: {
       width: "85%",
     },
     input: {
-      backgroundColor: "white",
+
       paddingHorizontal:5,
       paddingVertical: 7,
       borderRadius: 10,
-      width:"95%"
+      width:"92%"
       ,color:"black"
     },
     buttonContainer: {

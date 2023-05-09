@@ -29,7 +29,7 @@ const AddProductsScreen = ({ navigation }) => {
   const [price, setPrice] = useState("");
   const [type, setType] = useState("");
   const [details, setDetails] = useState("");
-  const [Rate, setRate] = useState();
+  const [quantity, setquantity] = useState();
 
   const handleAddProduct = () => {
     addProduct({
@@ -38,7 +38,7 @@ const AddProductsScreen = ({ navigation }) => {
       price,
       type,
       details,
-      Rate,
+      quantity,
     });
     alert("Product Added with Product Name : " + productName);
   };
@@ -128,11 +128,11 @@ const AddProductsScreen = ({ navigation }) => {
             style={styles.input}
           />
           <Input
-            placeholder="Rate"
-            value={Rate}
-            onChangeText={(text) => setRate(text)}
+            placeholder="Quantity"
+            value={quantity}
+            onChangeText={(text) => setquantity(text)}
             iconName="account-star-outline"
-            label="Rate"
+            label="Quantity"
             style={styles.input}
           />
         </View>

@@ -11,6 +11,8 @@ import {
     ScrollView,
     FlatList,
   } from "react-native";
+  import { Ionicons } from "@expo/vector-icons";
+
   import React, { useState, useEffect } from "react";
   import Entypo from "react-native-vector-icons/Entypo";
   import {
@@ -36,6 +38,39 @@ const DeleteProductScreen = ({navigation}) => {
     }
   return (
     <View style={styles.container} behavior={"padding"}>
+       <View style={{width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 20,marginTop:20
+    }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+         
+        >
+          <Ionicons
+            name="arrow-back-circle-outline"
+            size={30}
+            color={"#707981"}
+          />
+        </TouchableOpacity>
+        <View style={{ flex: 2, alignItems: "center", right: 12 }}>
+          <Text
+            style={{
+              color: "#1C0A00",
+              fontSize: 22,
+              fontFamily: "Sora-SemiBold",
+              textAlign: "center",
+            }}
+          >
+           Delete Product
+          </Text>
+        </View>
+        <View></View>
+      </View>
     <View
       style={{
         width: "15%",
@@ -88,19 +123,23 @@ const DeleteProductScreen = ({navigation}) => {
 export default DeleteProductScreen
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      justifyContent: "center",
+      width: "100%",
+      flexDirecion: "row",
+      backgroundColor: "#F5F5F5",
       alignItems: "center",
+      justifyContent: "flex-start",
+      paddingBottom: 0,
+      flex: 1,
     },
     inputContainer: {
       width: "85%",
     },
     input: {
-      backgroundColor: "white",
+     
       paddingHorizontal:5,
       paddingVertical: 7,
       borderRadius: 10,
-      width:"95%"
+      width:"92%"
       ,color:"black"
     },
     buttonContainer: {

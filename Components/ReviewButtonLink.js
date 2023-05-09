@@ -42,8 +42,7 @@ const styles = StyleSheet.create({
   },
   addReviewTxt: {
     textAlignVertical: "center",
-    fontWeight: "bold",
-    fontSize: 18,
+    fontFamily: "Sora-SemiBold",    fontSize: 18,
     color:"#ffffff",
   },
 });

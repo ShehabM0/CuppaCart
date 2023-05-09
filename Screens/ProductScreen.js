@@ -12,7 +12,9 @@ import { getCreditCardById } from "../firebase/creditcard";
 import { getTotalSum, getTotalQnt, orderCart, minusUserCash, minusProductQnt, addUserBonus } from "../firebase/cart";
 
 import SuccessMessage from "../Components/SuccessMessage"
-
+import { getProductByID } from "../firebase/products";
+import * as Font from "expo-font";
+import * as Haptics from "expo-haptics"
 export default function ProductScreen({ navigation, route }) {
 
   const { productName, image, price, details, id } = route.params;
@@ -29,8 +31,7 @@ export default function ProductScreen({ navigation, route }) {
   const [pricee, setPrice] = useState(price[1]);
   const [coin, setCoin] = useState(40);
   const [qnt, setQnt] = useState(1);
-
-
+  const [fontLoaded, setFontLoaded] = useState(false);
   useEffect(() => {
     switch(selectedSize) {
       case 0: 
@@ -62,7 +63,22 @@ export default function ProductScreen({ navigation, route }) {
  useEffect(() => {
     (userFavorite.includes(id)) ? setFavorite('orange') : setFavorite('white');
   }, [userFavorite]);
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "Sora-SemiBold": require("../assets/Fonts/static/Sora-SemiBold.ttf"),
+        "sora-regular": require("../assets/Fonts/static/Sora-Regular.ttf"),
+        "sora-light": require("../assets/Fonts/static/Sora-Light.ttf"),
+      });
+      setFontLoaded(true);
+    };
 
+    loadFonts();
+  }, []);
+
+  if (!fontLoaded) {
+    return null; // Render nothing until the font is loaded
+  }
   function addToFavorite() {
     if(favorite == 'white') {
       setFavorite('orange');
@@ -95,18 +111,21 @@ export default function ProductScreen({ navigation, route }) {
     setSelectedSize(0);
     setPrice(qnt * price[0]);
     setCoin(qnt * coins[0]);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
   }
 
   function setMedium() {
     setSelectedSize(1);
     setPrice(qnt * price[1]);
     setCoin(qnt * coins[1]);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
   }
 
   function setLarge() {
     setSelectedSize(2);
     setPrice(qnt * price[2]);
     setCoin(qnt * coins[2]);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
   }
 
   function increaseQnt() {
@@ -121,7 +140,7 @@ export default function ProductScreen({ navigation, route }) {
   function ShowMore(handlePress) {
     return (
       <TouchableOpacity onPress={handlePress}>
-        <Text style={{ color: "#C67C4E", fontWeight: 'bold' }}>Show More</Text>
+        <Text style={{ color: "#C67C4E", fontFamily:"Sora-SemiBold", }}>Show More</Text>
       </TouchableOpacity>
     );
   }
@@ -129,7 +148,7 @@ export default function ProductScreen({ navigation, route }) {
   function ShowLess(handlePress) {
     return (
       <TouchableOpacity onPress={handlePress}>
-        <Text style={{ color: "#C67C4E", fontWeight: 'bold' }}>Show Less</Text>
+        <Text style={{ color: "#C67C4E", fontFamily:"Sora-SemiBold", }}>Show Less</Text>
       </TouchableOpacity>
     );
   }
@@ -324,7 +343,7 @@ const styles = StyleSheet.create({
   },
   revRate: {
     color: COLORS.white,
-    fontWeight: 'bold',
+    fontFamily:"Sora-SemiBold",
     fontSize: 15,
   },
 
@@ -333,11 +352,12 @@ const styles = StyleSheet.create({
   },
   descTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily:"Sora-SemiBold",
   },
   descBody: {
     fontSize: 15,
     color: 'rgba(0, 0, 0, 0.65)',
+    fontFamily:"sora-regular",
     padding: 5
   },
 
@@ -387,7 +407,7 @@ const styles = StyleSheet.create({
   },
   cartTxt: {
     fontSize: 17,
-    fontWeight: 'bold',
+    fontFamily:"sora-regular",
     color: "#FFFFFF",
   },
 
