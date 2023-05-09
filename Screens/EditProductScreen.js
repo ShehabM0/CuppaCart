@@ -181,11 +181,11 @@ const styles = StyleSheet.create({
         width: "85%",
       },
       input: {
-        backgroundColor: "white",
+
         paddingHorizontal:5,
         paddingVertical: 7,
         borderRadius: 10,
-        width:"95%"
+        width:"92%"
         ,color:"black"
       },
     buttonContainer: {
