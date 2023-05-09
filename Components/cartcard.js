@@ -76,19 +76,19 @@ import {
 
     return (
                 
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Product", {
-            productName,
-            price,
-            image,
-            details,
-            type,
-            id,
-            Rate,
-          });
-        }}
-      >
+      // <TouchableOpacity
+      //   onPress={() => {
+      //     navigation.navigate("Product", {
+      //       productName,
+      //       price,
+      //       image,
+      //       details,
+      //       type,
+      //       id,
+      //       Rate,
+      //     });
+      //   }}
+      // >
   
           
   
@@ -117,7 +117,7 @@ import {
             </View>
           </LinearGradient>
         </View>
-      </TouchableOpacity>
+      // </TouchableOpacity>
      
   
     );

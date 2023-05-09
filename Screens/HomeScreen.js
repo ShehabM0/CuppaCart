@@ -216,7 +216,7 @@ export default function ProfileScreen({ navigation }) {
           return (
             <ProductCard
               productName={itemData.item.productName}
-              price={itemData.item.price}
+              price={itemData.item.price[1]}
               details={itemData.item.details}
               image={itemData.item.image}
               Rate={itemData.item.Rate}
