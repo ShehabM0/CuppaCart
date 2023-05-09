@@ -206,7 +206,14 @@ const ProfileScreen = ({ navigation }) => {
             ]}
           >
             <Title style={{ color: "white" }}>{Products.length}</Title>
-            <Caption style={{ color: "white", fontSize: 15 }}>Products</Caption>
+            <TouchableRipple
+              onPress={() => {
+                navigation.navigate("AllProduct");
+              }}
+            >
+           <Caption style={{ color: "white", fontSize: 15 }}>Products</Caption>      
+        </TouchableRipple>
+          
           </View>
 
           <View style={styles.infoBox}>
