@@ -150,7 +150,7 @@ export default function ProfileScreen({ navigation }) {
             </Text>
           </View>
           <Text style={{marginTop: 5, fontSize: 15, color: '#908e8c',fontFamily: "Sora-SemiBold"}}>
-            What do you want today
+            What do you want to drink today ?
           </Text>
         </View>
        
