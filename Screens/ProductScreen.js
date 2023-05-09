@@ -12,12 +12,13 @@ import { getCreditCardById } from "../firebase/creditcard";
 import { getTotalSum, getTotalQnt, orderCart, minusUserCash, minusProductQnt, addUserBonus } from "../firebase/cart";
 
 import SuccessMessage from "../Components/SuccessMessage"
-import { getProductByID } from "../firebase/products";
-import * as Font from "expo-font";
 import * as Haptics from "expo-haptics"
+import * as Font from "expo-font";
+
+
 export default function ProductScreen({ navigation, route }) {
 
-  const { productName, image, price, details, id } = route.params;
+  const { productName, image, details, id } = route.params;
 
   const user_id = getCurrUserId();
   const coins = [30, 40, 50];
@@ -28,10 +29,13 @@ export default function ProductScreen({ navigation, route }) {
   const [starsCount, setStarsCount] = useState(0);
   const [success, setSuccess] = useState(false);
   const [starsAvg, setStarsAvg] = useState(0);
-  const [pricee, setPrice] = useState(price[1]);
+  const [prices, setPrices] = useState([]);
+  const [pricee, setPrice] = useState(prices[1]);
   const [coin, setCoin] = useState(40);
   const [qnt, setQnt] = useState(1);
   const [fontLoaded, setFontLoaded] = useState(false);
+
+
   useEffect(() => {
     switch(selectedSize) {
       case 0: 
@@ -46,6 +50,12 @@ export default function ProductScreen({ navigation, route }) {
   }, [qnt]);
 
   useEffect(() => {
+    getProductByID(id)
+    .then(product => {
+      setPrices(product.price);
+      setPrice(product.price[1]);
+    });
+
     getUserById(user_id)
     .then(user => {
       setUserFavorite(user[0].favorite);
@@ -109,21 +119,21 @@ export default function ProductScreen({ navigation, route }) {
 
   function setSmall() {
     setSelectedSize(0);
-    setPrice(qnt * price[0]);
+    setPrice(qnt * prices[0]);
     setCoin(qnt * coins[0]);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
   }
 
   function setMedium() {
     setSelectedSize(1);
-    setPrice(qnt * price[1]);
+    setPrice(qnt * prices[1]);
     setCoin(qnt * coins[1]);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
   }
 
   function setLarge() {
     setSelectedSize(2);
-    setPrice(qnt * price[2]);
+    setPrice(qnt * prices[2]);
     setCoin(qnt * coins[2]);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
   }
