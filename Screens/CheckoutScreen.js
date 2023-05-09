@@ -50,7 +50,7 @@ const CheckoutScreen = ({ navigation }) => {
   }, []);
 
 
-  function test() {
+  function CheckOut() {
     setLoading(true);
     setTimeout(() => setLoading(false), 3500);
     orderCart()
@@ -324,7 +324,7 @@ const CheckoutScreen = ({ navigation }) => {
               marginTop: 50,
               marginLeft: "10%",
             }}
-            onPress={test}
+            onPress={CheckOut} // add handleAuthentication
           >
             <Text
               style={{
