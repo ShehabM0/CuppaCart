@@ -27,6 +27,20 @@ async function getUserCreditCardBalance() {
     return user_cash;
 }
 
+async function getTotalCash() {
+    const user_id = getCurrUserId();
+    let cashSum = 0;
+    await getUserById(user_id)
+    .then(async (user) => {
+        for(const cartProduct of user[0].cart) {
+            await getProductByID(cartProduct.product_id)
+            .then(product => cashSum += (cartProduct.qnt * product.price[cartProduct.size]))
+        }
+    });
+    // console.log(cashSum);
+    return cashSum;
+}
+
 async function getTotalSum() {
     const user_id = getCurrUserId();
     let cashSum = 0;
@@ -95,10 +109,13 @@ async function orderCart() {
     .then(res => f2 = res);
 
     if(f1 && f2) {
+        await minusUserCash();
+        await minusProductQnt();
+        await addUserBonus();
         console.log("DONE");
         return true;
     } else {
-        console.log("ERRROR");
+        console.log("ERROR");
         return false;
     }
 }
@@ -136,17 +153,16 @@ async function minusProductQnt() {
 
 async function addUserBonus() {
     const user_id = getCurrUserId();
-    
     await getUserById(user_id)
-    .then(async (user) => updateUser(user_id, { balance: await user[0].balance + 10 }));
+    .then(async (user) => updateUser(user_id, { balance: await user[0].balance + 10, cart: [] }));
 }
-
 
 
 export {
     minusProductQnt,
     minusUserCash,
     addUserBonus,
+    getTotalCash,
     getTotalSum,
     getTotalQnt,
     orderCart,
