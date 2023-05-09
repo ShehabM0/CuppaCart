@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { View, Text, SafeAreaView, Keyboard, Alert } from "react-native";
 import {COLORS} from "../Conts/Color";
 import Button from "../Components/Button";
@@ -8,6 +8,7 @@ import Loader from "../Components/Loader";
 import { auth, db } from "../firebase/config";
 import {
   reauthenticateWithCredential, updatePassword, EmailAuthProvider } from "firebase/auth";
+  import * as Font from "expo-font";
 
 const ChangePassword = ({ navigation }) => {
   const [oldPassword, setOldPassword] = useState('');
@@ -15,6 +16,8 @@ const ChangePassword = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = React.useState({});
   const [loading, setLoading] = React.useState(false);
+  const [fontLoaded, setFontLoaded] = useState(false);
+
   const currentUser = auth.currentUser;
 
   const validate = async () => {
@@ -66,6 +69,25 @@ const ChangePassword = ({ navigation }) => {
     };
   };
 
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "Sora-SemiBold": require("../assets/Fonts/static/Sora-SemiBold.ttf"),
+        "sora-regular": require("../assets/Fonts/static/Sora-Regular.ttf"),
+        "sora-light": require("../assets/Fonts/static/Sora-Light.ttf"),
+      });
+      setFontLoaded(true);
+    };
+
+    loadFonts();
+  }, []);
+
+  if (!fontLoaded) {
+    return null; // Render nothing until the font is loaded
+  }
+
+
   const handleOnchange = (text, input) => {
     setInputs((prevState) => ({ ...prevState, [input]: text }));
   };
@@ -77,10 +99,10 @@ const ChangePassword = ({ navigation }) => {
     <SafeAreaView style={{ backgroundColor: COLORS.white, flex: 1 }}>
       <Loader visible={loading} />
       <View style={{ paddingTop: 50, paddingHorizontal: 20 }}>
-        <Text style={{ color: COLORS.black, fontSize: 30, fontWeight: "bold" }}>
+        <Text style={{ color: COLORS.black, fontSize: 28, fontFamily:"Sora-SemiBold" }}>
           Change your password
         </Text>
-        <Text style={{ color: COLORS.grey, fontSize: 18, marginVertical: 10 }}>
+        <Text style={{ color: COLORS.grey, fontSize: 16, marginVertical: 10,fontFamily:"sora-regular" }}>
           Enter your details to change your password
         </Text>
         <View style={{ marginVertical: 20 }}>
@@ -120,7 +142,7 @@ const ChangePassword = ({ navigation }) => {
             onPress={() => navigation.navigate("ForgetPassword")}
             style={{
               color: COLORS.black,
-              fontWeight: "bold",
+              fontFamily:"Sora-SemiBold",
               textAlign: "center",
               fontSize: 16,
               padding: 2,
