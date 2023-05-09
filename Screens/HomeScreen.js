@@ -155,7 +155,7 @@ export default function ProfileScreen({ navigation }) {
         </View>
        
         <TouchableOpacity
-        onPress={() => console.log("fuck")}
+        onPress={() => navigation.navigate("ProfileTab")}
             style={{
               borderRadius: 10,
               overflow: "hidden",
