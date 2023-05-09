@@ -223,7 +223,7 @@ const CheckoutScreen = ({ navigation }) => {
               </View>
               <View style={styles.list}>
                 <Text style={styles.primaryTextSm}>Delivery</Text>
-                <Text>1000000000 $</Text>
+                <Text style={styles.secondaryTextSm}>1000000000 $</Text>
               </View>
               <View style={styles.list}>
                 <Text style={styles.primaryTextSm}>Total In Cash</Text>
