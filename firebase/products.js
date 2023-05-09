@@ -11,6 +11,7 @@ import {
   orderBy,
   where,
   getDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { async } from "@firebase/util";
 
@@ -63,6 +64,24 @@ async function editProduct(object) {
   }
 }
 
+async function updateProduct(id, data) {
+  let result;
+  await updateDoc(doc(db, "products", id), data)
+  .then(() => {
+    result = {
+      status: true,
+      message: "updated"
+    }
+  })
+  .catch((error) => {
+    result = {
+      status: false,
+      message: error.message
+    }
+  })
+  return result;
+}
+
 async function deleteProduct(object) {
   try {
     await deleteDoc(doc(db, "products", object.id));
@@ -91,6 +110,7 @@ export {
   getProducts,
   addProduct,
   editProduct,
+  updateProduct,
   deleteProduct,
   subscribeProduct,
   getProductByID,

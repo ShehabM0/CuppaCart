@@ -1,7 +1,14 @@
-import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, doc, addDoc, getDocs, getDoc, query, where, updateDoc } from 'firebase/firestore';
 import { db } from './config';
 
 const creditCardCollection = collection(db, "creditcards");
+
+async function getCreditCardById(id) {
+  const mdoc = doc(db, "creditcards", id);
+  const doc_ref = await getDoc(mdoc);
+  return doc_ref.data();
+}
+
 
 async function getCreditCard(creditCardData) {
     const q = query(
@@ -38,9 +45,29 @@ async function addCreditCard(creditCardData) {
     return result;
 }
 
+async function updateCreditCard(id, data) {
+    let result;
+    await updateDoc(doc(db, "creditcards", id), data)
+    .then(() => {
+        result = {
+            status: true,
+            message: "updated"
+        }
+    })
+    .catch((error) => {
+        result = {
+            status: false,
+            message: error.message
+        }
+    })
+    return result;
+}
+
 
 export {
+    updateCreditCard,
     getCreditCardByNumber,
+    getCreditCardById,
     getCreditCard,
     addCreditCard,
 }
