@@ -15,6 +15,7 @@ import { getUserById, deleteUser } from "../firebase/user";
 import { doc, deleteDoc } from "firebase/firestore";
 import { getUserUId } from "../firebase/auth";
 import { getFormatedDate } from "react-native-modern-datepicker";
+import * as Font from "expo-font";
 
 const SettingsScreen = ({ navigation }) => {
   const [firstname, setFirstname] = useState("");
@@ -33,6 +34,7 @@ const SettingsScreen = ({ navigation }) => {
   const [selectedStartDate, setSelectedStartDate] = useState("");
   const [startedDate, setStartedDate] = useState("12/12/2023");
   const [isLoading, setIsLoading] = useState(false);
+  const [fontLoaded, setFontLoaded] = useState(false);
 
   useEffect(() => {
     getUserUId().then((id) => {
@@ -48,6 +50,23 @@ const SettingsScreen = ({ navigation }) => {
       });
     });
   }, []);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "Sora-SemiBold": require("../assets/Fonts/static/Sora-SemiBold.ttf"),
+        "sora-regular": require("../assets/Fonts/static/Sora-Regular.ttf"),
+        "sora-light": require("../assets/Fonts/static/Sora-Light.ttf"),
+      });
+      setFontLoaded(true);
+    };
+
+    loadFonts();
+  }, []);
+
+  if (!fontLoaded) {
+    return null; // Render nothing until the font is loaded
+  }
 
   const handleDelete = () => {
     Alert.alert(
@@ -157,14 +176,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
-    fontWeight: "700",
+    fontFamily:"Sora-SemiBold",
     color: "#1d1d1d",
     marginBottom: 6,
     marginTop: 20,
   },
   subtitle: {
     fontSize: 15,
-    fontWeight: "500",
+    fontFamily:"sora-light",
     color: "#929292",
   },
   menuWrapper: {
@@ -179,6 +198,7 @@ const styles = StyleSheet.create({
   menuItemText: {
     color: "#000",
     marginLeft: 10,
+    fontFamily:"sora-regular",
     fontWeight: "600",
     fontSize: 16,
     lineHeight: 26,
