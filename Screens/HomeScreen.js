@@ -20,7 +20,7 @@ import { StatusBar } from "expo-status-bar";
 import { SearchBar } from "react-native-elements";
 import { auth,db } from "../firebase/config";
 import { getUserUId, getUserById } from "../firebase/user";
-import { getProducts } from "../firebase/products";
+import { getProductByID,getProducts } from "../firebase/products";
 import ProductCard from "../Components/productCard";
 import { logout } from "../firebase/auth";
 import { BlurView } from "expo-blur";
