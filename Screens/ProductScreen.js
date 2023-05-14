@@ -12,6 +12,7 @@ import { getTotalSum, getTotalQnt, orderCart, minusUserCash, minusProductQnt, ad
 import SuccessMessage from "../Components/SuccessMessage"
 import * as Haptics from "expo-haptics"
 import * as Font from "expo-font";
+import { getProductByID } from "../firebase/products";
 
 
 export default function ProductScreen({ navigation, route }) {
@@ -113,6 +114,9 @@ export default function ProductScreen({ navigation, route }) {
       });
     })
     .catch(err => alert(err.message));
+    Haptics.notificationAsync(
+      Haptics.NotificationFeedbackType.Success
+    )
   }
 
   function setSmall() {
