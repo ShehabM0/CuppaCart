@@ -85,7 +85,7 @@ const ProfileScreen = ({ navigation }) => {
     return null; // Render nothing until the font is loaded
   }
   return (
-    <LinearGradient colors={["white", "white"]} style={styles.linearGradient}>
+    
       <ScrollView style={styles.scrollView}>
         <SafeAreaView style={styles.container}>
           <View style={styles.userInfoSection}>
@@ -114,17 +114,17 @@ const ProfileScreen = ({ navigation }) => {
           <View style={styles.userInfoSection}>
             <View style={styles.row}>
               <Icon name="map-marker-radius" color="#777777" size={20} />
-              <Text style={{ color: "black", marginLeft: 20,fontFamily:"sora-regular" }}>
+              <Text style={{ color: "#000000", marginLeft: 20,fontFamily:"sora-regular" }}>
                 Cairo,Egypt
               </Text>
             </View>
             <View style={styles.row}>
               <Icon name="phone" color="#777777" size={20} />
-              <Text style={{ color: "black", marginLeft: 20,fontFamily:"sora-regular" }}>{phone}</Text>
+              <Text style={{ color: "#000000", marginLeft: 20,fontFamily:"sora-regular" }}>{phone}</Text>
             </View>
             <View style={styles.row}>
               <Icon name="email" color="#777777" size={20} />
-              <Text style={{ color: "black", marginLeft: 20 ,fontFamily:"sora-regular" }}>{email}</Text>
+              <Text style={{ color: "#000000", marginLeft: 20 ,fontFamily:"sora-regular" }}>{email}</Text>
             </View>
           </View>
 
@@ -138,8 +138,8 @@ const ProfileScreen = ({ navigation }) => {
                 },
               ]}
             >
-              <Title style={{ color: "black",fontFamily:"sora-regular"  }}>-</Title>
-              <Caption style={{ color: "black", fontSize: 15,fontFamily:"sora-regular"  }}>Bonus</Caption>
+              <Title style={{ color: "#000000",fontFamily:"sora-regular"  }}>-</Title>
+              <Caption style={{ color: "#000000", fontSize: 15,fontFamily:"sora-regular"  }}>Bonus</Caption>
             </View>
             <View
               style={[
@@ -150,15 +150,15 @@ const ProfileScreen = ({ navigation }) => {
                 },
               ]}
             >
-              <Title style={{ color: "black",fontFamily:"sora-regular"  }}>-</Title>
-              <Caption style={{ color: "black", fontSize: 15,fontFamily:"sora-regular"  }}>
+              <Title style={{color: "#000000",fontFamily:"sora-regular"  }}>-</Title>
+              <Caption style={{ color: "#000000", fontSize: 15,fontFamily:"sora-regular"  }}>
                 Orders
               </Caption>
             </View>
 
             <View style={styles.infoBox}>
-              <Title style={{ color: "black",fontFamily:"sora-regular"  }}>{balance}</Title>
-              <Caption style={{ color: "black ", fontSize: 15,fontFamily:"sora-regular"  }}>
+              <Title style={{ color: "#000000",fontFamily:"sora-regular"  }}>{balance}</Title>
+              <Caption style={{ color: "#000000", fontSize: 15,fontFamily:"sora-regular"  }}>
                 Balance
               </Caption>
             </View>
@@ -202,7 +202,7 @@ const ProfileScreen = ({ navigation }) => {
           </TouchableOpacity>
         </SafeAreaView>
       </ScrollView>
-    </LinearGradient>
+    
   );
 };
 
