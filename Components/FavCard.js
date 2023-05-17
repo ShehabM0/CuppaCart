@@ -1,27 +1,17 @@
-import React ,{useEffect,useState} from "react";
+import React , { useEffect,useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   Image,
   TouchableOpacity,
-  Dimensions,SafeAreaView,ScrollView
+  Dimensions,
 } from "react-native";
+import { getUserById, getCurrUserId, updateUser } from "../firebase/user";
+import SuccessMessage from "../Components/SuccessMessage";
 import { useNavigation } from "@react-navigation/core";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
-import {
-  getUserUId,
-  addUser,
-  deleteUser,
-  editUser,
-  getUserById,
-  getUserByName,
-  getUsers,
-  subscribeUser,
-  getCurrUserId,
-  updateUser,
-  } from "../firebase/user";
 
 const FavCard = ({
   productName,
@@ -31,55 +21,26 @@ const FavCard = ({
   type,
   id,
   Rate,
-  cart,
-  setCart,
 }) => {
   const navigation = useNavigation();
   const { width } = Dimensions.get("window");
 
- 
+  const [success, setSuccess] = useState(true);
   const [userFav, setUserFav] = useState([]);
-  const [user, setUser] = useState();
-  const [ProductInFav, setProductInFav] = useState();
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setname] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [role, setRole] = useState("");
-  const [userCart, setUserCart] = useState([]);
   const user_id = getCurrUserId();
-
+  
   useEffect(() => {
-    getUserUId().then((id) => {
-      getUserById(id).then((user) => {
-        user.forEach((user) => {
-          console.log("fav is ", user.favorite);
-          setUserFav(user.favorite);
-          setUser(user);
-        });
-        setLoading(false); // Hide the loader when the data fetching is complete
-      });
-    });
+    getUserById(user_id).then((user) => user.forEach((user) => setUserFav(user.favorite)));
   }, []);
   
   const handleDelete = async () => {
-    // var userfavorite = user.favorite;
-    // userfavorite = userfavorite.filter((e) => e !== id);
-    // console.log("here",userfavorite);
-    // editUser({
-    //   ...user,
-    //   favorite: userfavorite,
-    // });
-    // alert("Product Deleted From Cart");
     const id_idx = userFav.indexOf(id);
     userFav.splice(id_idx, 1);
     updateUser(user_id, { favorite: [...userFav] });
-    alert("Product Deleted From Cart");
+    alert("Product Deleted From Your Favorite");
   };
-  return (
-    
-            
+  
+  return ( 
     <TouchableOpacity
       onPress={() => {
         navigation.navigate("Product", {
@@ -93,9 +54,6 @@ const FavCard = ({
         });
       }}
     >
-
-        
-
       <View style={styles.container}>
         <LinearGradient
           colors={["#C67C4E", "black"]}
@@ -109,7 +67,7 @@ const FavCard = ({
                 <Text style={styles.type}>{type}</Text>
               </View>
               <View style={styles.priceContainer}>
-                <Text style={styles.price}>{price} $</Text>
+                <Text style={styles.price}>{price[1]} $</Text>
 
                 <TouchableOpacity onPress={() => {handleDelete()}}>
                 <View style={styles.menuItem}>
@@ -122,8 +80,6 @@ const FavCard = ({
         </LinearGradient>
       </View>
     </TouchableOpacity>
-   
-
   );
 };
 
