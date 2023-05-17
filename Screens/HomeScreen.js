@@ -9,52 +9,48 @@ import {
 } from 'react-native';
 import {
   FlatList,
-  ScrollView,
   TextInput,
-  TouchableHighlight,
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { doc, setDoc } from "firebase/firestore";
-import { StatusBar } from "expo-status-bar";
-import { SearchBar } from "react-native-elements";
-import { auth,db } from "../firebase/config";
+import { auth } from "../firebase/config";
 import { getUserUId, getUserById } from "../firebase/user";
-import { getProductByID,getProducts } from "../firebase/products";
+import { getProductByID, getProducts } from "../firebase/products";
+import { getStarsAvg } from "../firebase/reviews";
 import ProductCard from "../Components/productCard";
 import { logout } from "../firebase/auth";
 import { BlurView } from "expo-blur";
-import { Ionicons } from "@expo/vector-icons";
 import * as Font from "expo-font";
-import { AppLoading } from "expo";
 const {width} = Dimensions.get('screen');
 const cardWidth = width / 2 - 20;
 
 export default function ProfileScreen({ navigation }) {
-  const [fullname, setfullname] = useState("");
   const [firstname, setFirstname] = useState("");
   const [image, setimage] = useState(null);
   const [role, setRole] = useState("");
-  const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const windowWidth = Dimensions.get("window").width;
-  const windowHeight = Dimensions.get("window").height;
   const [fontLoaded, setFontLoaded] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [selectedCategoryIndex, setSelectedCategoryIndex] = React.useState(0);
   const isIOS = Platform.OS === "ios";
 
   const getProductHandle = async () => {
-    const arr = await getProducts();
+    const products = await getProducts();
+    let allProducts = [];
+
+    for (const product of products) {
+      const productRate = await getStarsAvg(product.id);
+      allProducts.push({ ...product, 'rate': productRate.starsAvg });
+    }
+
     if (searchTerm) {
-      const filteredArr = arr.filter((product) =>
+      const filteredProductsArr = allProducts.filter((product) =>
         product.productName.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setFilteredProducts(filteredArr);
+      setFilteredProducts(filteredProductsArr);
     } else {
-      setFilteredProducts(arr);
+      setFilteredProducts(allProducts);
     }
-  };
+  }
 
   useEffect(() => {
     getProductHandle();
@@ -139,7 +135,8 @@ export default function ProfileScreen({ navigation }) {
   //     </ScrollView>
   //   );
   // };
-  return (
+  return (filteredProducts.length > 0) ?
+  (
     <SafeAreaView style={{flex: 1, backgroundColor:"#ffff",}}>
       <View style={style.header}>
         <View style={{}}>
@@ -208,7 +205,7 @@ export default function ProfileScreen({ navigation }) {
         </Image>
       </View>
       <FlatList
-        style={{ padding: 10,marginTop:5}}
+        style={{padding: 10,marginTop:5}}
         showsVerticalScrollIndicator={false}
         data={filteredProducts}
         numColumns={2}
@@ -219,12 +216,89 @@ export default function ProfileScreen({ navigation }) {
               price={itemData.item.price[1]}
               details={itemData.item.details}
               image={itemData.item.image}
-              Rate={itemData.item.Rate}
+              rate={itemData.item.rate}
               id={itemData.item.id}
             />
           );
         }}
       />
+    </SafeAreaView>
+  ) :
+  (
+    <SafeAreaView style={{flex: 1, backgroundColor:"#ffff",}}>
+      <View style={style.header}>
+        <View style={{}}>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{fontSize: 25 ,fontFamily: "Sora-SemiBold"}}>Hello,</Text>
+            <Text style={{fontSize: 25, fontFamily: "Sora-SemiBold", marginLeft: 6}}>
+             {firstname}
+            </Text>
+          </View>
+          <Text style={{marginTop: 5, fontSize: 15, color: '#908e8c',fontFamily: "Sora-SemiBold"}}>
+            What do you want to drink today ?
+          </Text>
+        </View>
+       
+        <TouchableOpacity
+          onPress={() => navigation.navigate("ProfileTab")}
+            style={{
+              borderRadius: 10,
+              overflow: "hidden",
+              width: 10 * 5,
+              height: 10 *5,
+            }}
+          >
+            <BlurView
+              style={{
+                height: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Image
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  borderRadius: 10,
+                }}
+                source={{uri:image}}
+              />
+            </BlurView>
+          </TouchableOpacity>
+       
+      </View>
+      <View
+        style={{
+          marginTop: 23,
+          flexDirection: 'row',
+          paddingHorizontal: 20,
+        }}>
+        <View style={style.inputContainer}>
+          <Icon name="search" size={28} />
+          <TextInput
+            style={{flex: 1, fontSize: 18}}
+            placeholder="Search for Coffee"
+            value={searchTerm}
+            onChangeText={(query) => setSearchTerm(query)}
+            onIconPress={getProductHandle}
+          />
+        </View>
+       
+      </View>
+      <View>
+        <Image style={{width:300,height:140 ,borderRadius:10,marginLeft:30,marginTop:25,left:18}} 
+          source={require("../assets/poster.png")}>
+        </Image>
+      </View>
+
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ padding: 20 }}>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center' }}>
+            Oops...drink you are searching for doesn't exist at this time.
+          </Text>
+        </View>
+      </View>
+      
     </SafeAreaView>
   );
 }
