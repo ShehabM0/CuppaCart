@@ -1,73 +1,41 @@
 import {
   StyleSheet,
   Text,
-  StatusBar,
   View,
-  ScrollView,
-  TouchableOpacity,
-  RefreshControl,
   FlatList,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import FavCard from "../Components/FavCard";
-import { getProductByID, getProducts } from "../firebase/products";
-import {
-  getUserUId,
-  addUser,
-  deleteUser,
-  editUser,
-  getUserById,
-  getUserByName,
-  getUsers,
-  subscribeUser,
-} from "../firebase/user";
-import Loader from "../Components/Loader";
-import { Ionicons } from "@expo/vector-icons";
-import WishList from "../Components/WishlistCard";
-let ar = [];
-let prod;
+import Loader from '../Components/Loader';
+import { getProductByID } from "../firebase/products";
+import { getUserById, getCurrUserId } from "../firebase/user";
+
 const MyWishlistScreen = ({ navigation, route }) => {
+
+  const [productsInFav, setProductsInFav] = useState([]);
   const [userFav, setUserFav] = useState([]);
-  const [user, setUser] = useState();
-  const [ProductInFav, setProductInFav] = useState();
-  const [loading, setLoading] = useState(false);
+
+  const getProductHandle = async () => {
+    let allProducts = [];
+    for (const product_id of userFav) {
+      const getProdduct = await getProductByID(product_id);
+      allProducts.push(getProdduct);
+    }
+    setProductsInFav(allProducts)
+  };
 
   useEffect(() => {
-    (async () => {
-      let ar = [];
-      let prod;
-      for (let i = 0; i < userFav.length && i < userFav.length; i++) {
-        prod = await getProductByID(userFav[i]);
-        ar.push(prod);
-      }
-      //console.log(prod);
-      // console.log(ar);
-      setProductInFav(ar);
-    })();
+    getProductHandle();
   }, [userFav]);
 
+
   useEffect(() => {
-    const a = navigation.addListener("focus", () => {
-      setLoading(true); // Show the loader when the event occurs
+      const user_id = getCurrUserId();
+      getUserById(user_id).then((user) => setUserFav(user[0].favorite));
+  }, [userFav]);
 
-      getUserUId().then((id) => {
-        getUserById(id).then((user) => {
-          user.forEach((user) => {
-            console.log("fav is ", user.favorite);
-            setUserFav(user.favorite);
-            setUser(user);
-          });
-          setLoading(false); // Hide the loader when the data fetching is complete
-        });
-      });
-    });
-
-    return () => {
-      a.remove(); // Clean up the listener when the component unmounts
-    };
-  }, [navigation]);
-
-  return (
+  return (userFav.length > 0) ?
+  (
     <View style={styles.container}>
       <View style={styles.topBarContainer}></View>
       <View style={styles.screenNameContainer}>
@@ -94,11 +62,9 @@ const MyWishlistScreen = ({ navigation, route }) => {
         </Text>
       </View>
 
-     
-      {/* style={{flex: 1, width: "100%", padding: 20}} */}
       <FlatList
         style={{ flex: 1, width: "105%", padding: 20 }}
-        data={ProductInFav}
+        data={productsInFav}
         numColumns={1}
         showsHorizontalScrollIndicator={true}
         renderItem={(itemData) => {
@@ -117,7 +83,42 @@ const MyWishlistScreen = ({ navigation, route }) => {
       />
       <View style={styles.emptyView}></View>
     </View>
-  );
+  ) :
+  (
+    <>
+      <View style={styles.topBarContainer}></View>
+        <View style={styles.screenNameContainer}>
+          <Text
+            style={{
+              color: "#1C0A00",
+              fontSize: 40,
+              fontFamily: "Sora-SemiBold",
+              marginBottom: 11,
+              marginTop: -10,
+            }}
+          >
+            Favourites
+          </Text>
+          <Text
+            style={{
+              fontFamily: "Sora-SemiBold",
+              color: "#BABBC3",
+              fontSize: 18,
+              marginBottom: 11,
+            }}
+          >
+            View, add or remove products from favourites for later purchase
+          </Text>
+        </View>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ padding: 20 }}>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center' }}>
+            Oops..your favourite list is empty.
+          </Text>
+        </View>
+      </View>
+    </>
+  )
 };
 
 export default MyWishlistScreen;
