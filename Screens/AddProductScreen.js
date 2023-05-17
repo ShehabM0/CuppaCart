@@ -1,48 +1,85 @@
 import {
-  Alert,
-  KeyboardAvoidingView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
-  Image,
-  StatusBar,
   ScrollView,
-  FlatList,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import SuccessMessage from "../Components/SuccessMessage";
 import Entypo from "react-native-vector-icons/Entypo";
-import {
-  addProduct,
-  deleteProduct,
-  editProduct,
-  getProductByName,
-  getProducts,
-  subscribeProduct,
-} from "../firebase/products";
+import { addProduct } from "../firebase/products";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
+
+
 const AddProductsScreen = ({ navigation }) => {
   const [productName, setProductName] = useState("");
   const [image, setImage] = useState(null);
   const [price, setPrice] = useState("");
+  const [coin, setCoin] = useState("");
   const [type, setType] = useState("");
   const [details, setDetails] = useState("");
-  const [quantity, setquantity] = useState();
+  const [quantity, setquantity] = useState(0);
+  const [success, setSuccess] = useState(false);
+
+  function handleCoins() {
+    let coins = coin.trim();
+    coins = coins.split(" ");
+    if(coins.length != 3) {
+      alert("Coins must be three values one for Small, Medium and Large sizes");
+      return false;
+    }
+    coins.forEach(coin => {
+      if(isNaN(coin)) {
+        alert("Coins must be three values one for Small, Medium and Large sizes");
+        return false;
+      }
+    })
+    coins = coins.map((str) => { return parseInt(str); });
+    return coins;
+  }
+
+  function handlePrices() {
+    let prices = price.trim();
+    prices = prices.split(" ");
+    if(prices.length != 3) {
+      alert("Prices must be three values one for Small, Medium and Large sizes");
+      return false;
+    }
+    prices.forEach(price => {
+      if(isNaN(price)) {
+        alert("Prices must be three values one for Small, Medium and Large sizes");
+        return false;
+      }
+    })
+    prices = prices.map((str) => { return parseInt(str); });
+    return prices;
+  }
 
   const handleAddProduct = () => {
-    addProduct({
-      productName,
-      image,
-      price,
-      type,
-      details,
-      quantity,
-    });
-    alert("Product Added with Product Name : " + productName);
+    const price = handlePrices();
+    const coin = handleCoins();
+    if(price && coin) {
+      addProduct({
+        productName,
+        image,
+        price,
+        coin,
+        type,
+        details,
+        quantity,
+      });
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 2000);
+    }
   };
   return (
+    <>
+    {
+      success &&
+      <SuccessMessage message={`Product ${productName} Added`}/>
+    }
     <ScrollView style={{ padding: 20 }}>
       <View style={styles.container} behavior={"padding"}>
         <View
@@ -103,11 +140,19 @@ const AddProductsScreen = ({ navigation }) => {
             style={styles.input}
           />
           <Input
-            placeholder="price"
+            placeholder="Small Medium Large"
             value={price}
             onChangeText={(text) => setPrice(text)}
+            iconName="cash"
+            label="Prices 'Enter 3 integer values seperated by space'"
+            style={styles.input}
+          />
+          <Input
+            placeholder="Small Medium Large"
+            value={coin}
+            onChangeText={(text) => setCoin(text)}
             iconName="bitcoin"
-            label="price"
+            label="Coins 'Enter 3 integer values seperated by space'"
             style={styles.input}
           />
 
@@ -154,6 +199,7 @@ const AddProductsScreen = ({ navigation }) => {
         </View>
       </View>
     </ScrollView>
+    </>
   );
 };
 
@@ -182,7 +228,7 @@ const styles = StyleSheet.create({
     width: "60%",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 40,
+    marginBottom: 40,
   },
   button: {
     backgroundColor: "#0782F9",
