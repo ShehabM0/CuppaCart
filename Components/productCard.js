@@ -2,7 +2,6 @@ import react, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   Image,
   TouchableOpacity,
   Dimensions,
@@ -19,6 +18,7 @@ const ProductCard = ({
   type,
   id,
   quantity,
+  rate,
 }) => {
   const navigation = useNavigation();
   const { width } = Dimensions.get("window");
@@ -123,7 +123,7 @@ const ProductCard = ({
                     fontFamily:"Sora-SemiBold"
                   }}
                 >
-                  1.5
+                  {rate}
                 </Text>
               </BlurView>
             </View>
