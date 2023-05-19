@@ -12,10 +12,10 @@
     "slug": "RN_App",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/iconcup.png",
+    "icon": "./assets/cupicon.jpg",
     "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./assets/splashcup.pmg",
+      "image": "./assets/splashcup.jpg",
       "resizeMode": "cover"
     },
     "assetBundlePatterns": [
