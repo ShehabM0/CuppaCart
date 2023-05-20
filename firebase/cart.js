@@ -7,24 +7,27 @@ async function checkUserCreditCard() {
     await getUserById(user_id)
     .then(async (user) => {
         if(!user[0].creditcard) {
-          alert("Your account doens't have any credit card!!");
-          return false;
+          return { status: false, data: "Your account doens't have any credit card!!" };
         }
-        return true;
+        return { status: false, data: "Done" };
     });
 }
 
 async function getUserCreditCardBalance() {
     let user_cash = 0;
-    if(checkUserCreditCard()) {
+    checkUserCreditCard().then(async ({ status, data }) => {
+      if(status) {
         const user_id = getCurrUserId();
         await getUserById(user_id)
         .then(async (user) => {
             await getCreditCardById(await user[0].creditcard)
             .then((card) => user_cash = card.balance);
         });
-    }
-    return user_cash;
+        return { status: true, data: user_cash };
+      } else {
+        return { status: false, data: data };
+      }
+    });
 }
 
 async function getTotalCash() {
@@ -37,14 +40,25 @@ async function getTotalCash() {
             .then(product => cashSum += (cartProduct.qnt * product.price[cartProduct.size]))
         }
     });
-    // console.log(cashSum);
     return cashSum;
 }
 
-async function getTotalSum() {
+async function getTotalCoins() {
+    const user_id = getCurrUserId();
+    let coinsSum = 0;
+    await getUserById(user_id)
+    .then(async (user) => {
+        for(const cartProduct of user[0].cart) {
+            await getProductByID(cartProduct.product_id)
+            .then(product => coinsSum += (cartProduct.qnt * (product.price[cartProduct.size] + 10)))
+        }
+    });
+    return coinsSum;
+}
+
+async function getTotalSumInCash() {
     const user_id = getCurrUserId();
     let cashSum = 0;
-    let coinsSum = 0;
     await getUserById(user_id)
     .then(async (user) => {
         for(const cartProduct of user[0].cart) {
@@ -54,12 +68,39 @@ async function getTotalSum() {
     });
 
     try {
-        let user_cash = await getUserCreditCardBalance();
-        if(cashSum > user_cash ) {
-            alert("Your credit card balance doens't have enough money");
-            return false;
+        let user_cash = 0;
+        await getUserCreditCardBalance().then(({ status, data }) => {
+          if(status) user_cash = data;
+          else return { status: true, data: data }; 
+        });
+        if(cashSum > user_cash) {
+            return { status: false, data: "Your credit card balance doens't have enough money" };
         } else {
-            return cashSum;
+            return { status: true, data: cashSum };
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+async function getTotalSumInCoins() {
+    const user_id = getCurrUserId();
+    let coinsSum = 0;
+    let userCoins = 0;
+    await getUserById(user_id)
+    .then(async (user) => {
+        userCoins = await user[0].balance;
+        for(const cartProduct of user[0].cart) {
+            await getProductByID(cartProduct.product_id)
+            .then(product => coinsSum += (cartProduct.qnt * (product.price[cartProduct.size] + 10)))
+        }
+    });
+
+    try {
+        if(coinsSum > userCoins) {
+            return { status: false, data: "Your coins balance isn't enough" };
+        } else {
+            return { status: true, data: coinsSum };
         }
     } catch (error) {
         console.log(error.message);
@@ -86,37 +127,60 @@ async function getTotalQnt() {
                 const cpqnt = await cartProduct.qnt;
                 const pqnt = await product.quantity;
                 if(cpqnt > pqnt)
-                    errors.push({product_name: product.productName, product_qnt: product.quantity});
+                    errors.push({ product_name: product.productName, product_qnt: product.quantity });
             });
         }
     });
     if(errors.length) {
         let errorStr = "";
         errors.forEach(e => errorStr += e.product_name + " It has only " + e.product_qnt + " quantity,\n\n");
-        alert(errorStr);
-        return false;
+        return { status: false, data: errorStr}
     } else {
-        return true;
+        return { status: true, data: "Done"}
     }
 }
 
-async function orderCart() {
-
-    let f1, f2;
-    await getTotalQnt()
-    .then(res => f1 = res);
-    await getTotalSum()
-    .then(res => f2 = res);
-
-    if(f1 && f2) {
+async function orderCartInCash() {
+    let f1_status, f1_data;
+    let f2_status, f2_data;
+    await getTotalSumInCash().then(({ status, data }) => {
+        f1_status = status;
+        f1_data = data;
+    });
+    await getTotalQnt().then(({ status, data }) => {
+        f2_status = status;
+        f2_data = data;
+    });
+    if(f1_status && f2_status) {
         await minusUserCash();
         await minusProductQnt();
         await addUserBonus();
-        console.log("DONE");
-        return true;
+        return { status: true, data: "Done" };
     } else {
-        console.log("ERROR");
-        return false;
+        if(!f1_status) return { status: true, data: f1_data };
+        if(!f2_status) return { status: true, data: f2_data };
+    }
+}
+
+async function orderCartInCoins() {
+    let f1_status, f1_data;
+    let f2_status, f2_data;
+    await getTotalSumInCoins().then(({ status, data }) => {
+        f1_status = status;
+        f1_data = data;
+    });
+    await getTotalQnt().then(({ status, data }) => {
+        f2_status = status;
+        f2_data = data;
+    });
+    if(f1_status && f2_status) {
+        await minusUserCoins();
+        await minusProductQnt();
+        await addUserBonus();
+        return { status: true, data: "Done" };
+    } else {
+        if(!f1_status) return { status: true, data: f1_data };
+        if(!f2_status) return { status: true, data: f2_data };
     }
 }
 
@@ -127,14 +191,35 @@ async function minusUserCash() {
     let creditCardId;
 
     await getUserCreditCardBalance()
-    .then(user_cash => userr_cash = user_cash);
-    await getTotalSum()
-    .then(totalSum => totallSum = totalSum);
+    .then(({ status, data }) => {
+      if(status) userr_cash = data;
+      else return { status: false, data: data };
+    })
+      
+    await getTotalSumInCash()
+    .then(({ status, data }) => totallSum = data);
     
     await getUserById(user_id)
     .then(async (user) => creditCardId = await user[0].creditcard);
 
     updateCreditCard(creditCardId, { balance: userr_cash - totallSum });
+}
+
+async function minusUserCoins() {
+    const user_id = getCurrUserId();
+    let userr_coins = 0;
+    let totallSum = 0;
+
+    await getUserById(user_id)
+    .then(async (user) => userr_coins = await user[0].balance)
+
+    await getTotalSumInCoins()
+    .then(({ status, data }) => totallSum = data);
+    
+    await getUserById(user_id)
+    .then(async (user) => creditCardId = await user[0].creditcard);
+
+    updateUser(creditCardId, { balance: userr_coins - totallSum });
 }
 
 async function minusProductQnt() {
@@ -159,11 +244,11 @@ async function addUserBonus() {
 
 
 export {
-    minusProductQnt,
-    minusUserCash,
-    addUserBonus,
+    getTotalSumInCoins,
+    getTotalSumInCash,
+    orderCartInCoins,
+    orderCartInCash,
+    getTotalCoins,
     getTotalCash,
-    getTotalSum,
     getTotalQnt,
-    orderCart,
 }
