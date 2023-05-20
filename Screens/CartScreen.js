@@ -1,87 +1,39 @@
 import {
   StyleSheet,
   Text,
-  StatusBar,
   View,
-  ScrollView,
   TouchableOpacity,
-  RefreshControl,
   FlatList,
 } from "react-native";
 import Cartcard from "../Components/cartcard";
 import * as Haptics from "expo-haptics";
 import * as Font from "expo-font";
-
 import React, { useState, useEffect } from "react";
-import { getProductByID, getProducts } from "../firebase/products";
-import {
-  getUserUId,
-  addUser,
-  deleteUser,
-  editUser,
-  getUserById,
-  getUserByName,
-  getUsers,
-  subscribeUser,
-} from "../firebase/user";
-import Loader from "../Components/Loader";
-import { Ionicons } from "@expo/vector-icons";
-let ar = [];
-let prod;
+import { getProductByID } from "../firebase/products";
+import { getUserById, getCurrUserId } from "../firebase/user";
+
 const CartScreen = ({ navigation }) => {
   const [userCart, setUserCart] = useState([]);
-  const [user, setUser] = useState();
   const [ProductInCart, setProductInCart] = useState();
-  const [loading, setLoading] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
 
+  const getProductHandle = async () => {
+    let allProducts = [];
+    for (const product of userCart) {
+      const getProdduct = await getProductByID(product.product_id);
+      allProducts.push({...getProdduct, id: product.product_id, qnt: product.qnt, size: product.size});
+    }
+    setProductInCart(allProducts);
+  };
+
   useEffect(() => {
-    (async () => {
-      let ar = [];
-      let prod;
-
-      for (let i = 0; i < userCart.length; i++) {
-        prod = await getProductByID(userCart[i].product_id);
-        ar.push(prod);
-      }
-
-      setProductInCart(ar);
-      // console.log("remfkmfkrm",userCart.length);
-    })();
+    getProductHandle();
   }, [userCart]);
-  //console.log("remfkmfkrm",ProductInCart);
 
   useEffect(() => {
-    const a = navigation?.addListener("focus", () => {
-      setLoading(true); // Show the loader when the event occurs
-
-      getUserUId().then((id) => {
-        getUserById(id).then((user) => {
-          user.forEach((user) => {
-            console.log("cart is ", user.cart);
-            setUserCart(user.cart);
-            setUser(user);
-          });
-          setLoading(false); // Hide the loader when the data fetching is complete
-        });
-      });
-    });
-
-    return () => {
-      a?.remove(); // Clean up the listener when the component unmounts
-    };
-  }, [navigation]);
-
-  // const [products, setProducts] = useState([]);
-
-  // const getProductHandle = async () => {
-  //   const arr = await getProducts();
-  //   setProducts(arr);
-  // };
-
-  // useEffect(() => {
-  //   getProductHandle();
-  // }, []);
+    const user_id = getCurrUserId();
+    getUserById(user_id).then((user) => setUserCart(user[0].cart));
+  }, [userCart, navigation]);
 
   function checkoutnavigation() {
     navigation.navigate("Checkout");
@@ -107,43 +59,34 @@ const CartScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topBarContainer}>
-        
-      </View>
+      <View style={styles.topBarContainer}/>
       <View style={styles.screenNameContainer}>
         <View>
           <Text style={styles.screenNameText}>My Cart</Text>
         </View>
-        
           <Text style={styles.screenNameParagraph}>
             View , add or remove products from cart for later purchase
           </Text>
-        </View>
-      
+      </View>
+      <View style={{ flex: 1, width: "105%", padding: 20 }}>
+        {
+          ProductInCart.map((itemData, index) => {
+            return (
+              <Cartcard
+                key={index}
+                productName={itemData.productName}
+                price={itemData.price[itemData.size]}
+                image={itemData.image}
+                id={itemData.id}
+                qnt={itemData.qnt}
+                size={itemData.size}
+              />
+            );
+          })
+        }
+      </View>
 
-      <Loader visible={loading} />
-
-      {/* style={{flex: 1, width: "100%", padding: 20}} */}
-      <FlatList
-        style={{ flex: 1, width: "105%", padding: 20 }}
-        data={ProductInCart}
-        numColumns={1}
-        showsHorizontalScrollIndicator={true}
-        renderItem={(itemData) => {
-          return (
-            <Cartcard
-              productName={itemData.item.productName}
-              price={itemData.item.price[1]}
-              details={itemData.item.details}
-              image={itemData.item.image}
-              Rate={itemData.item.Rate}
-              id={itemData.item.id}
-              type={itemData.item.type}
-            />
-          );
-        }}
-      />
-      <View style={styles.emptyView}></View>
+      <View style={styles.emptyView}/>
 
       <TouchableOpacity style={styles.button} onPress={checkoutnavigation}>
         <Text style={styles.buttonText}>Proceed to checkout</Text>
@@ -239,3 +182,24 @@ const styles = StyleSheet.create({
 });
 
 export default CartScreen;
+
+
+
+{/* <FlatList
+  style={{ flex: 1, width: "105%", padding: 20 }}
+  data={ProductInCart}
+  numColumns={1}
+  showsHorizontalScrollIndicator={true}
+  renderItem={(itemData, index) => (
+      <View key={index}>
+        <Cartcard
+          productName={itemData.item.productName}
+          price={itemData.item.price[itemData.item.size]}
+          image={itemData.item.image}
+          id={itemData.item.id}
+          qnt={itemData.item.qnt}
+          size={itemData.item.size}
+        />
+      </View>
+  )}
+/> */}

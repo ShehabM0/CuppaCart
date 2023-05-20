@@ -5,20 +5,13 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  Dimensions,SafeAreaView,ScrollView
 } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import {
   getUserUId,
-  addUser,
-  deleteUser,
-  editUser,
   getUserById,
-  getUserByName,
-  getUsers,
-  subscribeUser,
   getCurrUserId,
   updateUser,
   } from "../firebase/user";
@@ -27,31 +20,18 @@ import {
     productName,
     price,
     image,
-    details,
-    type,
     id,
-    Rate,
-    cart,
-    setCart,
+    qnt,
+    size,
   }) => {
-    const navigation = useNavigation();
-    const { width } = Dimensions.get("window");
+  const navigation = useNavigation();
 
-    const [userCart, setUserCart] = useState([]);
-  const [user, setUser] = useState();
-  const [ProductInCart, setProductInCart] = useState();
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setname] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [role, setRole] = useState("");
+  const [userCart, setUserCart] = useState([]);
+  const sizes = ["S", "M", "L"];
  
   const user_id = getCurrUserId();
-
   const handleDelete = async () => {
     const id_idx = userCart.indexOf(id);
-    console.log("wdcfs",userCart);
     userCart.splice(id_idx, 1);
     updateUser(user_id, { cart: [...userCart] });
     alert("Product Deleted From Cart");
@@ -62,11 +42,8 @@ import {
     getUserUId().then((id) => {
       getUserById(id).then((user) => {
         user.forEach((user) => {
-          // console.log("cartooo is ", user.cart);
           setUserCart(user.cart);
-          setUser(user);
         });
-        setLoading(false); // Hide the loader when the data fetching is complete
       });
     });
   }, []);
@@ -76,48 +53,35 @@ import {
 
     return (
                 
-      // <TouchableOpacity
-      //   onPress={() => {
-      //     navigation.navigate("Product", {
-      //       productName,
-      //       price,
-      //       image,
-      //       details,
-      //       type,
-      //       id,
-      //       Rate,
-      //     });
-      //   }}
-      // >
-  
-          
-  
+      <TouchableOpacity onPress={() => { navigation.navigate("Product", { id })}}>
         <View style={styles.container}>
           <LinearGradient
             colors={["#C67C4E", "black"]}
             style={styles.gradient}
           >
             <View style={styles.card}>
-              <Image source={{ uri: image }} style={styles.image} />
+              <View style={{alignItems: 'center', justifyContent:'center'}}>
+                <Image source={{ uri: image }} style={styles.image} />
+              </View>
               <View style={styles.details}>
                 <View style={styles.titleContainer}>
                   <Text style={styles.title}>{productName}</Text>
-                  <Text style={styles.type}>{type}</Text>
+                  <TouchableOpacity onPress={() => {handleDelete()}}>
+                    <View style={styles.menuItem}>
+                      <Ionicons name="trash-outline" size={25} color="#fff" />
+                    </View>
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.priceContainer}>
                   <Text style={styles.price}>{price} $</Text>
-  
-                  <TouchableOpacity onPress={() => {handleDelete()}}>
-                  <View style={styles.menuItem}>
-                    <Ionicons name="trash-outline" size={25} color="#fff" />
-                    </View>
-                  </TouchableOpacity>
+                  <Text style={[styles.price, {paddingLeft: 10}]}>x{qnt}</Text>
+                  <Text style={[styles.price, {paddingLeft: 10}]}>{sizes[size]}</Text>
                 </View>
               </View>
             </View>
           </LinearGradient>
         </View>
-      // </TouchableOpacity>
+      </TouchableOpacity>
      
   
     );
