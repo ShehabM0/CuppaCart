@@ -17,15 +17,11 @@ const FavCard = ({
   productName,
   price,
   image,
-  details,
-  type,
   id,
-  Rate,
 }) => {
   const navigation = useNavigation();
   const { width } = Dimensions.get("window");
 
-  const [success, setSuccess] = useState(true);
   const [userFav, setUserFav] = useState([]);
   const user_id = getCurrUserId();
   
@@ -43,15 +39,7 @@ const FavCard = ({
   return ( 
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("Product", {
-          productName,
-          price,
-          image,
-          details,
-          type,
-          id,
-          Rate,
-        });
+        navigation.navigate("Product", { id });
       }}
     >
       <View style={styles.container}>
@@ -64,7 +52,6 @@ const FavCard = ({
             <View style={styles.details}>
               <View style={styles.titleContainer}>
                 <Text style={styles.title}>{productName}</Text>
-                <Text style={styles.type}>{type}</Text>
               </View>
               <View style={styles.priceContainer}>
                 <Text style={styles.price}>{price[1]} $</Text>

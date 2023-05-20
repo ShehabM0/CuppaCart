@@ -19,7 +19,7 @@ const MyWishlistScreen = ({ navigation, route }) => {
     let allProducts = [];
     for (const product_id of userFav) {
       const getProdduct = await getProductByID(product_id);
-      allProducts.push(getProdduct);
+      allProducts.push({...getProdduct, id: product_id});
     }
     setProductsInFav(allProducts)
   };
@@ -72,11 +72,8 @@ const MyWishlistScreen = ({ navigation, route }) => {
             <FavCard
               productName={itemData.item.productName}
               price={itemData.item.price}
-              details={itemData.item.details}
               image={itemData.item.image}
-              Rate={itemData.item.Rate}
               id={itemData.item.id}
-              type={itemData.item.type}
             />
           );
         }}
