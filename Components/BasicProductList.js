@@ -1,23 +1,45 @@
 import { StyleSheet, Text, View,Image } from "react-native";
-import React from "react";
-import { Ionicons } from "@expo/vector-icons";
+import React, { useState, useEffect } from "react";
+import { getProductByID } from "../firebase/products";
 
-const BasicProductList = ({ productName,
-    price,
-    quantity,image }) => {
+const BasicProductList = ({ id, quantity }) => {
+
+  const [productName, setProductName] = useState("");
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    getProductByID(id)
+    .then(product => {
+      setProductName(product.productName);
+      setImage(product.image);
+    });
+  }, [])
+
+
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <View style={styles.IconContainer}>
-          <Image source={{uri:image}} />
+          {
+            image && 
+            <Image 
+              style={styles.img}
+              source={{uri: image}}>
+            </Image>
+          }
+          {
+            !image && 
+            <Image 
+              style={styles.img}
+              source={{
+                uri: "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"}}>
+            </Image>
+          }
         </View>
         <View style={styles.productInfoContainer}>
           <Text style={styles.secondaryText}>{productName}</Text>
-          <Text>x2</Text>
+          <Text>x{quantity}</Text>
         </View>
-      </View>
-      <View>
-        <Text style={styles.primaryText}>{price}$</Text>
       </View>
     </View>
   );
@@ -49,6 +71,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     marginLeft: 10,
   },
+  img: {
+    width: 50,
+    height: 50,
+    borderRadius: 10,
+  },
   IconContainer: {
     display: "flex",
     flexDirection: "row",
@@ -70,3 +97,7 @@ const styles = StyleSheet.create({
     fontFamily: "sora-regular"
   },
 });
+
+{/* <View>
+  <Text style={styles.primaryText}>{price}$</Text>
+</View> */}
