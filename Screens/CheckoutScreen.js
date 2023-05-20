@@ -1,77 +1,69 @@
-import {
-  StyleSheet,
-  StatusBar,
-  View,
-  TouchableOpacity,
-  Text,
-  ScrollView,
-  FlatList,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
-import BasicProductList from "../Components/BasicProductList";
-import * as Font from "expo-font";
+import { StyleSheet, View, TouchableOpacity, Text, ScrollView, FlatList } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
 import * as LocalAuthentication from "expo-local-authentication";
+import * as Font from "expo-font";
+
+import BasicProductList from "../Components/BasicProductList";
+import WarningMessage from "../Components/WarningMessage";
 import SuccessMessage from "../Components/SuccessMessage";
 import Loader from "../Components/Loader";
-import { getUserUId, getUserById } from "../firebase/user";
 
-import { getProductByID } from "../firebase/products";
-import { getCreditCardById } from "../firebase/creditcard";
-import {
+import { getCurrUserId, getUserById } from "../firebase/user";
+import { 
+  getTotalSumInCoins,
+  getTotalSumInCash,
+  orderCartInCoins,
+  orderCartInCash,
+  getTotalCoins,
   getTotalCash,
-  getTotalSum,
-  getTotalQnt,
-  orderCart,
-  minusUserCash,
-  minusProductQnt,
-  addUserBonus,
+  getTotalQnt
 } from "../firebase/cart";
 
-import { getProducts } from "../firebase/products";
 const CheckoutScreen = ({ navigation }) => {
+
+  const user_id = getCurrUserId();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [warning, setWarning] = useState(false);
   const [Products, setProducts] = useState([]);
   const [index, setIndex] = useState("Cash");
   const [fontLoaded, setFontLoaded] = useState(false);
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [totalInCash, setTotalInCash] = useState(0);
+  const [totalInCoins, setTotalInCoins] = useState(0);
+
 
   useEffect(() => {
-    let b = 0;
+    let totalCoins = 0;
     const getTotal = async () => {
-      let a = 0;
-      await getTotalCash().then((total) => (a = total));
-      b = a;
+      await getTotalCoins().then((total) => totalCoins = total);
     };
+    getTotal().then(() => setTotalInCoins(totalCoins));
+  }, [totalInCoins]);
 
-    getTotal().then(() => setTotalInCash(b));
+  useEffect(() => {
+    let totalCash = 0;
+    const getTotal = async () => {
+      await getTotalCash().then((total) => totalCash = total);
+    }
+    getTotal().then(() => setTotalInCash(totalCash));
   }, [totalInCash]);
 
   useEffect(() => {
-    getUserUId().then((id) => {
-     
-      getUserById(id).then((user) => {
-        
-        setEmail(user[0].email);
-        setPhone(user[0].phone);
-      });
+    getUserById(user_id).then((user) => {
+      setEmail(user[0].email);
+      setPhone(user[0].phone);
     });
   }, []);
 
-  function CheckOut() {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 3500);
-    orderCart().then((result) => {
-      if (result) {
-        setTimeout(() => {
-          setSuccess(true);
-          setTimeout(() => setSuccess(false), 4000);
-        }, 3500);
-      }
-    });
+  function CheckOutInCash() {
+    // TODO
+  }
+  function CheckOutInCoins() {
+    // TODO
   }
 
   async function handleAuthentication() {
@@ -116,8 +108,17 @@ const CheckoutScreen = ({ navigation }) => {
   }
 
   const getProductsHandle = async () => {
-    const arr = await getProducts();
-    setProducts(arr);
+    await getUserById(user_id)
+    .then(async (user) => {
+      const result = user[0].cart.reduce((acc, product) => {
+      if (!acc[product.product_id])
+        acc[product.product_id] = { product_id: product.product_id, qnt: 0 };
+      acc[product.product_id].qnt += product.qnt;
+      return acc;
+      }, {});
+      const cartProducts = Object.values(result);
+      setProducts(cartProducts);
+    })
   };
   useEffect(() => {
     getProductsHandle();
@@ -185,10 +186,8 @@ const CheckoutScreen = ({ navigation }) => {
               renderItem={(itemData) => {
                 return (
                   <BasicProductList
-                    productName={itemData.item.productName}
-                    price={itemData.item.price}
-                    image={itemData.item.image}
-                    id={itemData.item.id}
+                    quantity={itemData.item.qnt}
+                    id={itemData.item.product_id}
                   />
                 );
               }}
@@ -283,13 +282,13 @@ const CheckoutScreen = ({ navigation }) => {
                 <View style={styles.list}>
                   <Text style={styles.primaryTextSm}>Delivery</Text>
                   <Text style={styles.secondaryTextSm}>
-                    {totalInCash * 0.05} $
+                    {(totalInCash * 0.05).toFixed(2)} $
                   </Text>
                 </View>
                 <View style={styles.list}>
                   <Text style={styles.primaryTextSm}>Total In Cash</Text>
                   <Text style={styles.secondaryTextSm}>
-                    {totalInCash + totalInCash * 0.05} $
+                    {totalInCash + (totalInCash * 0.05)} $
                   </Text>
                 </View>
               </View>
@@ -300,15 +299,15 @@ const CheckoutScreen = ({ navigation }) => {
               <View style={styles.totalOrderInfoContainer}>
                 <View style={styles.list}>
                   <Text style={styles.primaryTextSm}>Order</Text>
-                  <Text style={styles.secondaryTextSm}>10000000000$</Text>
+                  <Text style={styles.secondaryTextSm}>{totalInCoins}$</Text>
                 </View>
                 <View style={styles.list}>
                   <Text style={styles.primaryTextSm}>Delivery</Text>
-                  <Text style={styles.secondaryTextSm}>1000000000 $</Text>
+                  <Text style={styles.secondaryTextSm}>{(totalInCoins * 0.05).toFixed(2)} $</Text>
                 </View>
                 <View style={styles.list}>
                   <Text style={styles.primaryTextSm}>Total In Coins</Text>
-                  <Text style={styles.secondaryTextSm}>10000000000000 $</Text>
+                  <Text style={styles.secondaryTextSm}>{totalInCoins + (totalInCoins * 0.05)} $</Text>
                 </View>
               </View>
             </View>
