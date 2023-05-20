@@ -14,10 +14,11 @@ import {
 } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { auth } from "../firebase/config";
-import { getUserUId, getUserById } from "../firebase/user";
+import { getUserUId, getUserById, getCurrUserId } from "../firebase/user";
 import { getProductByID, getProducts } from "../firebase/products";
 import { getStarsAvg } from "../firebase/reviews";
 import ProductCard from "../Components/productCard";
+import Loader from "../Components/Loader";
 import { logout } from "../firebase/auth";
 import { BlurView } from "expo-blur";
 import * as Font from "expo-font";
@@ -27,10 +28,10 @@ const cardWidth = width / 2 - 20;
 export default function ProfileScreen({ navigation }) {
   const [firstname, setFirstname] = useState("");
   const [image, setimage] = useState(null);
-  const [role, setRole] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [fontLoaded, setFontLoaded] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const isIOS = Platform.OS === "ios";
 
   const getProductHandle = async () => {
@@ -54,6 +55,8 @@ export default function ProfileScreen({ navigation }) {
 
   useEffect(() => {
     getProductHandle();
+    if(searchTerm)
+      setLoading(false);
   }, [searchTerm]);
 
   const ss = () => {
@@ -63,14 +66,13 @@ export default function ProfileScreen({ navigation }) {
     });
   };
   useEffect(() => {
-    getUserUId().then((id) => {
-      getUserById(id).then((user) => {
-        setFirstname(user[0].firstname);
-        setimage(user[0].image);
-        setRole(user[0].Role);
-      });
+    const user_id = getCurrUserId();
+    getUserById(user_id).then((user) => {
+      setFirstname(user[0].firstname);
+      setimage(user[0].image);
     });
   }, []);
+
 
   useEffect(() => {
     const loadFonts = async () => {
@@ -86,55 +88,7 @@ export default function ProfileScreen({ navigation }) {
   if (!fontLoaded) {
     return null; // Render nothing until the font is loaded
   }
-  // const categories = [
-  //   {id: '1', name: 'Coffee'},
-  //   {id: '2', name: 'Tea'},
-  //   {id: '3', name: 'Milk',},
-  //   {id: '4', name: 'Soda', },
-  // ];
-  // const ListCategories = () => {
-  //   return (
-  //     <ScrollView
-  //       horizontal
-  //       showsHorizontalScrollIndicator={false}
-  //       contentContainerStyle={style.categoriesListContainer}>
-  //       {categories.map((category, index) => (
-  //         <TouchableOpacity
-  //           key={index}
-  //           activeOpacity={0.8}
-  //           onPress={() => setSelectedCategoryIndex(index)}>
-  //           <View
-  //             style={{
-  //               backgroundColor:
-  //                 selectedCategoryIndex == index
-  //                   ? '#F9813A'
-  //                   : '#fedac5',
-  //               ...style.categoryBtn,
-  //             }}>
-  //             <View style={style.categoryBtnImgCon}>
-  //               {/* <Image
-  //                 source={category.image}
-  //                 style={{height: 35, width: 35, resizeMode: 'cover'}}
-  //               /> */}
-  //             </View>
-  //             <Text
-  //               style={{
-  //                 fontSize: 15,
-  //                 fontFamily:"Sora-SemiBold",
-  //                 marginLeft: 10,
-  //                 color:
-  //                   selectedCategoryIndex == index
-  //                     ? "white"
-  //                     : '#F9813A',
-  //               }}>
-  //               {category.name}
-  //             </Text>
-  //           </View>
-  //         </TouchableOpacity>
-  //       ))}
-  //     </ScrollView>
-  //   );
-  // };
+
   return (filteredProducts.length > 0) ?
   (
     <SafeAreaView style={{flex: 1, backgroundColor:"#ffff",}}>
@@ -226,6 +180,7 @@ export default function ProfileScreen({ navigation }) {
   ) :
   (
     <SafeAreaView style={{flex: 1, backgroundColor:"#ffff",}}>
+      <Loader visible={loading} />
       <View style={style.header}>
         <View style={{}}>
           <View style={{flexDirection: 'row'}}>
@@ -369,3 +324,53 @@ const style = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+// const categories = [
+//   {id: '1', name: 'Coffee'},
+//   {id: '2', name: 'Tea'},
+//   {id: '3', name: 'Milk',},
+//   {id: '4', name: 'Soda', },
+// ];
+// const ListCategories = () => {
+//   return (
+//     <ScrollView
+//       horizontal
+//       showsHorizontalScrollIndicator={false}
+//       contentContainerStyle={style.categoriesListContainer}>
+//       {categories.map((category, index) => (
+//         <TouchableOpacity
+//           key={index}
+//           activeOpacity={0.8}
+//           onPress={() => setSelectedCategoryIndex(index)}>
+//           <View
+//             style={{
+//               backgroundColor:
+//                 selectedCategoryIndex == index
+//                   ? '#F9813A'
+//                   : '#fedac5',
+//               ...style.categoryBtn,
+//             }}>
+//             <View style={style.categoryBtnImgCon}>
+//               {/* <Image
+//                 source={category.image}
+//                 style={{height: 35, width: 35, resizeMode: 'cover'}}
+//               /> */}
+//             </View>
+//             <Text
+//               style={{
+//                 fontSize: 15,
+//                 fontFamily:"Sora-SemiBold",
+//                 marginLeft: 10,
+//                 color:
+//                   selectedCategoryIndex == index
+//                     ? "white"
+//                     : '#F9813A',
+//               }}>
+//               {category.name}
+//             </Text>
+//           </View>
+//         </TouchableOpacity>
+//       ))}
+//     </ScrollView>
+//   );
+// };

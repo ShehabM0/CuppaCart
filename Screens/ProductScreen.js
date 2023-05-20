@@ -2,38 +2,40 @@ import React, { useEffect, useState } from "react";
 import { Platform, StatusBar, ScrollView, Image, StyleSheet, Text, TouchableOpacity, View, SafeAreaView, Pressable } from 'react-native';
 import { Ionicons, Feather, FontAwesome5, FontAwesome, AntDesign } from '@expo/vector-icons'; 
 import { getCurrUserId, getUserById, updateUser } from "../firebase/user";
-import ReviewButtonLink from '../Components/ReviewButtonLink';
+import { getProductByID } from "../firebase/products";
 import { getStarsAvg } from "../firebase/reviews";
 import { COLORS } from '../Conts/Color';
-import ReadMore from 'react-native-read-more-text';
-import { getCreditCardById } from "../firebase/creditcard";
-import { getTotalSum, getTotalQnt, orderCart, minusUserCash, minusProductQnt, addUserBonus } from "../firebase/cart";
 
-import SuccessMessage from "../Components/SuccessMessage"
+import ReadMore from 'react-native-read-more-text';
+import ReviewButtonLink from '../Components/ReviewButtonLink';
+import WarningMessage from "../Components/WarningMessage";
+import SuccessMessage from "../Components/SuccessMessage";
+import Loader from "../Components/Loader";
+
 import * as Haptics from "expo-haptics"
 import * as Font from "expo-font";
-import { getProductByID } from "../firebase/products";
-
 
 export default function ProductScreen({ navigation, route }) {
 
-  const { productName, image, details, id } = route.params;
-
+  const { id } = route.params;
   const user_id = getCurrUserId();
-  const coins = [30, 40, 50];
+
+  const [productName, setProductName] = useState("");
+  const [details, setDetails] = useState("");
+  const [image, setImage] = useState("");
 
   const [userFavorite, setUserFavorite] = useState([]);
+  const [fontLoaded, setFontLoaded] = useState(false);
   const [selectedSize, setSelectedSize] = useState(1);
   const [favorite, setFavorite] = useState('white');
   const [starsCount, setStarsCount] = useState(0);
-  const [success, setSuccess] = useState(false);
-  const [starsAvg, setStarsAvg] = useState(0);
   const [prices, setPrices] = useState([]);
   const [pricee, setPrice] = useState(prices[1]);
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [starsAvg, setStarsAvg] = useState(0);
   const [coin, setCoin] = useState(40);
   const [qnt, setQnt] = useState(1);
-  const [fontLoaded, setFontLoaded] = useState(false);
-
 
   useEffect(() => {
     switch(selectedSize) {
@@ -49,10 +51,21 @@ export default function ProductScreen({ navigation, route }) {
   }, [qnt]);
 
   useEffect(() => {
+    if(productName &&  image && details && prices)
+      setLoading(false);
+    else 
+      setLoading(true);
+  }, [productName, image, details, prices])
+
+  useEffect(() => {
     getProductByID(id)
     .then(product => {
+      setProductName(product.productName);
+      setImage(product.image);
+      setDetails(product.details);
       setPrices(product.price);
       setPrice(product.price[1]);
+      setCoin(product.price[1] + 10)
     });
 
     getUserById(user_id)
@@ -72,6 +85,7 @@ export default function ProductScreen({ navigation, route }) {
  useEffect(() => {
     (userFavorite.includes(id)) ? setFavorite('orange') : setFavorite('white');
   }, [userFavorite]);
+
   useEffect(() => {
     const loadFonts = async () => {
       await Font.loadAsync({
@@ -81,13 +95,9 @@ export default function ProductScreen({ navigation, route }) {
       });
       setFontLoaded(true);
     };
-
     loadFonts();
   }, []);
 
-  if (!fontLoaded) {
-    return null; // Render nothing until the font is loaded
-  }
   function addToFavorite() {
     if(favorite == 'white') {
       setFavorite('orange');
@@ -122,21 +132,21 @@ export default function ProductScreen({ navigation, route }) {
   function setSmall() {
     setSelectedSize(0);
     setPrice(qnt * prices[0]);
-    setCoin(qnt * coins[0]);
+    setCoin(qnt * (prices[0] + 10));
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
   }
 
   function setMedium() {
     setSelectedSize(1);
     setPrice(qnt * prices[1]);
-    setCoin(qnt * coins[1]);
+    setCoin(qnt * (prices[1] + 10));
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
   }
 
   function setLarge() {
     setSelectedSize(2);
     setPrice(qnt * prices[2]);
-    setCoin(qnt * coins[2]);
+    setCoin(qnt * (prices[2] + 10));
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
   }
 
@@ -165,21 +175,32 @@ export default function ProductScreen({ navigation, route }) {
     );
   }
 
+  if (!fontLoaded) {
+    return null; // Render nothing until the font is loaded
+  }
+
   return (
     <>
-    {
-      success && 
-      <SuccessMessage message={"Product added to your cart"}/>
-    }
-    
+      { success && <SuccessMessage message={"Product added to your cart"}/> }
       <View style={styles.imgbgLayout}/>
       <SafeAreaView style={{paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,backgroundColor:"#E4EDFA"}}>
         <ScrollView>
+          <Loader visible={loading} />
           <View style={styles.imgTitlePriceCont}>
-            <Image 
-              style={styles.img}
-              source={{uri: image}}>
-            </Image>
+            {
+              image && 
+              <Image 
+                style={styles.img}
+                source={{uri: image}}>
+              </Image>
+            }
+            {
+              !image && 
+              <Image 
+                style={styles.img}
+                source={{uri: "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"}}>
+              </Image>
+            }
 
             <View style={styles.arrowHeartCont}>
               <View style={styles.arrowHeart}>
@@ -250,11 +271,11 @@ export default function ProductScreen({ navigation, route }) {
           <View style={styles.qntcartCont}>
             <View style={styles.qntCont}>
                 <Pressable onPress={decreaseQnt}>
-                  <AntDesign name="minuscircle" size={28} color="black" />
+                  <AntDesign name="minuscircle" size={28} color="#C67C4E" />
                 </Pressable>
                 <Text style={styles.qntTxt}> {qnt} </Text>
                 <Pressable onPress={increaseQnt}>
-                  <AntDesign name="pluscircle" size={28} color="black" />
+                  <AntDesign name="pluscircle" size={28} color="#C67C4E" />
                 </Pressable>
             </View>
 
