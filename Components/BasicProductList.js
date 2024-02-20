@@ -1,9 +1,11 @@
-import { StyleSheet, Text, View,Image } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, View,Image } from "react-native";
 import React, { useState, useEffect } from "react";
 import { getProductByID } from "../firebase/products";
+import { MaterialIcons } from '@expo/vector-icons';
 
-const BasicProductList = ({ id, quantity }) => {
+const BasicProductList = ({ id, quantity, size, cash, coins, error, cb1, cb2 }) => {
 
+  const sizes = ["Small", "Medium", "Large"]
   const [productName, setProductName] = useState("");
   const [image, setImage] = useState("");
 
@@ -38,8 +40,23 @@ const BasicProductList = ({ id, quantity }) => {
         </View>
         <View style={styles.productInfoContainer}>
           <Text style={styles.secondaryText}>{productName}</Text>
-          <Text>x{quantity}</Text>
+          <Text>x{quantity} {sizes[size]}</Text>
         </View>
+      </View>
+      
+      <View style={{ display:"flex", flexDirection: 'row' }}>
+        <Text>{cash}$/{coins}C</Text>
+        {
+          error &&
+          <TouchableOpacity onPress={() => {
+            cb1(error)
+            cb2(true)
+          }}>
+            <View style={{paddingLeft: 5}}>
+              <MaterialIcons name="error-outline" size={24} color="red" />
+            </View>
+          </TouchableOpacity>
+        }
       </View>
     </View>
   );

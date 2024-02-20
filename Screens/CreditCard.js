@@ -32,8 +32,7 @@ export default CreditCardScreen = ({ route, navigation }) => {
             getCreditCard(creditCardData)
             .then(existCreditCard => {
                 if(existCreditCard) {
-                    let creditcard_id;
-                    existCreditCard.forEach(doc => creditcard_id = doc.id);
+                    let creditcard_id = existCreditCard[0].number;
         
                     updateUser(user_id, { creditcard: creditcard_id })
                     .then(({ status, message }) => {

@@ -8,6 +8,7 @@ import { addReview } from "../firebase/reviews";
 import { COLORS } from "../Conts/Color";
 
 import { getProductByID } from "../firebase/products"
+import { getPurchase } from "../firebase/pruchases";
 
 export default function AddReviewScreen({ navigation, route }) {
 
@@ -22,6 +23,7 @@ export default function AddReviewScreen({ navigation, route }) {
   const [starsError, setStarsError] = useState(false);
   const [textError, setTextError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [verifiedPurchase, setVerifiedPurchase] = useState(false);
 
   getProductByID(product_id)
   .then(data => { setProductImage(data.image); setProductTitle(data.productName); route = { id: product_id, ...data }; })
@@ -31,6 +33,8 @@ export default function AddReviewScreen({ navigation, route }) {
   .then(user => setUserName(user[0].firstname + " " + user[0].lastname))
   .catch(err => alert(err.message));
 
+  getPurchase(user_id, product_id)
+  .then(purchase => setVerifiedPurchase(purchase))
 
   const childToParent = (childData) => {
     setReviewStars(childData);
@@ -46,6 +50,7 @@ export default function AddReviewScreen({ navigation, route }) {
         user_name: userName,
         user_id: user_id,
         product_id: product_id,
+        verified_purchase: verifiedPurchase
       };
       addReview(reviewData)
       .then(({ status, message }) => {
@@ -180,7 +185,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
-    marginBottom: 20
+    marginVertical: 10
   },
   titleTxt: {
     fontSize: 20,
@@ -196,7 +201,7 @@ const styles = StyleSheet.create({
   starsCont: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 20,
+    // marginVertical: 10,
   },
 
   questionTxt: {

@@ -6,9 +6,9 @@ import { getProductByID } from "../firebase/products";
 import { getStarsAvg } from "../firebase/reviews";
 import { COLORS } from '../Conts/Color';
 
-import ReadMore from 'react-native-read-more-text';
+import ReadMore from '@fawazahmed/react-native-read-more';
 import ReviewButtonLink from '../Components/ReviewButtonLink';
-import WarningMessage from "../Components/WarningMessage";
+import ButtonLoader from "../Components/ButtonLoader";
 import SuccessMessage from "../Components/SuccessMessage";
 import Loader from "../Components/Loader";
 
@@ -32,6 +32,7 @@ export default function ProductScreen({ navigation, route }) {
   const [prices, setPrices] = useState([]);
   const [pricee, setPrice] = useState(prices[1]);
   const [success, setSuccess] = useState(false);
+  const [btnLoader, setBtnLoader] = useState(false);
   const [loading, setLoading] = useState(true);
   const [starsAvg, setStarsAvg] = useState(0);
   const [coin, setCoin] = useState(40);
@@ -115,12 +116,16 @@ export default function ProductScreen({ navigation, route }) {
   }
   
   function addToCart() {
+    setBtnLoader(true)
     getUserById(user_id)
     .then(user => {
       updateUser(user_id, { cart: [ ...user[0].cart, { product_id: id, qnt: qnt, size: selectedSize} ] })
       .then(() => {
         setSuccess(true);
         setTimeout(() => setSuccess(false), 2000);
+      })
+      .finally(() => {
+        setBtnLoader(false)
       });
     })
     .catch(err => alert(err.message));
@@ -183,7 +188,7 @@ export default function ProductScreen({ navigation, route }) {
     <>
       { success && <SuccessMessage message={"Product added to your cart"}/> }
       <View style={styles.imgbgLayout}/>
-      <SafeAreaView style={{paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,backgroundColor:"#E4EDFA"}}>
+      <SafeAreaView style={{paddingTop: StatusBar.currentHeight,backgroundColor:"#E4EDFA"}}>
         <ScrollView>
           <Loader visible={loading} />
           <View style={styles.imgTitlePriceCont}>
@@ -240,14 +245,16 @@ export default function ProductScreen({ navigation, route }) {
 
           <View style={styles.descCont}>
             <Text style={styles.descTitle}>Description</Text>
-              <View style={styles.descBody}>
+              <View>
                 <ReadMore
-                  textProps={{ allowFontScaling: false }}
                   numberOfLines={3}
-                  renderTruncatedFooter={ShowMore}
-                  renderRevealedFooter={ShowLess}
+                  seeMoreStyle={{ color: "#C67C4E", fontFamily:"Sora-SemiBold" }}
+                  seeLessStyle={{ color: "#C67C4E", fontFamily:"Sora-SemiBold" }}
+                  style={styles.descBody}
+                  // renderTruncatedFooter={ShowMore}
+                  // renderRevealedFooter={ShowLess}
                 >
-                <Text style={styles.descBody}>{details}</Text>
+                  {details}
               </ReadMore>
             </View>
           </View>
@@ -280,11 +287,21 @@ export default function ProductScreen({ navigation, route }) {
             </View>
 
             <View style={{ width: '60%' }}>
-              <TouchableOpacity onPress={addToCart}>
-                <View style={styles.cartCont}>
-                  <Text style={styles.cartTxt}>Add To Cart</Text>
-                </View>
-              </TouchableOpacity>
+              {
+                btnLoader ?
+                (
+                  <View style={styles.cartCont}>
+                    <ButtonLoader show={btnLoader} color={"white"}/>
+                  </View>
+                ) :
+                (
+                  <TouchableOpacity onPress={addToCart}>
+                    <View style={styles.cartCont}>
+                      <Text style={styles.cartTxt}>Add To Cart</Text>
+                    </View>
+                  </TouchableOpacity>
+                )
+              }
             </View>
           </View>
 
@@ -298,8 +315,6 @@ export default function ProductScreen({ navigation, route }) {
             nav={"Reviews"}
             product_id={id}
           />
-
-          <View style={{marginBottom: 25}}/>
 
         </ScrollView>
       </SafeAreaView>
@@ -390,7 +405,7 @@ const styles = StyleSheet.create({
   descBody: {
     fontSize: 15,
     color: 'rgba(0, 0, 0, 0.65)',
-    fontFamily:"sora-regular",
+    fontFamily:"Sora-SemiBold",
     padding: 5
   },
 

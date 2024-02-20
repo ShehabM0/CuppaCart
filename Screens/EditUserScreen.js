@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
   commandButton: {
     padding: 15,
     borderRadius: 10,
-    backgroundColor: "#964B00",
+    backgroundColor: "#1C0A00",
     alignItems: "center",
     marginTop: 100,
   },

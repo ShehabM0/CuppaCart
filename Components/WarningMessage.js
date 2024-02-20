@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 
 export default function WarningMessage({ message, childToParent }) {
 
@@ -16,17 +16,14 @@ export default function WarningMessage({ message, childToParent }) {
           <View style={styles.messageCont}>
             <View style={{ position: "absolute", top: 10, right: 10 }}>
               <TouchableOpacity onPress={() => setShow(false)}>
-                <AntDesign name="closecircleo" size={20} color="black" />
+                <Ionicons name="close" size={20} color="black" />
               </TouchableOpacity>
             </View>
-            <Image
-              style={styles.successImg}
-              source={require("../assets/warning.png")}
-            />
-            <Text style={{ color: "#9F6000", fontSize: 18 }}>Warning!</Text>
-            { message && <Text style={styles.successMessage}>{message}</Text> }
+            <FontAwesome name="warning" size={50} color="orange" />
+            <Text style={{ fontWeight: 'bold', color: "#9F6000", fontSize: 18 }}>Warning!</Text>
+            { message && <Text style={styles.message}>{message}</Text> }
             {!message && (
-              <Text style={styles.successMessage}>
+              <Text style={styles.message}>
                 Your request hasn't been done
               </Text>
             )}
@@ -64,12 +61,12 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 15,
   },
-  successMessage: {
+  message: {
     fontSize: 18,
     marginTop: 10,
     textAlign: "center",
   },
-  successImg: {
+  img: {
     width: 50,
     height: 50,
   },

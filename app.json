@@ -8,15 +8,16 @@
         }
       ]
     ],
-    "name": "RN_App",
-    "slug": "RN_App",
+    "name": "CuppaCart",
+    "slug": "CuppaCart",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/cupicon.jpg",
+    "icon": "./assets/cupicon.png",
     "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/splashcup.jpg",
-      "resizeMode": "cover"
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -26,7 +27,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/cupicon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
@@ -41,7 +42,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "b4e4aad6-1e6a-47b3-9546-68d9b9e0c227"
+        "projectId": "513302ae-8c20-428b-9df6-eadf8c0d5b3c"
       }
     }
   }

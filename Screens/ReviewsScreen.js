@@ -23,7 +23,7 @@ export default function ReviewsScreen({ route }) {
 
   return (reviews.length > 0) ? 
   (
-    <SafeAreaView style={{ paddingTop: Platform.OS === "android" ? StatusBar.currentHeight + 2 : 0,}}>
+    <SafeAreaView style={{ paddingTop: StatusBar.currentHeight + 2}}>
       <ScrollView>
         <ReviewButtonLink
           image={1}
@@ -41,6 +41,7 @@ export default function ReviewsScreen({ route }) {
                   userName={reviewData.user_name}
                   reviewStars={reviewData.stars}
                   reviewText={reviewData.text}
+                  verified={reviewData.verified_purchase}
                 />
               );
             })

@@ -6,23 +6,21 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';
-import {
-  FlatList,
   TextInput,
   TouchableOpacity,
-} from 'react-native-gesture-handler';
+  FlatList
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { auth } from "../firebase/config";
-import { getUserUId, getUserById, getCurrUserId } from "../firebase/user";
-import { getProductByID, getProducts } from "../firebase/products";
+import { getUserById, getCurrUserId } from "../firebase/user";
+import { getProducts } from "../firebase/products";
 import { getStarsAvg } from "../firebase/reviews";
 import ProductCard from "../Components/productCard";
 import Loader from "../Components/Loader";
 import { logout } from "../firebase/auth";
 import { BlurView } from "expo-blur";
 import * as Font from "expo-font";
-const {width} = Dimensions.get('screen');
+const { width } = Dimensions.get('screen');
 const cardWidth = width / 2 - 20;
 
 export default function ProfileScreen({ navigation }) {
@@ -32,7 +30,6 @@ export default function ProfileScreen({ navigation }) {
   const [fontLoaded, setFontLoaded] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const isIOS = Platform.OS === "ios";
 
   const getProductHandle = async () => {
     const products = await getProducts();
@@ -93,7 +90,7 @@ export default function ProfileScreen({ navigation }) {
   (
     <SafeAreaView style={{flex: 1, backgroundColor:"#ffff",}}>
       <View style={style.header}>
-        <View style={{}}>
+        <View>
           <View style={{flexDirection: 'row'}}>
             <Text style={{fontSize: 25 ,fontFamily: "Sora-SemiBold"}}>Hello,</Text>
             <Text style={{fontSize: 25, fontFamily: "Sora-SemiBold", marginLeft: 6}}>
@@ -149,17 +146,18 @@ export default function ProfileScreen({ navigation }) {
             onIconPress={getProductHandle}
           />
         </View>
-       
       </View>
-      <View>
-        {/* <ListCategories /> */}
-        <Image style={{width:300,height:140 ,borderRadius:10,marginLeft:30,marginTop:25,left:18}} 
-        source={require("../assets/poster.png")}>
 
-        </Image>
+      {/* <ListCategories /> */}
+      <View style={{ padding: 10, justifyContent: "center", alignItems: "center" }}>
+          <Image 
+            style={{width:300,height:140 ,borderRadius:10}} 
+            source={require("../assets/poster.png")}
+          />
       </View>
+
       <FlatList
-        style={{padding: 10,marginTop:5}}
+        style={{padding: 10, marginVertical: 5}}
         showsVerticalScrollIndicator={false}
         data={filteredProducts}
         numColumns={2}
@@ -249,7 +247,7 @@ export default function ProfileScreen({ navigation }) {
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <View style={{ padding: 20 }}>
           <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center' }}>
-            Oops...drink you are searching for doesn't exist at this time.
+            Oops...drink you are looking for doesn't exist at this time.
           </Text>
         </View>
       </View>

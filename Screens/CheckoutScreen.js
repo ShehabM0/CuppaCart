@@ -10,16 +10,14 @@ import WarningMessage from "../Components/WarningMessage";
 import SuccessMessage from "../Components/SuccessMessage";
 import Loader from "../Components/Loader";
 
-import { getCurrUserId, getUserById } from "../firebase/user";
-import { 
-  getTotalSumInCoins,
-  getTotalSumInCash,
-  orderCartInCoins,
-  orderCartInCash,
-  getTotalCoins,
-  getTotalCash,
-  getTotalQnt
-} from "../firebase/cart";
+import { getCurrUserId, getUserById, updateUser } from "../firebase/user";
+import { getTotalCoins, getTotalCash } from "../firebase/cart";
+import ErrorMessage from "../Components/ErrorMessage";
+import { getProductByID } from "../firebase/products";
+import { getCreditCardByNumber, updateCreditCard } from "../firebase/creditcard";
+import { addOrder } from "../firebase/orders";
+import { addPurchase } from "../firebase/pruchases";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const CheckoutScreen = ({ navigation }) => {
 
@@ -27,13 +25,23 @@ const CheckoutScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [warning, setWarning] = useState(false);
+  const [error, setError] = useState(false);
+  
   const [Products, setProducts] = useState([]);
   const [index, setIndex] = useState("Cash");
   const [fontLoaded, setFontLoaded] = useState(false);
+
+  const [userCoins, setUserCoins] = useState(0);
+  const [creditCard, setCreditCard] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+
   const [totalInCash, setTotalInCash] = useState(0);
   const [totalInCoins, setTotalInCoins] = useState(0);
+
+  const [warningMessage, setWarningMessage] = useState('');
+  const [showErrorMessage, setShowErrorMessage] = useState('');
+  const [isProdError, setIsProdError] = useState(false);
 
 
   useEffect(() => {
@@ -56,14 +64,133 @@ const CheckoutScreen = ({ navigation }) => {
     getUserById(user_id).then((user) => {
       setEmail(user[0].email);
       setPhone(user[0].phone);
+      setUserCoins(user[0].balance);
+      setCreditCard(user[0].creditcard);
     });
   }, []);
 
-  function CheckOutInCash() {
-    // TODO
+  async function orderSubmit() {
+
+    if(isProdError) {
+      setWarningMessage("Oops! Not enough quantity\ncheck Order Summary for more details")
+      setWarning(true);
+      return;
+    }
+
+    const order = {
+      user_id: user_id,
+      total_price: totalInCash,
+      products: Products,
+      cash: true,
+      create_at: new Date(),
+    }
+
+    if(index == "Cash") {
+      if(!creditCard) {
+        setWarningMessage("Please add credit card to complete your order")
+        setWarning(true);
+        return;
+      }
+
+      const getCreditCard = (await getCreditCardByNumber(creditCard))[0];
+      const creditCash = getCreditCard.balance;
+      const creditId = getCreditCard.id;
+
+      if(creditCash < totalInCash) {
+        setWarningMessage("It seems like you're trying to purchase an order that exceeds the amount of cash you currently have!")
+        setWarning(true);
+        return;
+      }
+
+      let purchaseProdcutsIds = []
+      for(prod of Products)
+        purchaseProdcutsIds.push(prod.product_id)
+      
+      addPurchase(user_id, purchaseProdcutsIds);
+      addOrder(order);
+      updateUser(user_id, { cart: [], balance: userCoins + 10 });
+      updateCreditCard(creditId, { balance: creditCash - totalInCash });
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false)
+        navigation.navigate("Home")
+      }, 2000);
+
+    } else { // Coins
+      if(userCoins < totalInCash) {
+        setWarningMessage("It seems like you're trying to purchase an order that exceeds the amount of coins you currently have!")
+        setWarning(true);
+        return;
+      }
+
+      order.total_price = totalInCoins
+      order.cash = false
+      addOrder(order);
+      updateUser(user_id, { cart: [], balance: userCoins - totalInCoins });
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false)
+        navigation.navigate("Home")
+      }, 2000);
+
+    }
   }
-  function CheckOutInCoins() {
-    // TODO
+
+  const getProductsHandle = async () => {
+    await getUserById(user_id)
+    .then(async (user) => {
+      const result = user[0].cart.reduce((acc, product) => {
+        if (!acc[JSON.stringify([product.product_id, product.size])]) {
+          acc[JSON.stringify([product.product_id, product.size])] = { 
+            product_id: product.product_id,
+            qnt: 0,
+            size: product.size,
+            error: '',
+          };
+        }
+        acc[JSON.stringify([product.product_id, product.size])].qnt += product.qnt;
+        return acc;
+      }, {});
+      const cartProducts = Object.values(result);
+      
+      setLoading(true);
+      for(let cartProduct of cartProducts) {
+        await getProductByID(cartProduct.product_id)
+        .then((product) => {
+          cartProduct.cash = product.price[cartProduct.size]
+          cartProduct.total_cash = cartProduct.cash * cartProduct.qnt
+          cartProduct.coins = cartProduct.cash + 10
+          cartProduct.total_coins = cartProduct.coins * cartProduct.qnt
+          if(product.quantity == 0) {
+            setIsProdError(true)
+            cartProduct.error = "Drink isn't available at the moment!"
+          }
+        })
+      }
+      setLoading(false);
+
+      setProducts(cartProducts);
+    })
+  };
+
+  useEffect(() => {
+    getProductsHandle();
+  }, [])
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        "Sora-SemiBold": require("../assets/Fonts/static/Sora-SemiBold.ttf"),
+        "sora-regular": require("../assets/Fonts/static/Sora-Regular.ttf"),
+        "sora-light": require("../assets/Fonts/static/Sora-Light.ttf"),
+      });
+      setFontLoaded(true);
+    };
+    loadFonts();
+  }, [])
+
+  if (!fontLoaded) {
+    return null; // Render nothing until the font is loaded
   }
 
   async function handleAuthentication() {
@@ -107,59 +234,22 @@ const CheckoutScreen = ({ navigation }) => {
     navigation.navigate("Cart");
   }
 
-  const getProductsHandle = async () => {
-    await getUserById(user_id)
-    .then(async (user) => {
-      const result = user[0].cart.reduce((acc, product) => {
-      if (!acc[product.product_id])
-        acc[product.product_id] = { product_id: product.product_id, qnt: 0 };
-      acc[product.product_id].qnt += product.qnt;
-      return acc;
-      }, {});
-      const cartProducts = Object.values(result);
-      setProducts(cartProducts);
-    })
-  };
-  useEffect(() => {
-    getProductsHandle();
-  }, []);
-
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "Sora-SemiBold": require("../assets/Fonts/static/Sora-SemiBold.ttf"),
-        "sora-regular": require("../assets/Fonts/static/Sora-Regular.ttf"),
-        "sora-light": require("../assets/Fonts/static/Sora-Light.ttf"),
-      });
-      setFontLoaded(true);
-    };
-
-    loadFonts();
-  }, []);
-
-  if (!fontLoaded) {
-    return null; // Render nothing until the font is loaded
-  }
-
   return (
     <>
       <Loader visible={loading} />
-      {success && <SuccessMessage message={"You payment has been done"} />}
+      {success && <SuccessMessage message={"Your payment has been done"} />}
+      {warning && <WarningMessage message={warningMessage} childToParent={(show) => setWarning(show)} />}
+      {error && <ErrorMessage message={showErrorMessage} childToParent={(show) => setError(show)} />}
 
-      <View style={styles.container}>
-        <View style={styles.topBarContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}
-          >
-            <Ionicons
-              name="arrow-back-circle-outline"
-              size={30}
-              color={"#707981"}
-            />
-          </TouchableOpacity>
-          <View style={{ flex: 2, alignItems: "center", right: 23 }}>
+      <SafeAreaView style={styles.container}>
+
+        <View style={{justifyContent: 'center', width: '100%', flexDirection: 'row'}}> 
+          <View style={{position: 'absolute', left: 10, top: 10}}>
+            <TouchableOpacity onPress={() => navigation.goBack() } >
+              <Ionicons name="arrow-back-circle-outline" size={30} color={"#707981"} />
+            </TouchableOpacity>
+          </View>
+          <View>
             <Text
               style={{
                 color: "#1C0A00",
@@ -171,14 +261,12 @@ const CheckoutScreen = ({ navigation }) => {
               Order
             </Text>
           </View>
-          <View></View>
         </View>
-        <ScrollView style={styles.bodyContainer} nestedScrollEnabled={true}>
+
+
+        <SafeAreaView style={styles.bodyContainer}>
           <Text style={styles.primaryText}>Order Summary</Text>
-          <ScrollView
-            style={[styles.orderSummaryContainer]}
-            nestedScrollEnabled={true}
-          >
+          <View style={styles.orderSummaryContainer} >
             <FlatList
               showsVerticalScrollIndicator={false}
               data={Products}
@@ -188,12 +276,19 @@ const CheckoutScreen = ({ navigation }) => {
                   <BasicProductList
                     quantity={itemData.item.qnt}
                     id={itemData.item.product_id}
+                    size={itemData.item.size}
+                    cash={itemData.item.total_cash}
+                    coins={itemData.item.total_coins}
+                    error={itemData.item.error}
+                    cb1={(msg) => setShowErrorMessage(msg)}
+                    cb2={(show) => setError(show)}
                   />
                 );
               }}
             />
-          </ScrollView>
-          <View style={{ marginTop: 20, flexDirection: "row" }}>
+          </View>
+
+          <View style={{ marginVertical: 20, flexDirection: "row" }}>
             <View
               style={{
                 display: "flex",
@@ -238,7 +333,6 @@ const CheckoutScreen = ({ navigation }) => {
                 justifyContent: "center",
                 alignItems: "center",
                 paddingVertical: 10,
-                paddingHorizontal: 14,
                 gap: 10,
                 width: 153.5,
                 height: 40,
@@ -270,14 +364,15 @@ const CheckoutScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           </View>
-
+          
+          <ScrollView>
           {index === "Cash" ? (
             <View>
               <Text style={styles.primaryText}>Total</Text>
               <View style={styles.totalOrderInfoContainer}>
                 <View style={styles.list}>
                   <Text style={styles.primaryTextSm}>Order</Text>
-                  <Text style={styles.secondaryTextSm}>{totalInCash}$</Text>
+                  <Text style={styles.secondaryTextSm}>{totalInCash} $</Text>
                 </View>
                 <View style={styles.list}>
                   <Text style={styles.primaryTextSm}>Delivery</Text>
@@ -299,15 +394,15 @@ const CheckoutScreen = ({ navigation }) => {
               <View style={styles.totalOrderInfoContainer}>
                 <View style={styles.list}>
                   <Text style={styles.primaryTextSm}>Order</Text>
-                  <Text style={styles.secondaryTextSm}>{totalInCoins}$</Text>
+                  <Text style={styles.secondaryTextSm}>{totalInCoins} C</Text>
                 </View>
                 <View style={styles.list}>
                   <Text style={styles.primaryTextSm}>Delivery</Text>
-                  <Text style={styles.secondaryTextSm}>{(totalInCoins * 0.05).toFixed(2)} $</Text>
+                  <Text style={styles.secondaryTextSm}>{(totalInCoins * 0.05).toFixed(2)} C</Text>
                 </View>
                 <View style={styles.list}>
                   <Text style={styles.primaryTextSm}>Total In Coins</Text>
-                  <Text style={styles.secondaryTextSm}>{totalInCoins + (totalInCoins * 0.05)} $</Text>
+                  <Text style={styles.secondaryTextSm}>{totalInCoins + (totalInCoins * 0.05)} C</Text>
                 </View>
               </View>
             </View>
@@ -323,32 +418,13 @@ const CheckoutScreen = ({ navigation }) => {
               <Text style={styles.secondaryTextSm}>Phone</Text>
               <Text style={styles.secondaryTextSm}>{phone}</Text>
             </View>
-            <TouchableOpacity
-              style={{
-                backgroundColor: "#C67C4E",
-                width: "80%",
-                paddingVertical: 10,
-                borderRadius: 10,
-                alignItems: "center",
-                marginTop: 50,
-                marginLeft: "10%",
-              }}
-              onPress={handleAuthentication} // add handleAuthentication
-            >
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 16,
-                  fontFamily: "sora-regular",
-                }}
-              >
-                Order
-              </Text>
-            </TouchableOpacity>
           </View>
-          <View style={styles.emptyView}></View>
-        </ScrollView>
-      </View>
+          </ScrollView>
+          <TouchableOpacity style={styles.orderButton} onPress={orderSubmit}>
+            <Text style={styles.orderText} > Order </Text>
+          </TouchableOpacity>
+        </SafeAreaView>
+      </SafeAreaView>
     </>
   );
 };
@@ -361,7 +437,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F5F5",
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingBottom: 0,
     flex: 1,
   },
   topBarContainer: {
@@ -371,6 +446,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 20,
+    backgroundColor: 'red'
   },
   toBarText: {
     fontSize: 15,
@@ -395,7 +471,6 @@ const styles = StyleSheet.create({
   },
   primaryText: {
     marginBottom: 5,
-    marginTop: 5,
     fontSize: 20,
     fontFamily: "Sora-SemiBold",
   },
@@ -454,4 +529,16 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     elevation: 3,
   },
+  orderButton: {
+    backgroundColor: "#C67C4E",
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  orderText: {
+    color: "white",
+    textAlign: 'center',
+    fontSize: 16,
+    fontFamily: "sora-regular",
+  }
 });

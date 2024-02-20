@@ -9,7 +9,6 @@ async function getCreditCardById(id) {
   return doc_ref.data();
 }
 
-
 async function getCreditCard(creditCardData) {
     const q = query(
         creditCardCollection,
@@ -18,13 +17,13 @@ async function getCreditCard(creditCardData) {
         where("expiry_date" , "==", creditCardData.date),
         where("cvv" , "==", creditCardData.cvv),);
     const existCreditCard = await getDocs(q);
-    return (existCreditCard.docs.length) ? existCreditCard : false;
+    return (existCreditCard.docs.length) ? existCreditCard.docs.map((doc) => doc.data()) : false;
 }
 
 async function getCreditCardByNumber(creditCardNumber) {
     const q = query(creditCardCollection, where("number" , "==", creditCardNumber));
     const existCreditCard = await getDocs(q);
-    return (existCreditCard.docs.length) ? existCreditCard : false;
+    return (existCreditCard.docs.length) ? existCreditCard.docs.map((doc) => { return {id: doc.id, ...doc.data()} }) : false;
 }
 
 async function addCreditCard(creditCardData) {
@@ -34,13 +33,13 @@ async function addCreditCard(creditCardData) {
         result = {
             status: true,
             message: "Credit Card Created"
-          }
+        }
     })
     .catch(error => {
         result = {
             status: false,
             message: error.message
-          }
+        }
     })
     return result;
 }
@@ -63,11 +62,23 @@ async function updateCreditCard(id, data) {
     return result;
 }
 
+const getCreditBalance = async (creditCardNumber) => {
+    try {
+        const val = await getCreditCardByNumber(creditCardNumber)
+        const cash = val[0].balance
+        return cash
+    } catch (error) {
+        console.log(error)
+        return null;
+    }
+}
+
 
 export {
-    updateCreditCard,
     getCreditCardByNumber,
     getCreditCardById,
+    getCreditBalance,
+    updateCreditCard,
     getCreditCard,
     addCreditCard,
 }

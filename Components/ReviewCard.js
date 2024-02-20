@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Image, StyleSheet, View, Text } from "react-native";
+import { Ionicons } from '@expo/vector-icons'; 
 
 import ReviewCardStars from "../Components/ReviewCardStars"
 
-export default function ReviewCard({ userName, reviewStars, reviewText }) {
+export default function ReviewCard({ userName, reviewStars, reviewText, verified }) {
 
   const [readMore, setReadMore] = useState(false);
 
@@ -22,6 +23,10 @@ export default function ReviewCard({ userName, reviewStars, reviewText }) {
                     style={styles.userImg}
                 />
                 <Text ellipsizeMode='tail' numberOfLines={1} style={styles.userName}> { userName } </Text>
+                {
+                  verified &&
+                  <Ionicons name="checkmark-circle" size={20} color="black" />
+                }
             </View>
             <View style={{ paddingLeft: 5 }}>
                 <ReviewCardStars number={ reviewStars }/>

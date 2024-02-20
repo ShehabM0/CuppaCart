@@ -4,6 +4,7 @@ import { db } from './config';
 reviewCollection = collection(db, "reviews");
 
 async function addReview(reviewData) {
+    console.log("H")
     let result;
     await addDoc(reviewCollection, reviewData)
     .then(() => {

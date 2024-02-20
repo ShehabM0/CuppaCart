@@ -1,42 +1,34 @@
 import React ,{useEffect,useState} from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/core";
-import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
-import {
-  getUserUId,
-  getUserById,
-  getCurrUserId,
-  updateUser,
-  } from "../firebase/user";
+import { getUserUId, getUserById, getCurrUserId, updateUser, } from "../firebase/user";
 
-  const cartcard = ({
-    productName,
-    price,
-    image,
-    id,
-    qnt,
-    size,
-  }) => {
+  const cartcard = ({ sentCart, productName, price, image, id, qnt, size }) => {
   const navigation = useNavigation();
 
   const [userCart, setUserCart] = useState([]);
   const sizes = ["S", "M", "L"];
  
   const user_id = getCurrUserId();
+
   const handleDelete = async () => {
-    const id_idx = userCart.indexOf(id);
-    userCart.splice(id_idx, 1);
-    updateUser(user_id, { cart: [...userCart] });
+    // const id_idx = userCart.indexOf(id);
+    // userCart.splice(id_idx, 1);
+    // console.log(id, qnt, size)
+    let tempCart = [];
+    for(product of sentCart) {
+      if(product.product_id == id && product.qnt == qnt && product.size == size)
+        continue;
+      tempCart.push(product);
+    }
+    // console.log(userCart);
+    // console.log("\n\n\n");
+    // console.log(tempCart);
+    // console.log("-------\n")
+    await updateUser(user_id, { cart: [...tempCart] });
     alert("Product Deleted From Cart");
   };  
-
 
   useEffect(() => {
     getUserUId().then((id) => {
@@ -48,42 +40,36 @@ import {
     });
   }, []);
 
-
-
-
     return (
                 
       <TouchableOpacity onPress={() => { navigation.navigate("Product", { id })}}>
         <View style={styles.container}>
-          <LinearGradient
-            colors={["#C67C4E", "black"]}
-            style={styles.gradient}
-          >
-            <View style={styles.card}>
-              <View style={{alignItems: 'center', justifyContent:'center'}}>
-                <Image source={{ uri: image }} style={styles.image} />
-              </View>
-              <View style={styles.details}>
-                <View style={styles.titleContainer}>
-                  <Text style={styles.title}>{productName}</Text>
+          <View style={styles.card}>
+            <View style={{padding: 10}}>
+              <Image source={{ uri: image }} style={styles.image} />
+            </View>
+            <View style={styles.details}>
+              <View style={styles.titleContainer}>
+                <Text style={styles.title}>{productName}</Text>
+                <View style={{ padding: 3}}> 
                   <TouchableOpacity onPress={() => {handleDelete()}}>
-                    <View style={styles.menuItem}>
-                      <Ionicons name="trash-outline" size={25} color="#fff" />
-                    </View>
+                    <Ionicons name="bag-remove-outline" size={22} color="black" />
                   </TouchableOpacity>
                 </View>
-                <View style={styles.priceContainer}>
-                  <Text style={styles.price}>{price} $</Text>
-                  <Text style={[styles.price, {paddingLeft: 10}]}>x{qnt}</Text>
-                  <Text style={[styles.price, {paddingLeft: 10}]}>{sizes[size]}</Text>
-                </View>
+              </View>
+              <View>
+                <Text style={styles.price}>${price}</Text>
+                <Text style={{color: "#91939f"}}>Quantity:
+                  <Text style={[styles.price, {paddingLeft: 10}]}> x{qnt}</Text>
+                </Text>
+                <Text style={{color: "#91939f"}}>Size: 
+                  <Text style={[styles.price, {paddingLeft: 10}]}> {sizes[size]}</Text>
+                </Text>
               </View>
             </View>
-          </LinearGradient>
+          </View>
         </View>
       </TouchableOpacity>
-     
-  
     );
   };
   
@@ -111,38 +97,29 @@ import {
     },
     details: {
       flex: 1,
-      justifyContent: "space-between",
-      height: 80,
+      // justifyContent: "space-between",
+      // height: 100,
     },
     titleContainer: {
       flexDirection: "row",
       alignItems: "center",
+      justifyContent: 'space-between'
     },
     title: {
-      color: "#fff",
+      color: "black",
       fontSize: 18,
       fontWeight: "bold",
       marginRight: 5,
     },
     type: {
-      color: "#fff",
+      color: "black",
       fontSize: 16,
     },
-    priceContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-    },
     price: {
-      color: "#fff",
+      color: "black",
       fontSize: 16,
       fontWeight: "bold",
       marginRight: 5,
-    },
-    menuItem: {
-      flexDirection: "row",
-      paddingVertical: 10,
-      paddingHorizontal: 19,
-      marginLeft: 130,
     },
     
   });
