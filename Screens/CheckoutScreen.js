@@ -145,7 +145,6 @@ const CheckoutScreen = ({ navigation }) => {
   
       }
     } else {
-      // Fingerprint authentication failed
       navigation.navigate("Cart");
     }
   }
