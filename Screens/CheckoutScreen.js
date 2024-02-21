@@ -246,7 +246,7 @@ const CheckoutScreen = ({ navigation }) => {
         }
       }
     }
-    navigation.navigate("Cart");
+    navigation.navigate("Cart ");
   }
 
   return (
