@@ -145,7 +145,7 @@ const CheckoutScreen = ({ navigation }) => {
   
       }
     } else {
-      navigation.navigate("Cart");
+      navigation.navigate("Cart"); 
     }
   }
   
