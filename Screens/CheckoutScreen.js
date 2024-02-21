@@ -70,71 +70,86 @@ const CheckoutScreen = ({ navigation }) => {
   }, []);
 
   async function orderSubmit() {
-
-    if(isProdError) {
-      setWarningMessage("Oops! Not enough quantity\ncheck Order Summary for more details")
-      setWarning(true);
-      return;
-    }
-
-    const order = {
-      user_id: user_id,
-      total_price: totalInCash,
-      products: Products,
-      cash: true,
-      create_at: new Date(),
-    }
-
-    if(index == "Cash") {
-      if(!creditCard) {
-        setWarningMessage("Please add credit card to complete your order")
+    // First, authenticate using fingerprint
+    let fingerprintResult = await LocalAuthentication.authenticateAsync({
+      promptMessage: "Authenticate Using Fingerprint",
+      fallbackLabel: "Use passcode instead",
+      disableDeviceFallback: false,
+      cancelLabel: "Cancel",
+    });
+  
+    // Check if fingerprint authentication is successful
+    if (fingerprintResult.success) {
+      // Fingerprint authentication successful, proceed with order submission
+      if(isProdError) {
+        setWarningMessage("Oops! Not enough quantity\ncheck Order Summary for more details")
         setWarning(true);
         return;
       }
-
-      const getCreditCard = (await getCreditCardByNumber(creditCard))[0];
-      const creditCash = getCreditCard.balance;
-      const creditId = getCreditCard.id;
-
-      if(creditCash < totalInCash) {
-        setWarningMessage("It seems like you're trying to purchase an order that exceeds the amount of cash you currently have!")
-        setWarning(true);
-        return;
+  
+      const order = {
+        user_id: user_id,
+        total_price: totalInCash,
+        products: Products,
+        cash: true,
+        create_at: new Date(),
       }
-
-      let purchaseProdcutsIds = []
-      for(prod of Products)
-        purchaseProdcutsIds.push(prod.product_id)
-      
-      addPurchase(user_id, purchaseProdcutsIds);
-      addOrder(order);
-      updateUser(user_id, { cart: [], balance: userCoins + 10 });
-      updateCreditCard(creditId, { balance: creditCash - totalInCash });
-      setSuccess(true);
-      setTimeout(() => {
-        setSuccess(false)
-        navigation.navigate("Home")
-      }, 2000);
-
-    } else { // Coins
-      if(userCoins < totalInCash) {
-        setWarningMessage("It seems like you're trying to purchase an order that exceeds the amount of coins you currently have!")
-        setWarning(true);
-        return;
+  
+      if(index == "Cash") {
+        if(!creditCard) {
+          setWarningMessage("Please add credit card to complete your order")
+          setWarning(true);
+          return;
+        }
+  
+        const getCreditCard = (await getCreditCardByNumber(creditCard))[0];
+        const creditCash = getCreditCard.balance;
+        const creditId = getCreditCard.id;
+  
+        if(creditCash < totalInCash) {
+          setWarningMessage("It seems like you're trying to purchase an order that exceeds the amount of cash you currently have!")
+          setWarning(true);
+          return;
+        }
+  
+        let purchaseProdcutsIds = []
+        for(prod of Products)
+          purchaseProdcutsIds.push(prod.product_id)
+        
+        addPurchase(user_id, purchaseProdcutsIds);
+        addOrder(order);
+        updateUser(user_id, { cart: [], balance: userCoins + 10 });
+        updateCreditCard(creditId, { balance: creditCash - totalInCash });
+        setSuccess(true);
+        setTimeout(() => {
+          setSuccess(false)
+          navigation.navigate("Home")
+        }, 2000);
+  
+      } else { // Coins
+        if(userCoins < totalInCash) {
+          setWarningMessage("It seems like you're trying to purchase an order that exceeds the amount of coins you currently have!")
+          setWarning(true);
+          return;
+        }
+  
+        order.total_price = totalInCoins
+        order.cash = false
+        addOrder(order);
+        updateUser(user_id, { cart: [], balance: userCoins - totalInCoins });
+        setSuccess(true);
+        setTimeout(() => {
+          setSuccess(false)
+          navigation.navigate("Home")
+        }, 2000);
+  
       }
-
-      order.total_price = totalInCoins
-      order.cash = false
-      addOrder(order);
-      updateUser(user_id, { cart: [], balance: userCoins - totalInCoins });
-      setSuccess(true);
-      setTimeout(() => {
-        setSuccess(false)
-        navigation.navigate("Home")
-      }, 2000);
-
+    } else {
+      // Fingerprint authentication failed
+      navigation.navigate("Cart");
     }
   }
+  
 
   const getProductsHandle = async () => {
     await getUserById(user_id)
